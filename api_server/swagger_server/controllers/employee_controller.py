@@ -33,6 +33,17 @@ def delete_employee(employeeId):  # noqa: E501
     return 'do some magic!'
 
 
+def find_all():  # noqa: E501
+    """Returns all Employees registered in the system.
+
+     # noqa: E501
+
+
+    :rtype: List[Employee]
+    """
+    return 'do some magic!'
+
+
 def find_employees_by_team_number(teamNumber):  # noqa: E501
     """Finds Employees by given team number. Role read:employees must be granted
 
@@ -49,7 +60,7 @@ def find_employees_by_team_number(teamNumber):  # noqa: E501
 def get_employee_by_id(employeeId):  # noqa: E501
     """Find employee by ID
 
-    Returns a single employee. Role read:employees must be granted # noqa: E501
+    Returns a single employee. # noqa: E501
 
     :param employeeId: ID of empoyee to return
     :type employeeId: int

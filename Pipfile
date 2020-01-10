@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 connexion = "==1.1.15"
 python-dateutil = "==2.6.0"
+flask-sqlalchemy = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.7"

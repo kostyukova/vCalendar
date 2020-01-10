@@ -10,7 +10,6 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost"
 basePath: "/vcalendar"
 tags:
 - name: "employee"
@@ -30,9 +29,7 @@ paths:
       operationId: "add_employee"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -55,9 +52,7 @@ paths:
       operationId: "update_employee"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -76,6 +71,24 @@ paths:
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
+  /employee/findAll:
+    get:
+      tags:
+      - "employee"
+      summary: "Returns all Employees registered in the system."
+      description: ""
+      operationId: "find_all"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
+      x-swagger-router-controller: "swagger_server.controllers.employee_controller"
   /employee/findByTeamNumber:
     get:
       tags:
@@ -85,7 +98,6 @@ paths:
       description: ""
       operationId: "find_employees_by_team_number"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "teamNumber"
@@ -103,18 +115,15 @@ paths:
               $ref: "#/definitions/Employee"
         "400":
           description: "Invalid team number value"
-      security:
-      - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
   /employee/{employeeId}:
     get:
       tags:
       - "employee"
       summary: "Find employee by ID"
-      description: "Returns a single employee. Role read:employees must be granted"
+      description: "Returns a single employee."
       operationId: "get_employee_by_id"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -132,8 +141,6 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Employee not found"
-      security:
-      - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
     post:
       tags:
@@ -145,7 +152,6 @@ paths:
       consumes:
       - "application/x-www-form-urlencoded"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -177,7 +183,6 @@ paths:
       description: ""
       operationId: "delete_employee"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -202,7 +207,6 @@ paths:
       description: "Role write:users role must be granted"
       operationId: "create_user"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -225,7 +229,6 @@ paths:
       description: ""
       operationId: "authenticate_user"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -245,8 +248,6 @@ paths:
             type: "string"
         "400":
           description: "Invalid username/password supplied"
-      security:
-      - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.user_controller"
   /user/{username}:
     get:
@@ -256,7 +257,6 @@ paths:
       description: ""
       operationId: "get_user_by_name"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -283,7 +283,6 @@ paths:
       description: "This can only be done by with write:users role."
       operationId: "update_user"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -312,7 +311,6 @@ paths:
       description: "This can only be done with write:users role."
       operationId: "delete_user"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"

@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost"
+    host: "localhost:8080"
 basePath: "/vcalendar"
 tags:
 - name: "employee"
@@ -29,9 +29,7 @@ paths:
       operationId: "addEmployee"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -53,9 +51,7 @@ paths:
       operationId: "updateEmployee"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -73,6 +69,22 @@ paths:
           description: "Validation exception"
       security:
       - Bearer: []
+  /employee/findAll:
+    get:
+      tags:
+      - "employee"
+      summary: "Returns all Employees registered in the system."
+      description: ""
+      operationId: "findAll"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
   /employee/findByTeamNumber:
     get:
       tags:
@@ -81,7 +93,6 @@ paths:
       description: ""
       operationId: "findEmployeesByTeamNumber"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "teamNumber"
@@ -99,17 +110,14 @@ paths:
               $ref: "#/definitions/Employee"
         400:
           description: "Invalid team number value"
-      security:
-      - Bearer: []
   /employee/{employeeId}:
     get:
       tags:
       - "employee"
       summary: "Find employee by ID"
-      description: "Returns a single employee. Role read:employees must be granted"
+      description: "Returns a single employee."
       operationId: "getEmployeeById"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -127,8 +135,6 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Employee not found"
-      security:
-      - Bearer: []
     post:
       tags:
       - "employee"
@@ -138,7 +144,6 @@ paths:
       consumes:
       - "application/x-www-form-urlencoded"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -169,7 +174,6 @@ paths:
       description: ""
       operationId: "deleteEmployee"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -193,7 +197,6 @@ paths:
       description: "Role write:users role must be granted"
       operationId: "createUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "body"
@@ -215,7 +218,6 @@ paths:
       description: ""
       operationId: "authenticateUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -235,8 +237,6 @@ paths:
             type: "string"
         400:
           description: "Invalid username/password supplied"
-      security:
-      - Bearer: []
   /user/{username}:
     get:
       tags:
@@ -245,7 +245,6 @@ paths:
       description: ""
       operationId: "getUserByName"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -271,7 +270,6 @@ paths:
       description: "This can only be done by with write:users role."
       operationId: "updateUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -299,7 +297,6 @@ paths:
       description: "This can only be done with write:users role."
       operationId: "deleteUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"

@@ -3,8 +3,8 @@ import six
 
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server import util
-import swagger_server.controllers.user_controller_impl
-
+from swagger_server.orm import User as User_orm
+from flask import jsonify
 
 def authenticate_user(username, password):  # noqa: E501
     """Generates token for user
@@ -59,8 +59,12 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: User
     """
-    return swagger_server.controllers.user_controller_impl.get_user_by_name(username)
-    #return 'to be implemented'
+    found = User_orm.query.filter_by(username=username).first()
+    result = User()
+    result.id = found.id
+    result.username = found.username
+    result.password = found.password
+    return jsonify(result.to_dict())
 
 
 def update_user(username, body):  # noqa: E501
