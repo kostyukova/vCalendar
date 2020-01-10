@@ -374,13 +374,6 @@ definitions:
       leave_days_left:
         type: integer
         format: int32
-      leave_days:
-        type: "array"
-        xml:
-          name: "leave_days"
-          wrapped: true
-        items:
-          $ref: "#/definitions/LeaveDays"
     xml:
       name: "Employee"
   LeaveDays:
