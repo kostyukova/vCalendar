@@ -357,6 +357,8 @@ definitions:
         type: "string"
       password:
         type: "string"
+      roles:
+        type: "string"
     xml:
       name: "User"
   Employee:

@@ -373,10 +373,13 @@ definitions:
         type: "string"
       password:
         type: "string"
+      roles:
+        type: "string"
     xml:
       name: "User"
     example:
       password: "password"
+      roles: "roles"
       id: 0
       email: "email"
       username: "username"

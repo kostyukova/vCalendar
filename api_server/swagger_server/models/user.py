@@ -15,7 +15,7 @@ class User(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, username: str=None, email: str=None, password: str=None):  # noqa: E501
+    def __init__(self, id: int=None, username: str=None, email: str=None, password: str=None, roles: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
         :param id: The id of this User.  # noqa: E501
@@ -26,25 +26,30 @@ class User(Model):
         :type email: str
         :param password: The password of this User.  # noqa: E501
         :type password: str
+        :param roles: The roles of this User.  # noqa: E501
+        :type roles: str
         """
         self.swagger_types = {
             'id': int,
             'username': str,
             'email': str,
-            'password': str
+            'password': str,
+            'roles': str
         }
 
         self.attribute_map = {
             'id': 'id',
             'username': 'username',
             'email': 'email',
-            'password': 'password'
+            'password': 'password',
+            'roles': 'roles'
         }
 
         self._id = id
         self._username = username
         self._email = email
         self._password = password
+        self._roles = roles
 
     @classmethod
     def from_dict(cls, dikt) -> 'User':
@@ -140,3 +145,24 @@ class User(Model):
         """
 
         self._password = password
+
+    @property
+    def roles(self) -> str:
+        """Gets the roles of this User.
+
+
+        :return: The roles of this User.
+        :rtype: str
+        """
+        return self._roles
+
+    @roles.setter
+    def roles(self, roles: str):
+        """Sets the roles of this User.
+
+
+        :param roles: The roles of this User.
+        :type roles: str
+        """
+
+        self._roles = roles

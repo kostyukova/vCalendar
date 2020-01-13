@@ -36,7 +36,7 @@ def create_user(body):  # noqa: E501
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
     orm = User_orm(username=body.username,
-                   password=body.password, email=body.email)
+                   password=body.password, email=body.email, roles = body.roles)
     # check username already exists
     found = User_orm.query.filter_by(username=body.username).one_or_none()
     if found != None:
@@ -96,7 +96,7 @@ def get_user_by_name(username):  # noqa: E501
         return 'User not found', 404
     result = User(
         id=found.id, username=found.username,
-        password=found.password, email=found.email)
+        password=found.password, email=found.email, roles = found.roles)
     return jsonify(result.to_dict())
 
 
@@ -122,6 +122,7 @@ def update_user(username, body):  # noqa: E501
     found.username = body.username
     found.password = body.password
     found.email = body.email
+    found.roles = body.roles
     # fixme roles
     try:
         db.session.add(found)
