@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 connex_app = connexion.App(__name__, specification_dir='./swagger/')
 connex_app.app.json_encoder = encoder.JSONEncoder
-connex_app.add_api('swagger.yaml', arguments={'title': 'Swagger Vacation calendar'})
+connex_app.add_api('swagger.yaml', arguments={'title': 'Swagger Vacation calendar'}, validate_response=True)
 
 # Get Flask application
 app = connex_app.app

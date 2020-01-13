@@ -18,7 +18,7 @@ def authenticate_user(username, password):  # noqa: E501
 
     :rtype: str
     """
-    return 'do some magic!'
+    return swagger_server.controllers.user_controller_impl.authenticate_user(username, password)
 
 
 def create_user(body):  # noqa: E501
@@ -29,11 +29,9 @@ def create_user(body):  # noqa: E501
     :param body: Created user object
     :type body: dict | bytes
 
-    :rtype: None
+    :rtype: User
     """
-    if connexion.request.is_json:
-        body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return swagger_server.controllers.user_controller_impl.create_user(body)
 
 
 def delete_user(username):  # noqa: E501
@@ -44,9 +42,9 @@ def delete_user(username):  # noqa: E501
     :param username: The name that needs to be deleted
     :type username: str
 
-    :rtype: None
+    :rtype: ApiResponse
     """
-    return 'do some magic!'
+    return swagger_server.controllers.user_controller_impl.delete_user(username)
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -60,7 +58,6 @@ def get_user_by_name(username):  # noqa: E501
     :rtype: User
     """
     return swagger_server.controllers.user_controller_impl.get_user_by_name(username)
-    #return 'to be implemented'
 
 
 def update_user(username, body):  # noqa: E501
@@ -73,8 +70,6 @@ def update_user(username, body):  # noqa: E501
     :param body: Updated user object
     :type body: dict | bytes
 
-    :rtype: None
+    :rtype: User
     """
-    if connexion.request.is_json:
-        body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return swagger_server.controllers.user_controller_impl.update_user(username, body)

@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-    host: "localhost:8080"
+host: "localhost:8080"
 basePath: "/vcalendar"
 tags:
 - name: "employee"
@@ -206,8 +206,14 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
-        default:
-          description: "successful operation"
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        409:
+          description: "User already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
   /user/authenticate:
@@ -237,6 +243,8 @@ paths:
             type: "string"
         400:
           description: "Invalid username/password supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /user/{username}:
     get:
       tags:
@@ -259,8 +267,12 @@ paths:
             $ref: "#/definitions/User"
         400:
           description: "Invalid username supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         404:
           description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
     put:
@@ -284,10 +296,18 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
         400:
           description: "Invalid user supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         404:
           description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
     delete:
@@ -305,10 +325,18 @@ paths:
         required: true
         type: "string"
       responses:
+        204:
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         400:
           description: "Invalid username supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         404:
           description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
 securityDefinitions:

@@ -8,6 +8,7 @@ CREATE OR REPLACE TABLE `employee` (
   `specialization` VARCHAR(10) DEFAULT '',
   `team_number` TINYINT(1) NOT NULL DEFAULT 1,
   `expert` TINYINT(1) NOT NULL DEFAULT 0,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
   PRIMARY KEY (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -34,15 +35,15 @@ CREATE OR REPLACE TABLE `employee_leave_days` (
 
 CREATE OR REPLACE TABLE `user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(20) NOT NULL,
+  `username` VARCHAR(20) NOT NULL UNIQUE,
   `password` VARCHAR(20) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
   `roles` SET('read:users','write:users','read:employees', 'write:employees') NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_number`, `expert`)
-    VALUES ('Иванов', 'junior engineer', '', 1, 0);
+INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_number`, `expert`, `email`)
+    VALUES ('Иванов', 'junior engineer', '', 1, 0, 'mail@mail.ru');
 INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
     VALUES (1, 28, 2020);
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`)

@@ -2,9 +2,11 @@ import connexion
 import six
 
 from swagger_server.models.user import User  # noqa: E501
-from swagger_server import util
+from swagger_server.models.api_response import ApiResponse
+from swagger_server import util, db
 from swagger_server.orm import User as User_orm
 from flask import jsonify
+
 
 def authenticate_user(username, password):  # noqa: E501
     """Generates token for user
@@ -33,8 +35,25 @@ def create_user(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
-
+    orm = User_orm(username=body.username,
+                   password=body.password, email=body.email)
+    # check username already exists
+    found = User_orm.query.filter_by(username=body.username).one_or_none()
+    if found != None:
+        return jsonify(ApiResponse(code=1001, type='user',
+                                   message='User with username \'{}\' already exists'.format(body.username))), 409
+    # check email already exists
+    found = User_orm.query.filter_by(email=body.email).one_or_none()
+    if found != None:
+        return jsonify(ApiResponse(code=1002, type='user',
+                                   message='User with email \'{}\' already exists'.format(body.email))), 409
+    try:
+        db.session.add(orm)
+        db.session.commit()
+        return get_user_by_name(body.username)
+    except Exception as ex:
+        return jsonify(ApiResponse(code=1003, type='user',
+                                   message='Internal server error: {}'.format(ex))), 500
 
 def delete_user(username):  # noqa: E501
     """Delete user
@@ -46,7 +65,18 @@ def delete_user(username):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    if not username:
+        return 'No username supplied', 400
+    found = User_orm.query.filter_by(username=username).one_or_none()
+    if found == None:
+        return 'User not found', 404
+    try:
+        db.session.delete(found)
+        db.session.commit()
+        return 'Successful operation', 204
+    except Exception as ex:
+        return jsonify(ApiResponse(code=5002, type='user',
+                                   message='Internal server error: {}'.format(ex))), 500
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -59,11 +89,14 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: User
     """
-    found = User_orm.query.filter_by(username=username).first()
-    result = User()
-    result.id = found.id
-    result.username = found.username
-    result.password = found.password
+    if not username:
+        return 'No username supplied', 400
+    found = User_orm.query.filter_by(username=username).one_or_none()
+    if found == None:
+        return 'User not found', 404
+    result = User(
+        id=found.id, username=found.username,
+        password=found.password, email=found.email)
     return jsonify(result.to_dict())
 
 
@@ -81,4 +114,19 @@ def update_user(username, body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    if not username:
+        return 'No username supplied', 400
+    found = User_orm.query.filter_by(username=username).one_or_none()
+    if found == None:
+        return 'User not found', 404
+    found.username = body.username
+    found.password = body.password
+    found.email = body.email
+    # fixme roles
+    try:
+        db.session.add(found)
+        db.session.commit()
+        return get_user_by_name(body.username)
+    except Exception as ex:
+        return jsonify(ApiResponse(code=5001, type='user',
+                                   message='Internal server error: {}'.format(ex))), 500
