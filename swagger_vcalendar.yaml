@@ -214,13 +214,17 @@ paths:
           description: "User already exists conflict"
           schema:
             $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
   /user/authenticate:
     get:
       tags:
       - "user"
-      summary: "Generates token for user"
+      summary: "Generates token for an user"
       description: ""
       operationId: "authenticateUser"
       produces:

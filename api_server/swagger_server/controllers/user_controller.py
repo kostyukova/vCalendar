@@ -2,12 +2,21 @@ import connexion
 import six
 
 from swagger_server.models.user import User  # noqa: E501
-from swagger_server import util
+from swagger_server import util, auth
+import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
 import swagger_server.controllers.user_controller_impl
 
 
+AUTH_ERRORS = {
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role),
+    auth.TokenStatus.ROLE_GRANTED: None
+}
+
+
 def authenticate_user(username, password):  # noqa: E501
-    """Generates token for user
+    """Generates token for an user
 
      # noqa: E501
 
@@ -31,7 +40,11 @@ def create_user(body):  # noqa: E501
 
     :rtype: User
     """
-    return swagger_server.controllers.user_controller_impl.create_user(body)
+    role = auth.WRITE_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return swagger_server.controllers.user_controller_impl.create_user(body)
+    return AUTH_ERRORS[hasRole](role)
 
 
 def delete_user(username):  # noqa: E501

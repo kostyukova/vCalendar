@@ -3,7 +3,8 @@ import six
 
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server.models.api_response import ApiResponse
-from swagger_server import util, db
+import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+from swagger_server import util, db, auth
 from swagger_server.orm import User as User_orm
 from flask import jsonify
 
@@ -20,7 +21,11 @@ def authenticate_user(username, password):  # noqa: E501
 
     :rtype: str
     """
-    return 'do some magic!'
+    token = auth.generate_token(username, password)
+    if token != None:
+        return token
+    else:
+        return jsonify(ErrorApiResponse.AuthError()), 400
 
 
 def create_user(body):  # noqa: E501
@@ -36,7 +41,7 @@ def create_user(body):  # noqa: E501
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
     orm = User_orm(username=body.username,
-                   password=body.password, email=body.email, roles = body.roles)
+                   password=body.password, email=body.email, roles=body.roles)
     # check username already exists
     found = User_orm.query.filter_by(username=body.username).one_or_none()
     if found != None:
@@ -54,6 +59,7 @@ def create_user(body):  # noqa: E501
     except Exception as ex:
         return jsonify(ApiResponse(code=1003, type='user',
                                    message='Internal server error: {}'.format(ex))), 500
+
 
 def delete_user(username):  # noqa: E501
     """Delete user
@@ -96,7 +102,7 @@ def get_user_by_name(username):  # noqa: E501
         return 'User not found', 404
     result = User(
         id=found.id, username=found.username,
-        password=found.password, email=found.email, roles = found.roles)
+        password=found.password, email=found.email, roles=found.roles)
     return jsonify(result.to_dict())
 
 

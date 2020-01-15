@@ -221,6 +221,10 @@ paths:
           description: "Successful operation"
           schema:
             $ref: "#/definitions/User"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "409":
           description: "User already exists conflict"
           schema:
@@ -232,7 +236,7 @@ paths:
     get:
       tags:
       - "user"
-      summary: "Generates token for user"
+      summary: "Generates token for an user"
       description: ""
       operationId: "authenticate_user"
       produces:
