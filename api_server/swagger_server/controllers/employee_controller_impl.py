@@ -3,15 +3,7 @@ import six
 
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.employee import Employee  # noqa: E501
-from swagger_server import util, auth
-import swagger_server.controllers.employee_controller_impl as impl
-
-AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(),
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(),
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role),
-    auth.TokenStatus.ROLE_GRANTED: None
-}
+from swagger_server import util
 
 
 def add_employee(body):  # noqa: E501
@@ -24,11 +16,9 @@ def add_employee(body):  # noqa: E501
 
     :rtype: Employee
     """
-    role = auth.WRITE_EMPLOYEES
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.add_employee(body)
-    return AUTH_ERRORS[hasRole](role)
+    if connexion.request.is_json:
+        body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'do some magic!'
 
 
 def delete_employee(employeeId):  # noqa: E501
@@ -41,11 +31,7 @@ def delete_employee(employeeId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    role = auth.WRITE_EMPLOYEES
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.delete_employee(employeeId)
-    return AUTH_ERRORS[hasRole](role)
+    return 'do some magic!'
 
 
 def find_all_employee():  # noqa: E501
@@ -56,7 +42,7 @@ def find_all_employee():  # noqa: E501
 
     :rtype: List[Employee]
     """
-    return impl.find_all_employee()
+    return 'do some magic!'
 
 
 def find_employees_by(full_name=None, team_number=None):  # noqa: E501
@@ -71,7 +57,7 @@ def find_employees_by(full_name=None, team_number=None):  # noqa: E501
 
     :rtype: List[Employee]
     """
-    return impl.find_employees_by(full_name, team_number)
+    return 'do some magic!'
 
 
 def get_employee_by_id(employeeId):  # noqa: E501
@@ -84,7 +70,7 @@ def get_employee_by_id(employeeId):  # noqa: E501
 
     :rtype: Employee
     """
-    return impl.get_employee_by_id(employeeId)
+    return 'do some magic!'
 
 
 def update_employee_by_id(employeeId, body):  # noqa: E501
@@ -99,8 +85,6 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
 
     :rtype: Employee
     """
-    role = auth.WRITE_EMPLOYEES
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.update_employee_by_id(employeeId, body)
-    return AUTH_ERRORS[hasRole](role)
+    if connexion.request.is_json:
+        body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'do some magic!'

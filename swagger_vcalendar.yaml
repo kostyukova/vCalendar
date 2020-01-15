@@ -39,34 +39,22 @@ paths:
         schema:
           $ref: "#/definitions/Employee"
       responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
         405:
           description: "Invalid input"
-      security:
-      - Bearer: []
-    put:
-      tags:
-      - "employee"
-      summary: "Update an existing employee. Role write:employees must be granted"
-      description: ""
-      operationId: "updateEmployee"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Employee object that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/Employee"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Employee not found"
-        405:
-          description: "Validation exception"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        409:
+          description: "Employee already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
   /employee/findAll:
@@ -75,7 +63,7 @@ paths:
       - "employee"
       summary: "Returns all Employees registered in the system."
       description: ""
-      operationId: "findAll"
+      operationId: "findAllEmployee"
       produces:
       - "application/json"
       responses:
@@ -85,22 +73,25 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Employee"
-  /employee/findByTeamNumber:
+  /employee/findBy:
     get:
       tags:
       - "employee"
-      summary: "Finds Employees by given team number. Role read:employees must be granted"
+      summary: "Finds Employees by given team number and/or full_name"
       description: ""
-      operationId: "findEmployeesByTeamNumber"
+      operationId: "findEmployeesBy"
       produces:
       - "application/json"
       parameters:
-      - name: "teamNumber"
+      - name: "full_name"
+        in: "query"
+        description: "Full name template to filter by"
+        type: "string"
+      - name: "team_number"
         in: "query"
         description: "Team number to filter by"
-        required: true
         type: "integer"
-        format: "int64"
+        format: "int32"
       responses:
         200:
           description: "successful operation"
@@ -110,6 +101,8 @@ paths:
               $ref: "#/definitions/Employee"
         400:
           description: "Invalid team number value"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /employee/{employeeId}:
     get:
       tags:
@@ -133,44 +126,66 @@ paths:
             $ref: "#/definitions/Employee"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         404:
           description: "Employee not found"
-    post:
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
       tags:
       - "employee"
       summary: "Updates an employee in the system with form data. Role write:employees must be granted"
       description: ""
       operationId: "updateEmployeeById"
       consumes:
-      - "application/x-www-form-urlencoded"
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "employeeId"
         in: "path"
-        description: "ID of employee that needs to be updated"
+        description: "ID of empoyee to return"
         required: true
         type: "integer"
         format: "int64"
-      - name: "full_name"
-        in: "formData"
-        description: "Updated full name of the employee"
-        required: false
-        type: "string"
-      - name: "position"
-        in: "formData"
-        description: "Updated position of the employee"
-        required: false
-        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Employee object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
+        400:
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        409:
+          description: "Employee already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
     delete:
       tags:
       - "employee"
-      summary: "Deletes an employee"
+      summary: "Deletes an employee. Role write:employees must be granteds"
       description: ""
       operationId: "deleteEmployee"
       produces:
@@ -178,15 +193,27 @@ paths:
       parameters:
       - name: "employeeId"
         in: "path"
-        description: "Employee id to delete. Role write:employees must be granted"
+        description: "Employee id to delete"
         required: true
         type: "integer"
         format: "int64"
       responses:
+        204:
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         404:
           description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
   /user:
@@ -361,7 +388,7 @@ paths:
       - "user"
       summary: "Finds all users. Role read:users role must be granted"
       description: ""
-      operationId: "findAll"
+      operationId: "findAllUser"
       produces:
       - "application/json"
       responses:

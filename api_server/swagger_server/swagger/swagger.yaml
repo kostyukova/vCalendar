@@ -40,35 +40,22 @@ paths:
         schema:
           $ref: "#/definitions/Employee"
       responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "405":
           description: "Invalid input"
-      security:
-      - Bearer: []
-      x-swagger-router-controller: "swagger_server.controllers.employee_controller"
-    put:
-      tags:
-      - "employee"
-      summary: "Update an existing employee. Role write:employees must be granted"
-      description: ""
-      operationId: "update_employee"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Employee object that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/Employee"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Employee not found"
-        "405":
-          description: "Validation exception"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "409":
+          description: "Employee already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
@@ -78,7 +65,7 @@ paths:
       - "employee"
       summary: "Returns all Employees registered in the system."
       description: ""
-      operationId: "find_all"
+      operationId: "find_all_employee"
       produces:
       - "application/json"
       parameters: []
@@ -90,23 +77,27 @@ paths:
             items:
               $ref: "#/definitions/Employee"
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
-  /employee/findByTeamNumber:
+  /employee/findBy:
     get:
       tags:
       - "employee"
-      summary: "Finds Employees by given team number. Role read:employees must be\
-        \ granted"
+      summary: "Finds Employees by given team number and/or full_name"
       description: ""
-      operationId: "find_employees_by_team_number"
+      operationId: "find_employees_by"
       produces:
       - "application/json"
       parameters:
-      - name: "teamNumber"
+      - name: "full_name"
+        in: "query"
+        description: "Full name template to filter by"
+        required: false
+        type: "string"
+      - name: "team_number"
         in: "query"
         description: "Team number to filter by"
-        required: true
+        required: false
         type: "integer"
-        format: "int64"
+        format: "int32"
       responses:
         "200":
           description: "successful operation"
@@ -116,6 +107,8 @@ paths:
               $ref: "#/definitions/Employee"
         "400":
           description: "Invalid team number value"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
   /employee/{employeeId}:
     get:
@@ -140,10 +133,14 @@ paths:
             $ref: "#/definitions/Employee"
         "400":
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "404":
           description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
-    post:
+    put:
       tags:
       - "employee"
       summary: "Updates an employee in the system with form data. Role write:employees\
@@ -151,36 +148,54 @@ paths:
       description: ""
       operationId: "update_employee_by_id"
       consumes:
-      - "application/x-www-form-urlencoded"
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "employeeId"
         in: "path"
-        description: "ID of employee that needs to be updated"
+        description: "ID of empoyee to return"
         required: true
         type: "integer"
         format: "int64"
-      - name: "full_name"
-        in: "formData"
-        description: "Updated full name of the employee"
-        required: false
-        type: "string"
-      - name: "position"
-        in: "formData"
-        description: "Updated position of the employee"
-        required: false
-        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Employee object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
       responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "405":
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "409":
+          description: "Employee already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
     delete:
       tags:
       - "employee"
-      summary: "Deletes an employee"
+      summary: "Deletes an employee. Role write:employees must be granteds"
       description: ""
       operationId: "delete_employee"
       produces:
@@ -188,15 +203,27 @@ paths:
       parameters:
       - name: "employeeId"
         in: "path"
-        description: "Employee id to delete. Role write:employees must be granted"
+        description: "Employee id to delete"
         required: true
         type: "integer"
         format: "int64"
       responses:
+        "204":
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "400":
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "404":
           description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
@@ -377,7 +404,7 @@ paths:
       - "user"
       summary: "Finds all users. Role read:users role must be granted"
       description: ""
-      operationId: "find_all"
+      operationId: "find_all_user"
       produces:
       - "application/json"
       parameters: []

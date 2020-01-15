@@ -81,7 +81,7 @@ def delete_user(username):  # noqa: E501
         return jsonify(ErrorApiResponse.InternalServerError()), 500
 
 
-def find_all():  # noqa: E501
+def find_all_user():  # noqa: E501
     """Finds all users. Role read:users role must be granted
 
      # noqa: E501

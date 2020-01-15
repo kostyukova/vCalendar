@@ -4,7 +4,7 @@ import six
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server import util, auth
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
-import swagger_server.controllers.user_controller_impl
+import swagger_server.controllers.user_controller_impl as impl
 
 
 AUTH_ERRORS = {
@@ -27,7 +27,7 @@ def authenticate_user(username, password):  # noqa: E501
 
     :rtype: str
     """
-    return swagger_server.controllers.user_controller_impl.authenticate_user(username, password)
+    return impl.authenticate_user(username, password)
 
 
 def create_user(body):  # noqa: E501
@@ -43,7 +43,7 @@ def create_user(body):  # noqa: E501
     role = auth.WRITE_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return swagger_server.controllers.user_controller_impl.create_user(body)
+        return impl.create_user(body)
     return AUTH_ERRORS[hasRole](role)
 
 
@@ -60,11 +60,11 @@ def delete_user(username):  # noqa: E501
     role = auth.WRITE_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return swagger_server.controllers.user_controller_impl.delete_user(username)
+        return impl.delete_user(username)
     return AUTH_ERRORS[hasRole](role)
 
 
-def find_all():  # noqa: E501
+def find_all_user():  # noqa: E501
     """Finds all users. Role read:users role must be granted
 
      # noqa: E501
@@ -75,7 +75,7 @@ def find_all():  # noqa: E501
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return swagger_server.controllers.user_controller_impl.find_all()
+        return impl.find_all_user()
     return AUTH_ERRORS[hasRole](role)
 
 
@@ -92,7 +92,7 @@ def get_user_by_name(username):  # noqa: E501
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return swagger_server.controllers.user_controller_impl.get_user_by_name(username)
+        return impl.get_user_by_name(username)
     return AUTH_ERRORS[hasRole](role)
 
 
@@ -111,5 +111,5 @@ def update_user(username, body):  # noqa: E501
     role = auth.WRITE_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return swagger_server.controllers.user_controller_impl.update_user(username, body)
+        return impl.update_user(username, body)
     return AUTH_ERRORS[hasRole](role)
