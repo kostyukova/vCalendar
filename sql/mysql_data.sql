@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE `employee` (
   `employee_id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(255) NOT NULL,
   `position` varchar(20) NOT NULL,
-  `specialization` VARCHAR(10) DEFAULT '',
+  `specialization` SET('BA', 'OACI', 'O365', 'Core') NOT NULL DEFAULT '',
   `team_number` TINYINT(1) NOT NULL DEFAULT 1,
   `expert` TINYINT(1) NOT NULL DEFAULT 0,
   `email` VARCHAR(255) NOT NULL UNIQUE,
@@ -43,7 +43,7 @@ CREATE OR REPLACE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_number`, `expert`, `email`)
-    VALUES ('Иванов', 'junior engineer', '', 1, 0, 'mail@mail.ru');
+    VALUES ('Иванов', 'junior engineer', 'Core,BA', 1, 0, 'mail@mail.ru');
 INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
     VALUES (1, 28, 2020);
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`)

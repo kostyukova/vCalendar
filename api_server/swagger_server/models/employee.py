@@ -15,11 +15,11 @@ class Employee(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_number: int=None, expert: bool=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
+    def __init__(self, employee_id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_number: int=None, expert: bool=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
         """Employee - a model defined in Swagger
 
-        :param id: The id of this Employee.  # noqa: E501
-        :type id: int
+        :param employee_id: The employee_id of this Employee.  # noqa: E501
+        :type employee_id: int
         :param full_name: The full_name of this Employee.  # noqa: E501
         :type full_name: str
         :param position: The position of this Employee.  # noqa: E501
@@ -36,7 +36,7 @@ class Employee(Model):
         :type leave_days_left: int
         """
         self.swagger_types = {
-            'id': int,
+            'employee_id': int,
             'full_name': str,
             'position': str,
             'specialization': str,
@@ -47,7 +47,7 @@ class Employee(Model):
         }
 
         self.attribute_map = {
-            'id': 'id',
+            'employee_id': 'employee_id',
             'full_name': 'full_name',
             'position': 'position',
             'specialization': 'specialization',
@@ -57,7 +57,7 @@ class Employee(Model):
             'leave_days_left': 'leave_days_left'
         }
 
-        self._id = id
+        self._employee_id = employee_id
         self._full_name = full_name
         self._position = position
         self._specialization = specialization
@@ -78,25 +78,25 @@ class Employee(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this Employee.
+    def employee_id(self) -> int:
+        """Gets the employee_id of this Employee.
 
 
-        :return: The id of this Employee.
+        :return: The employee_id of this Employee.
         :rtype: int
         """
-        return self._id
+        return self._employee_id
 
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Employee.
+    @employee_id.setter
+    def employee_id(self, employee_id: int):
+        """Sets the employee_id of this Employee.
 
 
-        :param id: The id of this Employee.
-        :type id: int
+        :param employee_id: The employee_id of this Employee.
+        :type employee_id: int
         """
 
-        self._id = id
+        self._employee_id = employee_id
 
     @property
     def full_name(self) -> str:
@@ -154,7 +154,7 @@ class Employee(Model):
     def specialization(self) -> str:
         """Gets the specialization of this Employee.
 
-        Employee specialization  # noqa: E501
+        Employee specialization, comma separated value form set(BA, OACI, O365, Core)  # noqa: E501
 
         :return: The specialization of this Employee.
         :rtype: str
@@ -165,17 +165,11 @@ class Employee(Model):
     def specialization(self, specialization: str):
         """Sets the specialization of this Employee.
 
-        Employee specialization  # noqa: E501
+        Employee specialization, comma separated value form set(BA, OACI, O365, Core)  # noqa: E501
 
         :param specialization: The specialization of this Employee.
         :type specialization: str
         """
-        allowed_values = ["BA", "OACI", "O365", "Core"]  # noqa: E501
-        if specialization not in allowed_values:
-            raise ValueError(
-                "Invalid value for `specialization` ({0}), must be one of {1}"
-                .format(specialization, allowed_values)
-            )
 
         self._specialization = specialization
 

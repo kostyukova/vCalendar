@@ -457,7 +457,7 @@ definitions:
     - "position"
     - "team_number"
     properties:
-      id:
+      employee_id:
         type: "integer"
         format: "int64"
       full_name:
@@ -473,12 +473,8 @@ definitions:
         - "team leader"
       specialization:
         type: "string"
-        description: "Employee specialization"
-        enum:
-        - "BA"
-        - "OACI"
-        - "O365"
-        - "Core"
+        description: "Employee specialization, comma separated value form set(BA,\
+          \ OACI, O365, Core)"
       team_number:
         type: "integer"
         format: "int32"
@@ -495,10 +491,10 @@ definitions:
     example:
       expert: true
       full_name: "doggie"
-      specialization: "BA"
+      employee_id: 0
+      specialization: "specialization"
       leave_days_left: 5
       team_number: 6
-      id: 0
       position: "junior engineer"
       leave_days_total: 1
   LeaveDays:

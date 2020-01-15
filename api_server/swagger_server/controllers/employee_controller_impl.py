@@ -1,9 +1,11 @@
 import connexion
 import six
 
+from flask import jsonify
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.employee import Employee  # noqa: E501
-from swagger_server import util
+from swagger_server import util, db
+from swagger_server.orm import Employee as Employee_orm
 
 
 def add_employee(body):  # noqa: E501
@@ -42,7 +44,8 @@ def find_all_employee():  # noqa: E501
 
     :rtype: List[Employee]
     """
-    return 'do some magic!'
+    found = Employee_orm.query.all()
+    return [to_employee_dto(elem) for elem in found]
 
 
 def find_employees_by(full_name=None, team_number=None):  # noqa: E501
@@ -88,3 +91,8 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
     if connexion.request.is_json:
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
+
+
+def to_employee_dto(found: Employee_orm):
+    return Employee(employee_id=found.employee_id, full_name=found.full_name, position=found.position,
+                    specialization=found.specialization, team_number=found.team_number, expert=found.expert)

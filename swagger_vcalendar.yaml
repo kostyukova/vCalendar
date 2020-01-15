@@ -433,7 +433,7 @@ definitions:
     - "position"
     - "team_number"
     properties:
-      id:
+      employee_id:
         type: "integer"
         format: "int64"
       full_name:
@@ -449,12 +449,7 @@ definitions:
         - "team leader"
       specialization:
         type: "string"
-        description: "Employee specialization"
-        enum:
-        - "BA"
-        - "OACI"
-        - "O365"
-        - "Core"
+        description: "Employee specialization, comma separated value form set(BA, OACI, O365, Core)"
       team_number:
         type: "integer"
         format: "int32"
