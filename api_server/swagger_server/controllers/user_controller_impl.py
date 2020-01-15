@@ -1,12 +1,12 @@
-import connexion
 import six
 
-from swagger_server.models.user import User  # noqa: E501
-from swagger_server.models.api_response import ApiResponse
+import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
-from swagger_server import util, db, auth
-from swagger_server.orm import User as User_orm
 from flask import jsonify
+from swagger_server import auth, db, util
+from swagger_server.models.api_response import ApiResponse
+from swagger_server.models.user import User  # noqa: E501
+from swagger_server.orm import User as User_orm
 
 
 def authenticate_user(username, password):  # noqa: E501
@@ -22,7 +22,7 @@ def authenticate_user(username, password):  # noqa: E501
     :rtype: str
     """
     token = auth.generate_token(username, password)
-    if token != None:
+    if token is not None:
         return token
     else:
         return jsonify(ErrorApiResponse.AuthError()), 400
@@ -40,25 +40,22 @@ def create_user(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    orm = User_orm(username=body.username,
-                   password=body.password, email=body.email, roles=body.roles)
+    orm = User_orm(username=body.username, password=auth.generate_password_hash(body.password),
+                   email=body.email, roles=body.roles)
     # check username already exists
     found = User_orm.query.filter_by(username=body.username).one_or_none()
-    if found != None:
-        return jsonify(ApiResponse(code=1001, type='user',
-                                   message='User with username \'{}\' already exists'.format(body.username))), 409
+    if found is not None:
+        return jsonify(ErrorApiResponse.UsernameExistError(body.username)), 409
     # check email already exists
     found = User_orm.query.filter_by(email=body.email).one_or_none()
-    if found != None:
-        return jsonify(ApiResponse(code=1002, type='user',
-                                   message='User with email \'{}\' already exists'.format(body.email))), 409
+    if found is not None:
+        return jsonify(ErrorApiResponse.UseremailExistError(body.email)), 409
     try:
         db.session.add(orm)
         db.session.commit()
         return get_user_by_name(body.username)
     except Exception as ex:
-        return jsonify(ApiResponse(code=1003, type='user',
-                                   message='Internal server error: {}'.format(ex))), 500
+        return jsonify(ErrorApiResponse.InternalServerError(ex)), 500
 
 
 def delete_user(username):  # noqa: E501
@@ -72,17 +69,28 @@ def delete_user(username):  # noqa: E501
     :rtype: None
     """
     if not username:
-        return 'No username supplied', 400
+        return jsonify(ErrorApiResponse.NoUsernameError()), 400
     found = User_orm.query.filter_by(username=username).one_or_none()
-    if found == None:
-        return 'User not found', 404
+    if found is None:
+        return jsonify(ErrorApiResponse.UserNotFoundError()), 404
     try:
         db.session.delete(found)
         db.session.commit()
         return 'Successful operation', 204
     except Exception as ex:
-        return jsonify(ApiResponse(code=5002, type='user',
-                                   message='Internal server error: {}'.format(ex))), 500
+        return jsonify(ErrorApiResponse.InternalServerError()), 500
+
+
+def find_all():  # noqa: E501
+    """Finds all users. Role read:users role must be granted
+
+     # noqa: E501
+
+
+    :rtype: List[User]
+    """
+    found = User_orm.query.all()
+    return [to_user_dto(elem) for elem in found]
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -96,14 +104,11 @@ def get_user_by_name(username):  # noqa: E501
     :rtype: User
     """
     if not username:
-        return 'No username supplied', 400
+        return jsonify(ErrorApiResponse.NoUsernameError()), 400
     found = User_orm.query.filter_by(username=username).one_or_none()
-    if found == None:
-        return 'User not found', 404
-    result = User(
-        id=found.id, username=found.username,
-        password=found.password, email=found.email, roles=found.roles)
-    return jsonify(result.to_dict())
+    if found is None:
+        return jsonify(ErrorApiResponse.UserNotFoundError()), 404
+    return jsonify(to_user_dto(found).to_dict())
 
 
 def update_user(username, body):  # noqa: E501
@@ -118,22 +123,25 @@ def update_user(username, body):  # noqa: E501
 
     :rtype: None
     """
+    if not username:
+        return jsonify(ErrorApiResponse.NoUsernameError()), 400
+    found = User_orm.query.filter_by(username=username).one_or_none()
+    if found is None:
+        return jsonify(ErrorApiResponse.UserNotFoundError()), 404
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    if not username:
-        return 'No username supplied', 400
-    found = User_orm.query.filter_by(username=username).one_or_none()
-    if found == None:
-        return 'User not found', 404
+
     found.username = body.username
-    found.password = body.password
+    found.password = auth.generate_password_hash(body.password)
     found.email = body.email
     found.roles = body.roles
-    # fixme roles
     try:
         db.session.add(found)
         db.session.commit()
         return get_user_by_name(body.username)
     except Exception as ex:
-        return jsonify(ApiResponse(code=5001, type='user',
-                                   message='Internal server error: {}'.format(ex))), 500
+        return jsonify(ErrorApiResponse.InternalServerError()), 500
+
+
+def to_user_dto(found):
+    return User(id=found.id, username=found.username, password='***', email=found.email, roles=found.roles)

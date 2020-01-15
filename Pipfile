@@ -11,6 +11,7 @@ python-dateutil = "==2.6.0"
 flask-sqlalchemy = "*"
 pymysql = "*"
 pyjwt = "~=1.7"
+bcrypt = "~=3.1"
 
 [requires]
 python_version = "3.7"

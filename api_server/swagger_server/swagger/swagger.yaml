@@ -286,6 +286,10 @@ paths:
           description: "Invalid username supplied"
           schema:
             $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "404":
           description: "User not found"
           schema:
@@ -322,6 +326,10 @@ paths:
           description: "Invalid user supplied"
           schema:
             $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "404":
           description: "User not found"
           schema:
@@ -352,8 +360,36 @@ paths:
           description: "Invalid username supplied"
           schema:
             $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
         "404":
           description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.user_controller"
+  /user/findAll:
+    get:
+      tags:
+      - "user"
+      summary: "Finds all users. Role read:users role must be granted"
+      description: ""
+      operationId: "find_all"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "403":
+          description: "Forbidden"
           schema:
             $ref: "#/definitions/ApiResponse"
       security:

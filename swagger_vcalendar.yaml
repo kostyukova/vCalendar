@@ -277,6 +277,10 @@ paths:
           description: "User not found"
           schema:
             $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
     put:
@@ -312,6 +316,10 @@ paths:
           description: "User not found"
           schema:
             $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
     delete:
@@ -339,6 +347,32 @@ paths:
             $ref: "#/definitions/ApiResponse"
         404:
           description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+  /user/findAll:
+    get:
+      tags:
+      - "user"
+      summary: "Finds all users. Role read:users role must be granted"
+      description: ""
+      operationId: "findAll"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        403: 
+          description: 'Forbidden'
           schema:
             $ref: "#/definitions/ApiResponse"
       security:

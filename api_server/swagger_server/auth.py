@@ -4,6 +4,7 @@ from swagger_server import db
 from swagger_server.config import Config
 from swagger_server.orm import User as User_orm
 from enum import Enum, auto, unique
+import bcrypt
 import logging
 
 (AUTH_HEADER, PAYLOAD_USER_ID, PAYLOAD_EXP) = (
@@ -28,7 +29,7 @@ def generate_token(username, password):
     found = User_orm.query.filter_by(username=username).one_or_none()
     if found == None:
         return None
-    if found.password != password:  # FIXME password hash
+    if not check_password_hash(password, found.password):
         return None
     payload = {
         PAYLOAD_USER_ID: found.id,
@@ -69,3 +70,11 @@ def has_role(headers, role: str):
         roles = result.roles.split(',')
         return TokenStatus.ROLE_GRANTED if role in roles else TokenStatus.NO_ROLE_GRANTED
     return result
+
+
+def generate_password_hash(password: str):
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def check_password_hash(password: str, password_hash: str):
+    return bcrypt.checkpw(password.encode(), password_hash.encode())

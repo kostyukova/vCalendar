@@ -57,7 +57,26 @@ def delete_user(username):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return swagger_server.controllers.user_controller_impl.delete_user(username)
+    role = auth.WRITE_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return swagger_server.controllers.user_controller_impl.delete_user(username)
+    return AUTH_ERRORS[hasRole](role)
+
+
+def find_all():  # noqa: E501
+    """Finds all users. Role read:users role must be granted
+
+     # noqa: E501
+
+
+    :rtype: List[User]
+    """
+    role = auth.READ_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return swagger_server.controllers.user_controller_impl.find_all()
+    return AUTH_ERRORS[hasRole](role)
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -70,7 +89,11 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: User
     """
-    return swagger_server.controllers.user_controller_impl.get_user_by_name(username)
+    role = auth.READ_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return swagger_server.controllers.user_controller_impl.get_user_by_name(username)
+    return AUTH_ERRORS[hasRole](role)
 
 
 def update_user(username, body):  # noqa: E501
@@ -85,4 +108,8 @@ def update_user(username, body):  # noqa: E501
 
     :rtype: User
     """
-    return swagger_server.controllers.user_controller_impl.update_user(username, body)
+    role = auth.WRITE_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return swagger_server.controllers.user_controller_impl.update_user(username, body)
+    return AUTH_ERRORS[hasRole](role)
