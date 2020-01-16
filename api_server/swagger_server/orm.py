@@ -17,7 +17,7 @@ class Employee(db.Model):
     full_name = db.Column(db.String(255), index=True)
     position = db.Column(db.String(20))
     specialization = db.Column(db.String(20))
-    team_number = db.Column(db.Integer, index=True, unique=True)
+    team_id = db.Column(db.Integer, index=True, unique=True)
     expert = db.Column(db.Boolean)
     email = db.Column(db.String(255), index=True, unique=True)
 

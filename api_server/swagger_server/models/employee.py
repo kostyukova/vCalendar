@@ -15,7 +15,7 @@ class Employee(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, employee_id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_number: int=None, expert: bool=None, email: str=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
+    def __init__(self, employee_id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_id: int=None, expert: bool=None, email: str=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
         """Employee - a model defined in Swagger
 
         :param employee_id: The employee_id of this Employee.  # noqa: E501
@@ -26,8 +26,8 @@ class Employee(Model):
         :type position: str
         :param specialization: The specialization of this Employee.  # noqa: E501
         :type specialization: str
-        :param team_number: The team_number of this Employee.  # noqa: E501
-        :type team_number: int
+        :param team_id: The team_id of this Employee.  # noqa: E501
+        :type team_id: int
         :param expert: The expert of this Employee.  # noqa: E501
         :type expert: bool
         :param email: The email of this Employee.  # noqa: E501
@@ -42,7 +42,7 @@ class Employee(Model):
             'full_name': str,
             'position': str,
             'specialization': str,
-            'team_number': int,
+            'team_id': int,
             'expert': bool,
             'email': str,
             'leave_days_total': int,
@@ -54,7 +54,7 @@ class Employee(Model):
             'full_name': 'full_name',
             'position': 'position',
             'specialization': 'specialization',
-            'team_number': 'team_number',
+            'team_id': 'team_id',
             'expert': 'expert',
             'email': 'email',
             'leave_days_total': 'leave_days_total',
@@ -65,7 +65,7 @@ class Employee(Model):
         self._full_name = full_name
         self._position = position
         self._specialization = specialization
-        self._team_number = team_number
+        self._team_id = team_id
         self._expert = expert
         self._email = email
         self._leave_days_total = leave_days_total
@@ -179,27 +179,27 @@ class Employee(Model):
         self._specialization = specialization
 
     @property
-    def team_number(self) -> int:
-        """Gets the team_number of this Employee.
+    def team_id(self) -> int:
+        """Gets the team_id of this Employee.
 
 
-        :return: The team_number of this Employee.
+        :return: The team_id of this Employee.
         :rtype: int
         """
-        return self._team_number
+        return self._team_id
 
-    @team_number.setter
-    def team_number(self, team_number: int):
-        """Sets the team_number of this Employee.
+    @team_id.setter
+    def team_id(self, team_id: int):
+        """Sets the team_id of this Employee.
 
 
-        :param team_number: The team_number of this Employee.
-        :type team_number: int
+        :param team_id: The team_id of this Employee.
+        :type team_id: int
         """
-        if team_number is None:
-            raise ValueError("Invalid value for `team_number`, must not be `None`")  # noqa: E501
+        if team_id is None:
+            raise ValueError("Invalid value for `team_id`, must not be `None`")  # noqa: E501
 
-        self._team_number = team_number
+        self._team_id = team_id
 
     @property
     def expert(self) -> bool:

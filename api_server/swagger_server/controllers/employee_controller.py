@@ -59,8 +59,20 @@ def find_all_employee():  # noqa: E501
     """
     return impl.find_all_employee()
 
+def find_employee_by_email(email):  # noqa: E501
+    """Finds Employee by given email
 
-def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_number=None, email=None):  # noqa: E501
+     # noqa: E501
+
+    :param email: Unique employee email
+    :type email: str
+
+    :rtype: Employee
+    """
+    return impl.find_employee_by_email(email)
+
+
+def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_id=None, email=None):  # noqa: E501
     """Finds Employees by given parameters
 
      # noqa: E501
@@ -73,27 +85,14 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
     :type specialization: str
     :param expert: Expert mark to filter by
     :type expert: bool
-    :param team_number: Team number to filter by
-    :type team_number: int
+    :param team_id: Team number to filter by
+    :type team_id: int
     :param email: Email template to filter by
     :type email: str
 
     :rtype: List[Employee]
     """
-    return impl.find_employees_by(full_name, position, specialization, expert, team_number, email)
-
-
-def find_employee_by_email(email):  # noqa: E501
-    """Finds Employee by given email
-
-     # noqa: E501
-
-    :param email: Unique employee email
-    :type email: str
-
-    :rtype: Employee
-    """
-    return impl.find_employee_by_email(email)
+    return impl.find_employees_by(full_name, position, specialization, expert, team_id, email)
 
 
 def get_employee_by_id(employeeId):  # noqa: E501

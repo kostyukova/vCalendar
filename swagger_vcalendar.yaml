@@ -99,7 +99,7 @@ paths:
         in: "query"
         description: "Expert mark to filter by"
         type: "boolean"
-      - name: "team_number"
+      - name: "team_id"
         in: "query"
         description: "Team number to filter by"
         type: "integer"
@@ -116,7 +116,7 @@ paths:
             items:
               $ref: "#/definitions/Employee"
         400:
-          description: "Invalid team number value"
+          description: "Invalid params to filter by"
           schema:
             $ref: "#/definitions/ApiResponse"
   /employee/findByEmail/{email}:
@@ -475,7 +475,7 @@ definitions:
     required:
     - "full_name"
     - "position"
-    - "team_number"
+    - "team_id"
     - "expert"
     - "email"
     properties:
@@ -497,7 +497,7 @@ definitions:
         type: "string"
         description: "Employee specialization, comma separated value form set(BA, OACI, O365, Core)"
         example: "Core"
-      team_number:
+      team_id:
         type: "integer"
         format: "int32"
         example: "1"

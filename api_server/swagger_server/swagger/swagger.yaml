@@ -107,7 +107,7 @@ paths:
         description: "Expert mark to filter by"
         required: false
         type: "boolean"
-      - name: "team_number"
+      - name: "team_id"
         in: "query"
         description: "Team number to filter by"
         required: false
@@ -126,7 +126,7 @@ paths:
             items:
               $ref: "#/definitions/Employee"
         "400":
-          description: "Invalid team number value"
+          description: "Invalid params to filter by"
           schema:
             $ref: "#/definitions/ApiResponse"
       x-swagger-router-controller: "swagger_server.controllers.employee_controller"
@@ -506,7 +506,7 @@ definitions:
     - "expert"
     - "full_name"
     - "position"
-    - "team_number"
+    - "team_id"
     properties:
       employee_id:
         type: "integer"
@@ -527,7 +527,7 @@ definitions:
         example: "Core"
         description: "Employee specialization, comma separated value form set(BA,\
           \ OACI, O365, Core)"
-      team_number:
+      team_id:
         type: "integer"
         format: "int32"
         example: 1
@@ -550,8 +550,8 @@ definitions:
       employee_id: 0
       specialization: "Core"
       leave_days_left: 1
-      team_number: 1
       position: "junior engineer"
+      team_id: 1
       leave_days_total: 6
       email: "joe@mail.com"
   LeaveDays:

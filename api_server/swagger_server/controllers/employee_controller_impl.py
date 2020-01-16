@@ -22,7 +22,7 @@ def add_employee(body):  # noqa: E501
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
     orm = Employee_orm(full_name=body.full_name, position=body.position,
                        specialization=body.specialization if body.specialization else '',
-                       team_number=body.team_number, expert=body.expert, email=body.email)
+                       team_id=body.team_id, expert=body.expert, email=body.email)
     # check email already exists
     found = Employee_orm.query.filter_by(email=body.email).one_or_none()
     if found is not None:
@@ -30,7 +30,7 @@ def add_employee(body):  # noqa: E501
     try:
         db.session.add(orm)
         db.session.commit()
-        return find_employees_by_email(body.email)
+        return find_employee_by_email(body.email)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
 
@@ -68,7 +68,7 @@ def find_all_employee():  # noqa: E501
     return [to_employee_dto(elem) for elem in found]
 
 
-def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_number=None, email=None):  # noqa: E501
+def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_id=None, email=None):  # noqa: E501
     """Finds Employees by given parameters
 
      # noqa: E501
@@ -81,8 +81,8 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
     :type specialization: str
     :param expert: Expert mark to filter by
     :type expert: bool
-    :param team_number: Team number to filter by
-    :type team_number: int
+    :param team_id: Team number to filter by
+    :type team_id: int
     :param email: Email template to filter by
     :type email: str
 
@@ -100,8 +100,8 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
             '%' + specialization.strip() + '%'))
     if expert is not None:
         query = query.filter_by(expert=expert)
-    if team_number:
-        query = query.filter_by(team_number=team_number)
+    if team_id:
+        query = query.filter_by(team_id=team_id)
     if email and email.strip():
         query = query.filter(Employee_orm.email.ilike(
             '%' + email.strip() + '%'))
@@ -164,7 +164,7 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
     found.full_name = body.full_name
     found.position = body.position
     found.specialization = body.specialization if body.specialization else ''
-    found.team_number = body.team_number
+    found.team_id = body.team_id
     found.expert = body.expert
     found.email = body.email
     try:
@@ -177,5 +177,5 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
 
 def to_employee_dto(found: Employee_orm):
     return Employee(employee_id=found.employee_id, full_name=found.full_name, position=found.position,
-                    specialization=found.specialization, team_number=found.team_number,
+                    specialization=found.specialization, team_id=found.team_id,
                     expert=found.expert, email=found.email)

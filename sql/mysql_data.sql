@@ -1,15 +1,23 @@
 DROP TABLE IF EXISTS `employee_total_days`;
 DROP TABLE IF EXISTS `employee_leave_days`;
+DROP TABLE IF EXISTS `employee`;
+
+CREATE OR REPLACE TABLE `team` (
+  `team_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE OR REPLACE TABLE `employee` (
-  `employee_id` int(11) NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(255) NOT NULL,
-  `position` varchar(20) NOT NULL CHECK(`position` in ('junior engineer', 'senior engineer', 'chief engineer', 'team leader')),
+  `employee_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `full_name` VARCHAR(255) NOT NULL,
+  `position` VARCHAR(20) NOT NULL CHECK(`position` in ('junior engineer', 'senior engineer', 'chief engineer', 'team leader')),
   `specialization` SET('BA', 'OACI', 'O365', 'Core') NOT NULL DEFAULT '',
-  `team_number` TINYINT(1) NOT NULL DEFAULT 1,
+  `team_id` INT(11) NOT NULL,
   `expert` TINYINT(1) NOT NULL DEFAULT 0,
   `email` VARCHAR(255) NOT NULL UNIQUE,
-  PRIMARY KEY (`employee_id`)
+  PRIMARY KEY (`employee_id`),
+  CONSTRAINT `FK_employee_team_id` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE OR REPLACE TABLE `employee_total_days` (
@@ -42,7 +50,9 @@ CREATE OR REPLACE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_number`, `expert`, `email`)
+INSERT INTO `team`(`name`) VALUES ('Psi');
+
+INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
     VALUES ('Иванов', 'junior engineer', 'Core,BA', 1, 0, 'mail@mail.ru');
 INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
     VALUES (1, 28, 2020);
