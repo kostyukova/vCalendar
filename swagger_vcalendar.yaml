@@ -103,6 +103,30 @@ paths:
           description: "Invalid team number value"
           schema:
             $ref: "#/definitions/ApiResponse"
+  /employee/findByEmail/{email}:
+    get:
+      tags:
+      - "employee"
+      summary: "Finds Employee by given email"
+      description: ""
+      operationId: "findEmployeesByEmail"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Unique employee email"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
+        404:
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /employee/{employeeId}:
     get:
       tags:
@@ -418,12 +442,16 @@ definitions:
         format: "int64"
       username:
         type: "string"
+        example: "user"
       email:
         type: "string"
+        example: "user@mail.com"
       password:
         type: "string"
+        example: "123qwe"
       roles:
         type: "string"
+        example: "write:employees"
     xml:
       name: "User"
   Employee:
@@ -432,13 +460,15 @@ definitions:
     - "full_name"
     - "position"
     - "team_number"
+    - "expert"
+    - "email"
     properties:
       employee_id:
         type: "integer"
         format: "int64"
       full_name:
         type: "string"
-        example: "doggie"
+        example: "Joe Smith"
       position:
         type: "string"
         description: "Employee position"
@@ -450,11 +480,16 @@ definitions:
       specialization:
         type: "string"
         description: "Employee specialization, comma separated value form set(BA, OACI, O365, Core)"
+        example: "Core"
       team_number:
         type: "integer"
         format: "int32"
+        example: "1"
       expert:
         type: "boolean"
+      email:
+        type: "string"
+        example: "joe@mail.com"
       leave_days_total:
         type: integer
         format: int32

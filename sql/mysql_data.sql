@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS `employee_leave_days`;
 CREATE OR REPLACE TABLE `employee` (
   `employee_id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(255) NOT NULL,
-  `position` varchar(20) NOT NULL,
+  `position` varchar(20) NOT NULL CHECK(`position` in ('junior engineer', 'senior engineer', 'chief engineer', 'team leader')),
   `specialization` SET('BA', 'OACI', 'O365', 'Core') NOT NULL DEFAULT '',
   `team_number` TINYINT(1) NOT NULL DEFAULT 1,
   `expert` TINYINT(1) NOT NULL DEFAULT 0,

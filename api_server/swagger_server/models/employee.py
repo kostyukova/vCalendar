@@ -15,7 +15,7 @@ class Employee(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, employee_id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_number: int=None, expert: bool=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
+    def __init__(self, employee_id: int=None, full_name: str=None, position: str=None, specialization: str=None, team_number: int=None, expert: bool=None, email: str=None, leave_days_total: int=None, leave_days_left: int=None):  # noqa: E501
         """Employee - a model defined in Swagger
 
         :param employee_id: The employee_id of this Employee.  # noqa: E501
@@ -30,6 +30,8 @@ class Employee(Model):
         :type team_number: int
         :param expert: The expert of this Employee.  # noqa: E501
         :type expert: bool
+        :param email: The email of this Employee.  # noqa: E501
+        :type email: str
         :param leave_days_total: The leave_days_total of this Employee.  # noqa: E501
         :type leave_days_total: int
         :param leave_days_left: The leave_days_left of this Employee.  # noqa: E501
@@ -42,6 +44,7 @@ class Employee(Model):
             'specialization': str,
             'team_number': int,
             'expert': bool,
+            'email': str,
             'leave_days_total': int,
             'leave_days_left': int
         }
@@ -53,6 +56,7 @@ class Employee(Model):
             'specialization': 'specialization',
             'team_number': 'team_number',
             'expert': 'expert',
+            'email': 'email',
             'leave_days_total': 'leave_days_total',
             'leave_days_left': 'leave_days_left'
         }
@@ -63,6 +67,7 @@ class Employee(Model):
         self._specialization = specialization
         self._team_number = team_number
         self._expert = expert
+        self._email = email
         self._leave_days_total = leave_days_total
         self._leave_days_left = leave_days_left
 
@@ -214,8 +219,33 @@ class Employee(Model):
         :param expert: The expert of this Employee.
         :type expert: bool
         """
+        if expert is None:
+            raise ValueError("Invalid value for `expert`, must not be `None`")  # noqa: E501
 
         self._expert = expert
+
+    @property
+    def email(self) -> str:
+        """Gets the email of this Employee.
+
+
+        :return: The email of this Employee.
+        :rtype: str
+        """
+        return self._email
+
+    @email.setter
+    def email(self, email: str):
+        """Sets the email of this Employee.
+
+
+        :param email: The email of this Employee.
+        :type email: str
+        """
+        if email is None:
+            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
+
+        self._email = email
 
     @property
     def leave_days_total(self) -> int:

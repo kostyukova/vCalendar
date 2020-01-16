@@ -1,15 +1,16 @@
-import connexion
 import six
 
+import connexion
+import swagger_server.controllers.employee_controller_impl as impl
+import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+from swagger_server import auth, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.employee import Employee  # noqa: E501
-from swagger_server import util, auth
-import swagger_server.controllers.employee_controller_impl as impl
 
 AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(),
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(),
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role),
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='Employee'),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='Employee'),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='Employee'),
     auth.TokenStatus.ROLE_GRANTED: None
 }
 
@@ -72,6 +73,19 @@ def find_employees_by(full_name=None, team_number=None):  # noqa: E501
     :rtype: List[Employee]
     """
     return impl.find_employees_by(full_name, team_number)
+
+
+def find_employees_by_email(email):  # noqa: E501
+    """Finds Employee by given email
+
+     # noqa: E501
+
+    :param email: Unique employee email
+    :type email: str
+
+    :rtype: Employee
+    """
+    return impl.find_employees_by_email(email)
 
 
 def get_employee_by_id(employeeId):  # noqa: E501
