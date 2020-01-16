@@ -45,7 +45,15 @@ def delete_employee(employeeId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    found = Employee_orm.query.get(employeeId)
+    if found is None:
+        return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
+    try:
+        db.session.delete(found)
+        db.session.commit()
+        return 'Successful operation', 204
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
 
 
 def find_all_employee():  # noqa: E501
@@ -60,22 +68,50 @@ def find_all_employee():  # noqa: E501
     return [to_employee_dto(elem) for elem in found]
 
 
-def find_employees_by(full_name=None, team_number=None):  # noqa: E501
-    """Finds Employees by given team number and/or full_name
+def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_number=None, email=None):  # noqa: E501
+    """Finds Employees by given parameters
 
      # noqa: E501
 
     :param full_name: Full name template to filter by
     :type full_name: str
+    :param position: Position template to filter by
+    :type position: str
+    :param specialization: Specialization template to filter by
+    :type specialization: str
+    :param expert: Expert mark to filter by
+    :type expert: bool
     :param team_number: Team number to filter by
     :type team_number: int
+    :param email: Email template to filter by
+    :type email: str
 
     :rtype: List[Employee]
     """
-    return 'do some magic!'
+    query = Employee_orm.query
+    if full_name and full_name.strip():
+        query = query.filter(Employee_orm.full_name.ilike(
+            '%' + full_name.strip() + '%'))
+    if position and position.strip():
+        query = query.filter(Employee_orm.position.ilike(
+            '%' + position.strip() + '%'))
+    if specialization and specialization.strip():
+        query = query.filter(Employee_orm.specialization.ilike(
+            '%' + specialization.strip() + '%'))
+    if expert is not None:
+        query = query.filter_by(expert=expert)
+    if team_number:
+        query = query.filter_by(team_number=team_number)
+    if email and email.strip():
+        query = query.filter(Employee_orm.email.ilike(
+            '%' + email.strip() + '%'))
+    try:
+        return [to_employee_dto(elem) for elem in query.all()]
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
 
 
-def find_employees_by_email(email):  # noqa: E501
+def find_employee_by_email(email):  # noqa: E501
     """Finds Employee by given email
 
      # noqa: E501
@@ -87,7 +123,7 @@ def find_employees_by_email(email):  # noqa: E501
     """
     found = Employee_orm.query.filter_by(email=email).one_or_none()
     if found is None:
-        return ErrorApiResponse.EmployeeNotFoundError(email = email), 404
+        return ErrorApiResponse.EmployeeNotFoundError(email=email), 404
     return to_employee_dto(found)
 
 
@@ -101,7 +137,10 @@ def get_employee_by_id(employeeId):  # noqa: E501
 
     :rtype: Employee
     """
-    return 'do some magic!'
+    found = Employee_orm.query.get(employeeId)
+    if found is None:
+        return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
+    return to_employee_dto(found)
 
 
 def update_employee_by_id(employeeId, body):  # noqa: E501
@@ -116,11 +155,27 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
 
     :rtype: Employee
     """
+    found = Employee_orm.query.get(employeeId)
+    if found is None:
+        return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
     if connexion.request.is_json:
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    found.full_name = body.full_name
+    found.position = body.position
+    found.specialization = body.specialization if body.specialization else ''
+    found.team_number = body.team_number
+    found.expert = body.expert
+    found.email = body.email
+    try:
+        db.session.add(found)
+        db.session.commit()
+        return get_employee_by_id(employeeId)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
 
 
 def to_employee_dto(found: Employee_orm):
     return Employee(employee_id=found.employee_id, full_name=found.full_name, position=found.position,
-                    specialization=found.specialization, team_number=found.team_number, expert=found.expert)
+                    specialization=found.specialization, team_number=found.team_number,
+                    expert=found.expert, email=found.email)

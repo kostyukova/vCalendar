@@ -81,7 +81,7 @@ paths:
     get:
       tags:
       - "employee"
-      summary: "Finds Employees by given team number and/or full_name"
+      summary: "Finds Employees by given parameters"
       description: ""
       operationId: "find_employees_by"
       produces:
@@ -92,12 +92,32 @@ paths:
         description: "Full name template to filter by"
         required: false
         type: "string"
+      - name: "position"
+        in: "query"
+        description: "Position template to filter by"
+        required: false
+        type: "string"
+      - name: "specialization"
+        in: "query"
+        description: "Specialization template to filter by"
+        required: false
+        type: "string"
+      - name: "expert"
+        in: "query"
+        description: "Expert mark to filter by"
+        required: false
+        type: "boolean"
       - name: "team_number"
         in: "query"
         description: "Team number to filter by"
         required: false
         type: "integer"
         format: "int32"
+      - name: "email"
+        in: "query"
+        description: "Email template to filter by"
+        required: false
+        type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -116,7 +136,7 @@ paths:
       - "employee"
       summary: "Finds Employee by given email"
       description: ""
-      operationId: "find_employees_by_email"
+      operationId: "find_employee_by_email"
       produces:
       - "application/json"
       parameters:

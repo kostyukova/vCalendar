@@ -49,5 +49,5 @@ def EmployeeEmailExistError(email: str, type='employee'):
                        message='Employee with email \'{}\' already exists'.format(email))
 
 
-def EmployeeNotFoundError(id: int, email: str, type='employee'):
+def EmployeeNotFoundError(id: int = None, email: str = None, type='employee'):
     return ApiResponse(code=1010, type=type, message='Employee not found, id: \'{}\', email: \'{}\''.format(id, email))

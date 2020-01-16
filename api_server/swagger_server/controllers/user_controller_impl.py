@@ -77,7 +77,7 @@ def delete_user(username):  # noqa: E501
         db.session.commit()
         return 'Successful operation', 204
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(), 500
+        return ErrorApiResponse.InternalServerError(ex), 500
 
 
 def find_all_user():  # noqa: E501
@@ -133,13 +133,13 @@ def update_user(username, body):  # noqa: E501
     found.username = body.username
     found.password = auth.generate_password_hash(body.password)
     found.email = body.email
-    found.roles = body.roles
+    found.roles = body.roles if body.roles else ''
     try:
         db.session.add(found)
         db.session.commit()
         return get_user_by_name(body.username)
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(), 500
+        return ErrorApiResponse.InternalServerError(ex), 500
 
 
 def to_user_dto(found):
