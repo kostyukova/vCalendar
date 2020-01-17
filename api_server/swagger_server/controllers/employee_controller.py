@@ -85,7 +85,7 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
     :type specialization: str
     :param expert: Expert mark to filter by
     :type expert: bool
-    :param team_id: Team number to filter by
+    :param team_id: Team id to filter by
     :type team_id: int
     :param email: Email template to filter by
     :type email: str
@@ -115,7 +115,8 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
 
     :param employeeId: ID of empoyee to return
     :type employeeId: int
-    :param body: Employee object that needs to be added to the system
+    :param body: Employee object that needs to be updated in the system
+
     :type body: dict | bytes
 
     :rtype: Employee

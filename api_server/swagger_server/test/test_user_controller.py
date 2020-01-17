@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
+from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -15,7 +16,7 @@ class TestUserController(BaseTestCase):
     def test_authenticate_user(self):
         """Test case for authenticate_user
 
-        Generates token for user
+        Generates token for an user
         """
         query_string = [('username', 'username_example'),
                         ('password', 'password_example')]
@@ -51,10 +52,21 @@ class TestUserController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+    def test_find_all_user(self):
+        """Test case for find_all_user
+
+        Finds all users. Role read:users role must be granted
+        """
+        response = self.client.open(
+            '/vcalendar/user/findAll',
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_get_user_by_name(self):
         """Test case for get_user_by_name
 
-        Get user by user name. Role read:users role must be granted
+        Gets user by user name. Role read:users role must be granted
         """
         response = self.client.open(
             '/vcalendar/user/{username}'.format(username='username_example'),

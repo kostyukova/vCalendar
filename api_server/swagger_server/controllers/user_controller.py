@@ -80,7 +80,7 @@ def find_all_user():  # noqa: E501
 
 
 def get_user_by_name(username):  # noqa: E501
-    """Get user by user name. Role read:users role must be granted
+    """Gets user by user name. Role read:users role must be granted
 
      # noqa: E501
 

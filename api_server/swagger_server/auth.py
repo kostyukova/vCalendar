@@ -10,8 +10,8 @@ import logging
 (AUTH_HEADER, PAYLOAD_USER_ID, PAYLOAD_EXP) = (
     'Authorization', 'user_id', 'exp')
 
-(READ_USERS, WRITE_USERS, READ_EMPLOYEES, WRITE_EMPLOYEES) = (
-    'read:users', 'write:users', 'read:employees', 'write:employees')
+(READ_USERS, WRITE_USERS, WRITE:TEAMS, WRITE_EMPLOYEES) = (
+    'read:users', 'write:users', 'write:teams', 'write:employees')
 
 
 @unique

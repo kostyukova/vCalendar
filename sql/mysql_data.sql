@@ -46,7 +46,7 @@ CREATE OR REPLACE TABLE `user` (
   `username` VARCHAR(20) NOT NULL UNIQUE,
   `password` VARCHAR(128) NOT NULL,
   `email` VARCHAR(255) NOT NULL UNIQUE,
-  `roles` SET('read:users','write:users','read:employees', 'write:employees') NOT NULL DEFAULT '',
+  `roles` SET('read:users','write:users','write:teams', 'write:employees') NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -60,7 +60,7 @@ INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `en
     VALUES(1, 5, '2020-01-06', '2020-01-12');
 
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
-    VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'read:users,write:users');
+    VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users');
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
     VALUES('user', '$2b$12$nZKuiZrbSedpTwQrhDn6hey6S38fr5oVEYuM5QAodBrsNpCq3v9WO', 'user@mail.com', 'read:employees,write:employees');
 

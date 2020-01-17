@@ -12,6 +12,8 @@ info:
 host: "localhost:8080"
 basePath: "/vcalendar"
 tags:
+- name: "team"
+  description: "Team management"
 - name: "employee"
   description: "Employee management"
 - name: "user"
@@ -20,6 +22,193 @@ schemes:
 - "https"
 - "http"
 paths:
+  /team:
+    post:
+      tags:
+      - "team"
+      summary: "Add a new team to the system. Role write:teams must be granted"
+      description: ""
+      operationId: "addTeam"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Team object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Team"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        409:
+          description: "Team already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+  /team/findAll:
+    get:
+      tags:
+      - "team"
+      summary: "Returns all Teams registered in the system."
+      description: ""
+      operationId: "findAllTeam"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
+  /team/findBy:
+    get:
+      tags:
+      - "team"
+      summary: "Finds Teams by given parameters"
+      description: ""
+      operationId: "findTeamBy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "Team name template to filter by"
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
+        400:
+          description: "Invalid params to filter by"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /team/{teamId}:
+    get:
+      tags:
+      - "team"
+      summary: "Find team by ID"
+      description: "Returns a single team."
+      operationId: "getTeamById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        description: "ID of team to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        400:
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Team not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+      - "team"
+      summary: "Updates a team in the system with form data. Role write:teams must be granted"
+      description: ""
+      operationId: "updateTeamById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        description: "ID of team to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Team object that needs to be updated in the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Team"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        400:
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Team not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        405:
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        409:
+          description: "Team already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - "team"
+      summary: "Deletes an team. Role write:teams must be granteds"
+      description: ""
+      operationId: "deleteTeam"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        description: "Team id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        400:
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Team not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
   /employee:
     post:
       tags:
@@ -101,7 +290,7 @@ paths:
         type: "boolean"
       - name: "team_id"
         in: "query"
-        description: "Team number to filter by"
+        description: "Team id to filter by"
         type: "integer"
         format: "int32"
       - name: "email"
@@ -191,7 +380,7 @@ paths:
         format: "int64"
       - in: "body"
         name: "body"
-        description: "Employee object that needs to be added to the system"
+        description: "Employee object that needs to be updated in the system"
         required: true
         schema:
           $ref: "#/definitions/Employee"
@@ -320,7 +509,7 @@ paths:
     get:
       tags:
       - "user"
-      summary: "Get user by user name. Role read:users role must be granted"
+      summary: "Gets user by user name. Role read:users role must be granted"
       description: ""
       operationId: "getUserByName"
       produces:
@@ -470,6 +659,19 @@ definitions:
         example: "write:employees"
     xml:
       name: "User"
+  Team:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        example: "Alpha"
+    xml:
+      name: "Team"
   Employee:
     type: "object"
     required:
