@@ -68,5 +68,5 @@ def TotalDaysNotFoundError(id: int = None, employee_id: str = None, year: int = 
 
 
 def TotalDaysExistError(employee_id: str = None, year: int = None, type='total days'):
-    return ApiResponse(code=1011, type=type,
+    return ApiResponse(code=1014, type=type,
                        message='Total days for employee id\'{}\', year \'{}\' already exists'.format(employee_id, year))

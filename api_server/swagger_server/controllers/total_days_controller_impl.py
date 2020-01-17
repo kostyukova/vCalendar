@@ -49,7 +49,15 @@ def delete_total_days(id):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    found = TotalDays_orm.query.get(id)
+    if found is None:
+        return ErrorApiResponse.TotalDaysNotFoundError(id=id), 404
+    try:
+        db.session.delete(found)
+        db.session.commit()
+        return 'Successful operation', 204
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='total days'), 500
 
 
 def find_total_days_by(employee_id=None, year=None):  # noqa: E501
@@ -122,9 +130,25 @@ def update_total_days_by_id(id, body):  # noqa: E501
 
     :rtype: TotalDays
     """
+    found = TotalDays_orm.query.get(id)
+    if found is None:
+        return ErrorApiResponse.TotalDaysNotFoundError(id=id), 404
     if connexion.request.is_json:
         body = TotalDays.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # check already exists
+    duplicate = TotalDays_orm.query.filter_by(
+        employee_id=body.employee_id, year=body.year).one_or_none()
+    if duplicate is not None and duplicate.id != id:
+        return ErrorApiResponse.TotalDaysExistError(body.employee_id, body.year), 409
+    found.employee_id = body.employee_id
+    found.year = body.year
+    found.total_days = body.total_days
+    try:
+        db.session.add(found)
+        db.session.commit()
+        return get_total_days_by_id(id)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='total days'), 500
 
 
 def to_dto(found: TotalDays_orm):

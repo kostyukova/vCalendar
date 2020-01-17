@@ -136,7 +136,7 @@ def update_team_by_id(teamId, body):  # noqa: E501
         body = Team.from_dict(connexion.request.get_json())  # noqa: E501
     # check team already exists by name
     duplicate = Team_orm.query.filter_by(name=body.name).one_or_none()
-    if duplicate is not None:
+    if duplicate is not None and duplicate.team_id != teamId:
         return ErrorApiResponse.TeamExistError(body.name), 409
     found.name = body.name
     try:
