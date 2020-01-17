@@ -42,7 +42,15 @@ def delete_team(teamId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    found = Team_orm.query.get(teamId)
+    if found is None:
+        return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
+    try:
+        db.session.delete(found)
+        db.session.commit()
+        return 'Successful operation', 204
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
 
 
 def find_all_team():  # noqa: E501
@@ -121,9 +129,22 @@ def update_team_by_id(teamId, body):  # noqa: E501
 
     :rtype: Team
     """
+    found = Team_orm.query.get(teamId)
+    if found is None:
+        return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
     if connexion.request.is_json:
         body = Team.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # check team already exists by name
+    duplicate = Team_orm.query.filter_by(name=body.name).one_or_none()
+    if duplicate is not None:
+        return ErrorApiResponse.TeamExistError(body.name), 409
+    found.name = body.name
+    try:
+        db.session.add(found)
+        db.session.commit()
+        return get_team_by_id(teamId)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
 
 
 def to_team_dto(found: Team_orm):
