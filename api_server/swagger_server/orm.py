@@ -12,6 +12,14 @@ class User(db.Model):
         return 'User {}'.format(self.username)
 
 
+class Team(db.Model):
+    team_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), index=True, unique=True)
+
+    def __repr__(self):
+        return 'Team {}'.format(self.name)
+
+
 class Employee(db.Model):
     employee_id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(255), index=True)

@@ -88,7 +88,7 @@ paths:
       - name: "name"
         in: "query"
         description: "Team name template to filter by"
-        required: false
+        required: true
         type: "string"
       responses:
         "200":
@@ -99,6 +99,35 @@ paths:
               $ref: "#/definitions/Team"
         "400":
           description: "Invalid params to filter by"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.team_controller"
+  /team/findByName/{name}:
+    get:
+      tags:
+      - "team"
+      summary: "Finds Team by name"
+      description: ""
+      operationId: "find_team_by_name"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Team name to find"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        "400":
+          description: "Invalid name supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Team not found"
           schema:
             $ref: "#/definitions/ApiResponse"
       x-swagger-router-controller: "swagger_server.controllers.team_controller"
@@ -702,7 +731,7 @@ definitions:
     required:
     - "name"
     properties:
-      id:
+      team_id:
         type: "integer"
         format: "int64"
       name:
@@ -712,7 +741,7 @@ definitions:
       name: "Team"
     example:
       name: "Alpha"
-      id: 0
+      team_id: 0
   Employee:
     type: "object"
     required:

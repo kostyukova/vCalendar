@@ -20,13 +20,14 @@ def add_employee(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
-    orm = Employee_orm(full_name=body.full_name, position=body.position,
-                       specialization=body.specialization if body.specialization else '',
-                       team_id=body.team_id, expert=body.expert, email=body.email)
     # check email already exists
     found = Employee_orm.query.filter_by(email=body.email).one_or_none()
     if found is not None:
         return ErrorApiResponse.EmployeeEmailExistError(body.email), 409
+    # persist new employee
+    orm = Employee_orm(full_name=body.full_name, position=body.position,
+                       specialization=body.specialization if body.specialization else '',
+                       team_id=body.team_id, expert=body.expert, email=body.email)
     try:
         db.session.add(orm)
         db.session.commit()

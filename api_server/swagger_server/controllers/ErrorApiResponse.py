@@ -51,3 +51,12 @@ def EmployeeEmailExistError(email: str, type='employee'):
 
 def EmployeeNotFoundError(id: int = None, email: str = None, type='employee'):
     return ApiResponse(code=1010, type=type, message='Employee not found, id: \'{}\', email: \'{}\''.format(id, email))
+
+
+def TeamExistError(name: str, type='team'):
+    return ApiResponse(code=1011, type=type,
+                       message='Team with name \'{}\' already exists'.format(name))
+
+
+def TeamNotFoundError(id: int = None, name: str = None, type='team'):
+    return ApiResponse(code=1012, type=type, message='Team not found, id: \'{}\', name: \'{}\''.format(id, name))

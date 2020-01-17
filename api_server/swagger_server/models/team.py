@@ -15,25 +15,25 @@ class Team(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, name: str=None):  # noqa: E501
+    def __init__(self, team_id: int=None, name: str=None):  # noqa: E501
         """Team - a model defined in Swagger
 
-        :param id: The id of this Team.  # noqa: E501
-        :type id: int
+        :param team_id: The team_id of this Team.  # noqa: E501
+        :type team_id: int
         :param name: The name of this Team.  # noqa: E501
         :type name: str
         """
         self.swagger_types = {
-            'id': int,
+            'team_id': int,
             'name': str
         }
 
         self.attribute_map = {
-            'id': 'id',
+            'team_id': 'team_id',
             'name': 'name'
         }
 
-        self._id = id
+        self._team_id = team_id
         self._name = name
 
     @classmethod
@@ -48,25 +48,25 @@ class Team(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this Team.
+    def team_id(self) -> int:
+        """Gets the team_id of this Team.
 
 
-        :return: The id of this Team.
+        :return: The team_id of this Team.
         :rtype: int
         """
-        return self._id
+        return self._team_id
 
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Team.
+    @team_id.setter
+    def team_id(self, team_id: int):
+        """Sets the team_id of this Team.
 
 
-        :param id: The id of this Team.
-        :type id: int
+        :param team_id: The team_id of this Team.
+        :type team_id: int
         """
 
-        self._id = id
+        self._team_id = team_id
 
     @property
     def name(self) -> str:

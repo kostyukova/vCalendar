@@ -2,17 +2,10 @@ import six
 
 import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
-import swagger_server.controllers.team_controller_impl as impl
-from swagger_server import auth, util
+from swagger_server import db, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.team import Team  # noqa: E501
-
-AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='Team'),
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='Team'),
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='Team'),
-    auth.TokenStatus.ROLE_GRANTED: None
-}
+from swagger_server.orm import Team as Team_orm
 
 
 def add_team(body):  # noqa: E501
@@ -25,11 +18,18 @@ def add_team(body):  # noqa: E501
 
     :rtype: Team
     """
-    role = auth.WRITE_TEAMS
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.add_team(body)
-    return AUTH_ERRORS[hasRole](role)
+    if connexion.request.is_json:
+        body = Team.from_dict(connexion.request.get_json())  # noqa: E501
+    # check team already exists by name
+    found = Team_orm.query.filter_by(name=body.name).one_or_none()
+    if found is not None:
+        return ErrorApiResponse.TeamExistError(body.name), 409
+    try:
+        db.session.add(Team_orm(name=body.name))
+        db.session.commit()
+        return find_team_by_name(body.name)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
 
 
 def delete_team(teamId):  # noqa: E501
@@ -42,11 +42,7 @@ def delete_team(teamId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    role = auth.WRITE_TEAMS
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.delete_team(teamId)
-    return AUTH_ERRORS[hasRole](role)
+    return 'do some magic!'
 
 
 def find_all_team():  # noqa: E501
@@ -57,10 +53,11 @@ def find_all_team():  # noqa: E501
 
     :rtype: List[Team]
     """
-    return impl.find_all_team()
+    found = Team_orm.query.all()
+    return [to_team_dto(elem) for elem in found]
 
 
-def find_team_by(name):  # noqa: E501
+def find_team_by(name=None):  # noqa: E501
     """Finds Teams by given parameters
 
      # noqa: E501
@@ -70,7 +67,14 @@ def find_team_by(name):  # noqa: E501
 
     :rtype: List[Team]
     """
-    return impl.find_team_by(name)
+    query = Team_orm.query
+    if name and name.strip():
+        query = query.filter(Team_orm.name.ilike(
+            '%' + name.strip() + '%'))
+    try:
+        return [to_team_dto(elem) for elem in query.all()]
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
 
 
 def find_team_by_name(name):  # noqa: E501
@@ -83,7 +87,10 @@ def find_team_by_name(name):  # noqa: E501
 
     :rtype: Team
     """
-    return impl.find_team_by_name(name)
+    found = Team_orm.query.filter_by(name=name).one_or_none()
+    if found is None:
+        return ErrorApiResponse.TeamNotFoundError(name=name), 404
+    return to_team_dto(found)
 
 
 def get_team_by_id(teamId):  # noqa: E501
@@ -96,7 +103,10 @@ def get_team_by_id(teamId):  # noqa: E501
 
     :rtype: Team
     """
-    return impl.get_team_by_id(teamId)
+    found = Team_orm.query.get(teamId)
+    if found is None:
+        return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
+    return to_team_dto(found)
 
 
 def update_team_by_id(teamId, body):  # noqa: E501
@@ -111,8 +121,10 @@ def update_team_by_id(teamId, body):  # noqa: E501
 
     :rtype: Team
     """
-    role = auth.WRITE_TEAMS
-    hasRole = auth.has_role(connexion.request.headers, role)
-    if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.update_team_by_id(teamId, body)
-    return AUTH_ERRORS[hasRole](role)
+    if connexion.request.is_json:
+        body = Team.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'do some magic!'
+
+
+def to_team_dto(found: Team_orm):
+    return Team(team_id=found.team_id, name=found.name)
