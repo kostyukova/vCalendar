@@ -15,9 +15,13 @@ class LeaveDays(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, leave_days: int=None, start_date: str=None, end_date: str=None):  # noqa: E501
+    def __init__(self, id: int=None, employee_id: int=None, leave_days: int=None, start_date: str=None, end_date: str=None):  # noqa: E501
         """LeaveDays - a model defined in Swagger
 
+        :param id: The id of this LeaveDays.  # noqa: E501
+        :type id: int
+        :param employee_id: The employee_id of this LeaveDays.  # noqa: E501
+        :type employee_id: int
         :param leave_days: The leave_days of this LeaveDays.  # noqa: E501
         :type leave_days: int
         :param start_date: The start_date of this LeaveDays.  # noqa: E501
@@ -26,17 +30,23 @@ class LeaveDays(Model):
         :type end_date: str
         """
         self.swagger_types = {
+            'id': int,
+            'employee_id': int,
             'leave_days': int,
             'start_date': str,
             'end_date': str
         }
 
         self.attribute_map = {
+            'id': 'id',
+            'employee_id': 'employee_id',
             'leave_days': 'leave_days',
             'start_date': 'start_date',
             'end_date': 'end_date'
         }
 
+        self._id = id
+        self._employee_id = employee_id
         self._leave_days = leave_days
         self._start_date = start_date
         self._end_date = end_date
@@ -51,6 +61,50 @@ class LeaveDays(Model):
         :rtype: LeaveDays
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def id(self) -> int:
+        """Gets the id of this LeaveDays.
+
+
+        :return: The id of this LeaveDays.
+        :rtype: int
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id: int):
+        """Sets the id of this LeaveDays.
+
+
+        :param id: The id of this LeaveDays.
+        :type id: int
+        """
+
+        self._id = id
+
+    @property
+    def employee_id(self) -> int:
+        """Gets the employee_id of this LeaveDays.
+
+
+        :return: The employee_id of this LeaveDays.
+        :rtype: int
+        """
+        return self._employee_id
+
+    @employee_id.setter
+    def employee_id(self, employee_id: int):
+        """Sets the employee_id of this LeaveDays.
+
+
+        :param employee_id: The employee_id of this LeaveDays.
+        :type employee_id: int
+        """
+        if employee_id is None:
+            raise ValueError("Invalid value for `employee_id`, must not be `None`")  # noqa: E501
+
+        self._employee_id = employee_id
 
     @property
     def leave_days(self) -> int:
@@ -70,6 +124,8 @@ class LeaveDays(Model):
         :param leave_days: The leave_days of this LeaveDays.
         :type leave_days: int
         """
+        if leave_days is None:
+            raise ValueError("Invalid value for `leave_days`, must not be `None`")  # noqa: E501
 
         self._leave_days = leave_days
 
@@ -91,6 +147,8 @@ class LeaveDays(Model):
         :param start_date: The start_date of this LeaveDays.
         :type start_date: str
         """
+        if start_date is None:
+            raise ValueError("Invalid value for `start_date`, must not be `None`")  # noqa: E501
 
         self._start_date = start_date
 
@@ -112,5 +170,7 @@ class LeaveDays(Model):
         :param end_date: The end_date of this LeaveDays.
         :type end_date: str
         """
+        if end_date is None:
+            raise ValueError("Invalid value for `end_date`, must not be `None`")  # noqa: E501
 
         self._end_date = end_date

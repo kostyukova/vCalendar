@@ -26,7 +26,7 @@ CREATE OR REPLACE TABLE `employee_total_days` (
   `total_days` TINYINT(4) NOT NULL,
   `year` SMALLINT(4) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_employee_total_days` (`employee_id`, total_days),
+  UNIQUE KEY `UK_employee_total_days` (`employee_id`, year),
   CONSTRAINT `FK_employee_total_days` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -46,7 +46,7 @@ CREATE OR REPLACE TABLE `user` (
   `username` VARCHAR(20) NOT NULL UNIQUE,
   `password` VARCHAR(128) NOT NULL,
   `email` VARCHAR(255) NOT NULL UNIQUE,
-  `roles` SET('read:users','write:users','write:teams', 'write:employees') NOT NULL DEFAULT '',
+  `roles` SET('read:users','write:users','write:teams', 'write:employees', 'write:total_days', 'write:leave_days') NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -62,5 +62,5 @@ INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `en
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
     VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users');
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
-    VALUES('user', '$2b$12$nZKuiZrbSedpTwQrhDn6hey6S38fr5oVEYuM5QAodBrsNpCq3v9WO', 'user@mail.com', 'write:teams,write:employees');
+    VALUES('user', '$2b$12$nZKuiZrbSedpTwQrhDn6hey6S38fr5oVEYuM5QAodBrsNpCq3v9WO', 'user@mail.com', 'write:teams,write:employees,write:total_days,write:leave_days');
 

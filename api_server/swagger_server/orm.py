@@ -31,3 +31,26 @@ class Employee(db.Model):
 
     def __repr__(self):
         return 'Employee {}'.format(self.full_name)
+
+
+class Employee_total_days(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer)
+    total_days = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+
+    def __repr__(self):
+        return 'Employee {} has {} total days in {} year'\
+            .format(self.employee_id, self.total_days, self.year)
+
+
+class Employee_leave_days(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer)
+    leave_days = db.Column(db.Integer)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+
+    def __repr__(self):
+        return 'Employee {} leave days ({}, {})'\
+            .format(self.employee_id, self.start_date, self.end_date)
