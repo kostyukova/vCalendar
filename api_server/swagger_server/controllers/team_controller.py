@@ -8,9 +8,9 @@ from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.team import Team  # noqa: E501
 
 AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='Team'),
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='Team'),
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='Team'),
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='team'),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='team'),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='team'),
     auth.TokenStatus.ROLE_GRANTED: None
 }
 

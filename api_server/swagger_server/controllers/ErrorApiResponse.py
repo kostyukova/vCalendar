@@ -60,3 +60,13 @@ def TeamExistError(name: str, type='team'):
 
 def TeamNotFoundError(id: int = None, name: str = None, type='team'):
     return ApiResponse(code=1012, type=type, message='Team not found, id: \'{}\', name: \'{}\''.format(id, name))
+
+
+def TotalDaysNotFoundError(id: int = None, employee_id: str = None, year: int = None, type='total days'):
+    return ApiResponse(code=1013, type=type, message='Total days not found, id: \'{}\', employee_id: \'{}\', year: \'{}\''
+                       .format(id, employee_id, year))
+
+
+def TotalDaysExistError(employee_id: str = None, year: int = None, type='total days'):
+    return ApiResponse(code=1011, type=type,
+                       message='Total days for employee id\'{}\', year \'{}\' already exists'.format(employee_id, year))

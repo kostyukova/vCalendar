@@ -1,10 +1,12 @@
-import connexion
 import six
 
+import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+from swagger_server import auth, db, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.total_days import TotalDays  # noqa: E501
-from swagger_server import util, auth
+from swagger_server.orm import Employee as Employee_orm
+from swagger_server.orm import Employee_total_days as TotalDays_orm
 
 
 def add_total_days(body):  # noqa: E501
@@ -19,7 +21,22 @@ def add_total_days(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = TotalDays.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # check already exists
+    found = TotalDays_orm.query.filter_by(
+        employee_id=body.employee_id, year=body.year).one_or_none()
+    if found is not None:
+        return ErrorApiResponse.TotalDaysExistError(body.employee_id, body.year), 409
+    found = Employee_orm.query.get(body.employee_id)
+    if found is None:
+        return ErrorApiResponse.EmployeeNotFoundError(body.employee_id), 404
+    orm = TotalDays_orm(employee_id=body.employee_id,
+                        total_days=body.total_days, year=body.year)
+    try:
+        db.session.add(orm)
+        db.session.commit()
+        return find_total_days_by_year(body.employee_id, body.year)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='total days'), 500
 
 
 def delete_total_days(id):  # noqa: E501
@@ -47,7 +64,15 @@ def find_total_days_by(employee_id=None, year=None):  # noqa: E501
 
     :rtype: List[TotalDays]
     """
-    return 'do some magic!'
+    query = TotalDays_orm.query
+    if employee_id:
+        query = query.filter_by(employee_id=employee_id)
+    if year:
+        query = query.filter_by(year=year)
+    try:
+        return [to_dto(elem) for elem in query.all()]
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='total days'), 500
 
 
 def find_total_days_by_year(employeeId, year):  # noqa: E501
@@ -62,7 +87,11 @@ def find_total_days_by_year(employeeId, year):  # noqa: E501
 
     :rtype: TotalDays
     """
-    return 'do some magic!'
+    found = TotalDays_orm.query.filter_by(
+        employee_id=employeeId, year=year).one_or_none()
+    if found is None:
+        return ErrorApiResponse.TotalDaysNotFoundError(employee_id=employeeId, year=year), 404
+    return to_dto(found)
 
 
 def get_total_days_by_id(id):  # noqa: E501
@@ -75,7 +104,10 @@ def get_total_days_by_id(id):  # noqa: E501
 
     :rtype: TotalDays
     """
-    return 'do some magic!'
+    found = TotalDays_orm.query.get(id)
+    if found is None:
+        return ErrorApiResponse.TotalDaysNotFoundError(id=id), 404
+    return to_dto(found)
 
 
 def update_total_days_by_id(id, body):  # noqa: E501
@@ -93,3 +125,7 @@ def update_total_days_by_id(id, body):  # noqa: E501
     if connexion.request.is_json:
         body = TotalDays.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
+
+
+def to_dto(found: TotalDays_orm):
+    return TotalDays(id=found.id, employee_id=found.employee_id, total_days=found.total_days, year=found.year)

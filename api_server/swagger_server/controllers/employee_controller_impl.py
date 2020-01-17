@@ -33,7 +33,7 @@ def add_employee(body):  # noqa: E501
         db.session.commit()
         return find_employee_by_email(body.email)
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
 
 
 def delete_employee(employeeId):  # noqa: E501
@@ -54,7 +54,7 @@ def delete_employee(employeeId):  # noqa: E501
         db.session.commit()
         return 'Successful operation', 204
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
 
 
 def find_all_employee():  # noqa: E501
@@ -109,7 +109,7 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
     try:
         return [to_employee_dto(elem) for elem in query.all()]
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
 
 
 def find_employee_by_email(email):  # noqa: E501
@@ -173,7 +173,7 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
         db.session.commit()
         return get_employee_by_id(employeeId)
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Employee'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
 
 
 def to_employee_dto(found: Employee_orm):

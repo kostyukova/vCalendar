@@ -8,9 +8,9 @@ from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.total_days import TotalDays  # noqa: E501
 
 AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='Total days'),
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='Total days'),
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='Total days'),
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='total days'),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='total days'),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='total days'),
     auth.TokenStatus.ROLE_GRANTED: None
 }
 

@@ -29,7 +29,7 @@ def add_team(body):  # noqa: E501
         db.session.commit()
         return find_team_by_name(body.name)
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='team'), 500
 
 
 def delete_team(teamId):  # noqa: E501
@@ -50,7 +50,7 @@ def delete_team(teamId):  # noqa: E501
         db.session.commit()
         return 'Successful operation', 204
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='team'), 500
 
 
 def find_all_team():  # noqa: E501
@@ -82,7 +82,7 @@ def find_team_by(name=None):  # noqa: E501
     try:
         return [to_team_dto(elem) for elem in query.all()]
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='team'), 500
 
 
 def find_team_by_name(name):  # noqa: E501
@@ -144,7 +144,7 @@ def update_team_by_id(teamId, body):  # noqa: E501
         db.session.commit()
         return get_team_by_id(teamId)
     except Exception as ex:
-        return ErrorApiResponse.InternalServerError(ex, type='Team'), 500
+        return ErrorApiResponse.InternalServerError(ex, type='team'), 500
 
 
 def to_team_dto(found: Team_orm):

@@ -23,8 +23,8 @@ CREATE OR REPLACE TABLE `employee` (
 CREATE OR REPLACE TABLE `employee_total_days` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `employee_id` INT(11) NOT NULL,
-  `total_days` TINYINT(4) NOT NULL,
-  `year` SMALLINT(4) NOT NULL,
+  `total_days` TINYINT(4) NOT NULL CHECK(total_days>0),
+  `year` SMALLINT(4) NOT NULL CHECK(year>2019),
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_employee_total_days` (`employee_id`, year),
   CONSTRAINT `FK_employee_total_days` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
@@ -34,7 +34,7 @@ CREATE OR REPLACE TABLE `employee_total_days` (
 CREATE OR REPLACE TABLE `employee_leave_days` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `employee_id` INT(11) NOT NULL,
-  `leave_days` TINYINT(4) NOT NULL,
+  `leave_days` TINYINT(4) NOT NULL CHECK(leave_days>0),
   `start_date` DATE NOT NULL,
   `end_date` DATE NOT NULL,
   PRIMARY KEY (`id`),
