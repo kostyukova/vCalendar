@@ -15,7 +15,7 @@ class LeaveDays(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, employee_id: int=None, leave_days: int=None, start_date: str=None, end_date: str=None):  # noqa: E501
+    def __init__(self, id: int=None, employee_id: int=None, leave_days: int=None, start_date: date=None, end_date: date=None):  # noqa: E501
         """LeaveDays - a model defined in Swagger
 
         :param id: The id of this LeaveDays.  # noqa: E501
@@ -25,16 +25,16 @@ class LeaveDays(Model):
         :param leave_days: The leave_days of this LeaveDays.  # noqa: E501
         :type leave_days: int
         :param start_date: The start_date of this LeaveDays.  # noqa: E501
-        :type start_date: str
+        :type start_date: date
         :param end_date: The end_date of this LeaveDays.  # noqa: E501
-        :type end_date: str
+        :type end_date: date
         """
         self.swagger_types = {
             'id': int,
             'employee_id': int,
             'leave_days': int,
-            'start_date': str,
-            'end_date': str
+            'start_date': date,
+            'end_date': date
         }
 
         self.attribute_map = {
@@ -130,22 +130,22 @@ class LeaveDays(Model):
         self._leave_days = leave_days
 
     @property
-    def start_date(self) -> str:
+    def start_date(self) -> date:
         """Gets the start_date of this LeaveDays.
 
 
         :return: The start_date of this LeaveDays.
-        :rtype: str
+        :rtype: date
         """
         return self._start_date
 
     @start_date.setter
-    def start_date(self, start_date: str):
+    def start_date(self, start_date: date):
         """Sets the start_date of this LeaveDays.
 
 
         :param start_date: The start_date of this LeaveDays.
-        :type start_date: str
+        :type start_date: date
         """
         if start_date is None:
             raise ValueError("Invalid value for `start_date`, must not be `None`")  # noqa: E501
@@ -153,22 +153,22 @@ class LeaveDays(Model):
         self._start_date = start_date
 
     @property
-    def end_date(self) -> str:
+    def end_date(self) -> date:
         """Gets the end_date of this LeaveDays.
 
 
         :return: The end_date of this LeaveDays.
-        :rtype: str
+        :rtype: date
         """
         return self._end_date
 
     @end_date.setter
-    def end_date(self, end_date: str):
+    def end_date(self, end_date: date):
         """Sets the end_date of this LeaveDays.
 
 
         :param end_date: The end_date of this LeaveDays.
-        :type end_date: str
+        :type end_date: date
         """
         if end_date is None:
             raise ValueError("Invalid value for `end_date`, must not be `None`")  # noqa: E501

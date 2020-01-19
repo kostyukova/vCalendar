@@ -721,6 +721,232 @@ paths:
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.total_days_controller"
+  /employee/leave_days:
+    post:
+      tags:
+      - "leave_days"
+      summary: "Add a employee LeaveDays to the system. Role write:leave_days must\
+        \ be granted"
+      description: ""
+      operationId: "add_leave_days"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "LeaveDays object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/LeaveDays"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/LeaveDays"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "409":
+          description: "LeaveDays already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
+  /employee/leave_days/findBy:
+    get:
+      tags:
+      - "leave_days"
+      summary: "Finds LeaveDays by given parameters"
+      description: ""
+      operationId: "find_leave_days_by"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employee_id"
+        in: "query"
+        description: "Employee id to filter by"
+        required: false
+        type: "integer"
+      - name: "start_date"
+        in: "query"
+        description: "Start date to filter by"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "end_date"
+        in: "query"
+        description: "End date to filter by"
+        required: false
+        type: "string"
+        format: "date"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LeaveDays"
+        "400":
+          description: "Invalid params to filter by"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
+  /employee/{employeeId}/leave_days/{leave_date}:
+    get:
+      tags:
+      - "leave_days"
+      summary: "Finds unique LeaveDays by employee and leave date"
+      description: ""
+      operationId: "find_leave_days_by_date"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee id to filter by"
+        required: true
+        type: "integer"
+      - name: "leave_date"
+        in: "path"
+        description: "Leave date to filter by"
+        required: true
+        type: "string"
+        format: "date"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LeaveDays"
+        "400":
+          description: "Invalid name supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "LeaveDays not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
+  /employee/leave_days/{id}:
+    get:
+      tags:
+      - "leave_days"
+      summary: "Find LeaveDays by ID"
+      description: "Returns a single LeaveDays."
+      operationId: "get_leave_days_by_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of LeaveDays to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LeaveDays"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "LeaveDays not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
+    put:
+      tags:
+      - "leave_days"
+      summary: "Updates a LeaveDays in the system with form data. Role write:leave_days\
+        \ must be granted"
+      description: ""
+      operationId: "update_leave_days_by_id"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of LeaveDays to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "LeaveDays object that needs to be updated in the system"
+        required: true
+        schema:
+          $ref: "#/definitions/LeaveDays"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LeaveDays"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "LeaveDays not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "409":
+          description: "LeaveDays already exists conflict"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
+    delete:
+      tags:
+      - "leave_days"
+      summary: "Deletes a LeaveDays. Role write:leave_days must be granteds"
+      description: ""
+      operationId: "delete_leave_days"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "LeaveDays id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "204":
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "LeaveDays not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
   /user:
     post:
       tags:
@@ -1062,8 +1288,16 @@ definitions:
         format: "int32"
       start_date:
         type: "string"
+        format: "date"
       end_date:
         type: "string"
+        format: "date"
+    example:
+      leave_days: 1
+      end_date: "2000-01-23"
+      employee_id: 6
+      id: 0
+      start_date: "2000-01-23"
   ApiResponse:
     type: "object"
     properties:
