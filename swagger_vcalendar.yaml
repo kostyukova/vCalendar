@@ -710,9 +710,9 @@ paths:
           schema:
             $ref: "#/definitions/LeaveDays"
         409:
-          description: "LeaveDays already exists conflict"
+          description: "LeaveDays already exists conflict or rules conflict"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/ApiResponseConflict"
         403: 
           description: 'Forbidden'
           schema:
@@ -743,6 +743,10 @@ paths:
         description: "End date to filter by"
         type: "string"
         format: "date"
+      - name: "year"
+        in: "query"
+        description: "Year to filter by"
+        type: "integer"
       responses:
         200:
           description: "successful operation"
@@ -858,7 +862,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         409:
-          description: "LeaveDays already exists conflict"
+          description: "LeaveDays already exists conflict or rules conflict"
           schema:
             $ref: "#/definitions/ApiResponse"
         403: 
@@ -1164,6 +1168,16 @@ definitions:
       email:
         type: "string"
         example: "joe@mail.com"
+    xml:
+      name: "Employee"
+  EmployeeEx:
+    type: "object"
+    required:
+    - "leave_days_total"
+    - "leave_days_left"
+    allOf:
+    - $ref: '#/definitions/Employee'
+    properties:
       leave_days_total:
         type: integer
         format: int32
@@ -1171,7 +1185,7 @@ definitions:
         type: integer
         format: int32
     xml:
-      name: "Employee"
+      name: "EmployeeEx"
   TotalDays:
     type: "object"
     required:
@@ -1214,6 +1228,27 @@ definitions:
       end_date:
         type: "string"
         format: "date"
+  LeaveDaysEx:
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/LeaveDays'
+    required:
+    - "employee"
+    properties:
+      employee:
+        $ref: "#/definitions/Employee"
+  ConflictDetail:
+    type: "object"
+    required:
+    - "rule"
+    - "conflict_with"
+    properties:
+      rule:
+        type: "string"
+      conflict_with:
+        type: "array"
+        items:
+          $ref: "#/definitions/LeaveDaysEx"
   ApiResponse:
     type: "object"
     properties:
@@ -1224,6 +1259,17 @@ definitions:
         type: "string"
       message:
         type: "string"
+  ApiResponseConflict:
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/ApiResponse'
+    required:
+    - "details"
+    properties:
+      details:
+        type: "array"
+        items:
+          $ref: "#/definitions/ConflictDetail"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

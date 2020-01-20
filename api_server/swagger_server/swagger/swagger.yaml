@@ -750,9 +750,9 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         "409":
-          description: "LeaveDays already exists conflict"
+          description: "LeaveDays already exists conflict or rules conflict"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/ApiResponseConflict"
       security:
       - Bearer: []
       x-swagger-router-controller: "swagger_server.controllers.leave_days_controller"
@@ -783,6 +783,11 @@ paths:
         required: false
         type: "string"
         format: "date"
+      - name: "year"
+        in: "query"
+        description: "Year to filter by"
+        required: false
+        type: "integer"
       responses:
         "200":
           description: "successful operation"
@@ -906,7 +911,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         "409":
-          description: "LeaveDays already exists conflict"
+          description: "LeaveDays already exists conflict or rules conflict"
           schema:
             $ref: "#/definitions/ApiResponse"
       security:
@@ -1227,12 +1232,6 @@ definitions:
       email:
         type: "string"
         example: "joe@mail.com"
-      leave_days_total:
-        type: "integer"
-        format: "int32"
-      leave_days_left:
-        type: "integer"
-        format: "int32"
     xml:
       name: "Employee"
     example:
@@ -1240,11 +1239,19 @@ definitions:
       full_name: "Joe Smith"
       employee_id: 0
       specialization: "Core"
-      leave_days_left: 1
       position: "junior engineer"
       team_id: 1
-      leave_days_total: 6
       email: "joe@mail.com"
+  EmployeeEx:
+    properties:
+      leave_days_total:
+        type: "integer"
+        format: "int32"
+      leave_days_left:
+        type: "integer"
+        format: "int32"
+    allOf:
+    - $ref: "#/definitions/Employee"
   TotalDays:
     type: "object"
     required:
@@ -1298,6 +1305,24 @@ definitions:
       employee_id: 6
       id: 0
       start_date: "2000-01-23"
+  LeaveDaysEx:
+    properties:
+      employee:
+        $ref: "#/definitions/Employee"
+    allOf:
+    - $ref: "#/definitions/LeaveDays"
+  ConflictDetail:
+    type: "object"
+    required:
+    - "conflict_with"
+    - "rule"
+    properties:
+      rule:
+        type: "string"
+      conflict_with:
+        type: "array"
+        items:
+          $ref: "#/definitions/LeaveDaysEx"
   ApiResponse:
     type: "object"
     properties:
@@ -1312,6 +1337,14 @@ definitions:
       code: 0
       type: "type"
       message: "message"
+  ApiResponseConflict:
+    properties:
+      details:
+        type: "array"
+        items:
+          $ref: "#/definitions/ConflictDetail"
+    allOf:
+    - $ref: "#/definitions/ApiResponse"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

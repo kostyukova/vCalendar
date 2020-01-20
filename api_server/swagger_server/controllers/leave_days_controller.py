@@ -2,6 +2,7 @@ import connexion
 import six
 
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
+from swagger_server.models.api_response_conflict import ApiResponseConflict  # noqa: E501
 from swagger_server.models.leave_days import LeaveDays  # noqa: E501
 from swagger_server import util
 
@@ -34,7 +35,7 @@ def delete_leave_days(id):  # noqa: E501
     return 'do some magic!'
 
 
-def find_leave_days_by(employee_id=None, start_date=None, end_date=None):  # noqa: E501
+def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=None):  # noqa: E501
     """Finds LeaveDays by given parameters
 
      # noqa: E501
@@ -45,6 +46,8 @@ def find_leave_days_by(employee_id=None, start_date=None, end_date=None):  # noq
     :type start_date: str
     :param end_date: End date to filter by
     :type end_date: str
+    :param year: Year to filter by
+    :type year: int
 
     :rtype: List[LeaveDays]
     """
