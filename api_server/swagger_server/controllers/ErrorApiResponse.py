@@ -71,15 +71,23 @@ def TotalDaysNotFoundError(id: int = None, employee_id: str = None, year: int = 
 
 def TotalDaysExistError(employee_id: str = None, year: int = None, type='total days'):
     return ApiResponse(code=1014, type=type,
-                       message='Total days for employee id\'{}\', year \'{}\' already exists'.format(employee_id, year))
+                       message='Total days for employee id\'{}\', year \'{}\' already exists'
+                       .format(employee_id, year))
 
 
 def LeaveDaysNotFoundError(id: int = None, employee_id: str = None, leave_date: date = None, type='leave days'):
-    return ApiResponse(code=1013, type=type, message='Leave days not found, id: \'{}\', employee_id: \'{}\', leave date: \'{}\''
+    return ApiResponse(code=1015, type=type,
+                       message='Leave days not found, id: \'{}\', employee_id: \'{}\', leave date: \'{}\''
                        .format(id, employee_id, leave_date))
 
 
 def LeaveDaysExistError(employee_id: str = None, start_date: date = None, end_date: date = None, type='leave days'):
-    return ApiResponse(code=1014, type=type,
+    return ApiResponse(code=1016, type=type,
                        message='Leave days for employee id\'{}\', start date \'{}\', end date \'{}\' already exists'
                        .format(employee_id, start_date, end_date))
+
+
+def LeaveDaysPeriodError(start_date: date = None, end_date: date = None, type='leave days'):
+    return ApiResponse(code=1017, type=type,
+                       message='Leave days  start date \'{}\' must be less or equal to end date \'{}\''
+                       .format(start_date, end_date))

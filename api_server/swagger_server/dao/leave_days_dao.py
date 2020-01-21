@@ -69,3 +69,13 @@ def persist(orm: LeaveDays_orm):
     """
     db.session.add(orm)
     db.session.commit()
+
+def delete(orm: LeaveDays_orm):
+    """Deletes given orm
+
+    :param orm: LeaveDays object to delete
+    :type orm: LeaveDays_orm
+
+    """
+    db.session.delete(orm)
+    db.session.commit()

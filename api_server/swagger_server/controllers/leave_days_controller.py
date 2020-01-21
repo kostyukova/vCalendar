@@ -45,7 +45,7 @@ def delete_leave_days(id):  # noqa: E501
     role = auth.WRITE_LEAVE_DAYS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.delete_leave_days(body)
+        return impl.delete_leave_days(id)
     return AUTH_ERRORS[hasRole](role)
 
 

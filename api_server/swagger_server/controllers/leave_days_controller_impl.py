@@ -25,7 +25,9 @@ def add_leave_days(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = LeaveDays.from_dict(connexion.request.get_json())  # noqa: E501
-
+    delta = body.end_date - body.start_date
+    if delta.days < 0:
+        return ErrorApiResponse.LeaveDaysPeriodError(body.start_date, body.end_date), 409
     # check already exists
     found = dao.find_by(body.employee_id, body.start_date, body.end_date, None)
     if len(found) > 0:
@@ -54,7 +56,14 @@ def delete_leave_days(id):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    found = dao.get(id)
+    if found is None:
+        return ErrorApiResponse.LeaveDaysNotFoundError(id=id), 404
+    try:
+        dao.delete(found)
+        return 'Successful operation', 204
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='leave days'), 500
 
 
 def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=None):  # noqa: E501
@@ -73,9 +82,9 @@ def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=No
 
     :rtype: List[LeaveDays]
     """
-    if start_date:
+    if start_date and isinstance(start_date, str):
         start_date = util.deserialize_date(start_date)
-    if end_date:
+    if end_date and isinstance(end_date, str):
         end_date = util.deserialize_date(end_date)
     try:
         return [to_dto(elem) for elem in dao.find_by(employee_id, start_date, end_date, year)]
@@ -131,10 +140,35 @@ def update_leave_days_by_id(id, body):  # noqa: E501
 
     :rtype: LeaveDays
     """
+    found = dao.get(id)
+    if found is None:
+        return ErrorApiResponse.LeaveDaysNotFoundError(id=id), 404
     if connexion.request.is_json:
         body = LeaveDays.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    delta = body.end_date - body.start_date
+    if delta.days < 0:
+        return ErrorApiResponse.LeaveDaysPeriodError(body.start_date, body.end_date), 409
+    # check already exists
+    duplicate = find_leave_days_by(
+        body.employee_id, body.start_date, body.end_date)
+    if len(duplicate) > 1 or (len(duplicate) == 1 and duplicate[0].id != id):
+        return ErrorApiResponse.LeaveDaysExistError(body.employee_id, body.start_date, body.end_date), 409
+    # check employee exist
+    employee = Employee_orm.query.get(body.employee_id)
+    if employee is None:
+        return ErrorApiResponse.EmployeeNotFoundError(body.employee_id), 404
+    # check rules FIXME
+    found.employee_id = body.employee_id
+    found.start_date = body.start_date
+    found.end_date = body.end_date
+    found.leave_date = body.leave_days
+    try:
+        dao.persist(found)
+        return get_leave_days_by_id(id)
+    except Exception as ex:
+        return ErrorApiResponse.InternalServerError(ex, type='leave days'), 500
 
 
 def to_dto(found: LeaveDays_orm):
-    return LeaveDays(employee_id=found.employee_id, leave_days=found.leave_days, start_date=found.start_date, end_date=found.end_date)
+    return LeaveDays(id=found.id, employee_id=found.employee_id, leave_days=found.leave_days,
+                     start_date=found.start_date, end_date=found.end_date)
