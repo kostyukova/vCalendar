@@ -11,6 +11,7 @@ from swagger_server.models.api_response_conflict import \
 from swagger_server.models.leave_days import LeaveDays  # noqa: E501
 from swagger_server.orm import Employee as Employee_orm
 from swagger_server.orm import Employee_leave_days as LeaveDays_orm
+import swagger_server.controllers.rules as rules
 
 
 def add_leave_days(body):  # noqa: E501
@@ -36,7 +37,12 @@ def add_leave_days(body):  # noqa: E501
     found = Employee_orm.query.get(body.employee_id)
     if found is None:
         return ErrorApiResponse.EmployeeNotFoundError(body.employee_id), 404
+
     # check rules FIXME
+    conflict = rules.check_rules(
+        body.employee_id, body.start_date, body.end_date)
+    if len(conflict) > 0:
+        return ApiResponseConflict(code=5000, type='leave days', message='Restrictions are violated', details=conflict), 409
     orm = LeaveDays_orm(employee_id=body.employee_id,
                         leave_days=body.leave_days, start_date=body.start_date, end_date=body.end_date)
     try:
@@ -157,7 +163,11 @@ def update_leave_days_by_id(id, body):  # noqa: E501
     employee = Employee_orm.query.get(body.employee_id)
     if employee is None:
         return ErrorApiResponse.EmployeeNotFoundError(body.employee_id), 404
-    # check rules FIXME
+    # check rules
+    conflict = rules.check_rules(
+        body.employee_id, body.start_date, body.end_date, id)
+    if len(conflict) > 0:
+        return ApiResponseConflict(code=5000, type='leave days', message='Restrictions are violated', details=conflict), 409
     found.employee_id = body.employee_id
     found.start_date = body.start_date
     found.end_date = body.end_date

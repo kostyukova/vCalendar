@@ -16,26 +16,26 @@ class ConflictDetail(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, rule: str=None, conflict_with: List[LeaveDaysEx]=None):  # noqa: E501
+    def __init__(self, rule: str=None, conflict_with_leave_days: List[LeaveDaysEx]=None):  # noqa: E501
         """ConflictDetail - a model defined in Swagger
 
         :param rule: The rule of this ConflictDetail.  # noqa: E501
         :type rule: str
-        :param conflict_with: The conflict_with of this ConflictDetail.  # noqa: E501
-        :type conflict_with: List[LeaveDaysEx]
+        :param conflict_with_leave_days: The conflict_with_leave_days of this ConflictDetail.  # noqa: E501
+        :type conflict_with_leave_days: List[LeaveDaysEx]
         """
         self.swagger_types = {
             'rule': str,
-            'conflict_with': List[LeaveDaysEx]
+            'conflict_with_leave_days': List[LeaveDaysEx]
         }
 
         self.attribute_map = {
             'rule': 'rule',
-            'conflict_with': 'conflict_with'
+            'conflict_with_leave_days': 'conflict_with_leave_days'
         }
 
         self._rule = rule
-        self._conflict_with = conflict_with
+        self._conflict_with_leave_days = conflict_with_leave_days
 
     @classmethod
     def from_dict(cls, dikt) -> 'ConflictDetail':
@@ -72,24 +72,24 @@ class ConflictDetail(Model):
         self._rule = rule
 
     @property
-    def conflict_with(self) -> List[LeaveDaysEx]:
-        """Gets the conflict_with of this ConflictDetail.
+    def conflict_with_leave_days(self) -> List[LeaveDaysEx]:
+        """Gets the conflict_with_leave_days of this ConflictDetail.
 
 
-        :return: The conflict_with of this ConflictDetail.
+        :return: The conflict_with_leave_days of this ConflictDetail.
         :rtype: List[LeaveDaysEx]
         """
-        return self._conflict_with
+        return self._conflict_with_leave_days
 
-    @conflict_with.setter
-    def conflict_with(self, conflict_with: List[LeaveDaysEx]):
-        """Sets the conflict_with of this ConflictDetail.
+    @conflict_with_leave_days.setter
+    def conflict_with_leave_days(self, conflict_with_leave_days: List[LeaveDaysEx]):
+        """Sets the conflict_with_leave_days of this ConflictDetail.
 
 
-        :param conflict_with: The conflict_with of this ConflictDetail.
-        :type conflict_with: List[LeaveDaysEx]
+        :param conflict_with_leave_days: The conflict_with_leave_days of this ConflictDetail.
+        :type conflict_with_leave_days: List[LeaveDaysEx]
         """
-        if conflict_with is None:
-            raise ValueError("Invalid value for `conflict_with`, must not be `None`")  # noqa: E501
+        if conflict_with_leave_days is None:
+            raise ValueError("Invalid value for `conflict_with_leave_days`, must not be `None`")  # noqa: E501
 
-        self._conflict_with = conflict_with
+        self._conflict_with_leave_days = conflict_with_leave_days

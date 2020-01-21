@@ -1,4 +1,6 @@
 
+from datetime import date
+
 from sqlalchemy import text
 from swagger_server import db, util
 from swagger_server.orm import Employee as Employee_orm
@@ -49,6 +51,29 @@ def find_by_date(employeeId, leave_date):
         .params(param=leave_date).one_or_none()
 
 
+def find_by_rule(start_date: date, end_date: date, rule: str, id: int = None):
+    """Finds LeaveDays by given rule
+
+    :param start_date: Start date to filter by
+    :type start_date: date
+    :param end_date: End date to filter by
+    :type end_date: date
+    :param rule: rule to filter by
+    :type rule: str
+
+    :rtype: LeaveDays_orm
+    """
+    query = db.session.query(LeaveDays_orm).join('employee')
+    if id is not None:
+        query = query.filter(LeaveDays_orm.id != id)
+    query = query.filter(text("end_date >= :start_date"))\
+        .params(start_date=start_date)
+    query = query.filter(text("start_date <= :end_date"))\
+        .params(end_date=end_date)
+    query = query.filter(text(rule))
+    return query.all()
+
+
 def get(id):
     """Gets unique LeaveDays by id
 
@@ -69,6 +94,7 @@ def persist(orm: LeaveDays_orm):
     """
     db.session.add(orm)
     db.session.commit()
+
 
 def delete(orm: LeaveDays_orm):
     """Deletes given orm

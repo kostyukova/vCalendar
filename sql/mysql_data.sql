@@ -55,11 +55,16 @@ CREATE OR REPLACE TABLE `user` (
 INSERT INTO `team`(`name`) VALUES ('Psi');
 
 INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
-    VALUES ('Иванов', 'junior engineer', 'Core,BA', 1, 0, 'mail@mail.ru');
+    VALUES ('Иванов', 'junior engineer', 'Core,BA', 1, 0, 'ivanov@mail.ru');
+INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
+    VALUES ('Петров', 'junior engineer', 'Core,OACI', 1, 0, 'petrov@mail.ru');
+INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
+    VALUES ('Сидоров', 'junior engineer', 'BA,O365', 1, 0, 'sidorov@mail.ru');
+
 INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
     VALUES (1, 28, 2020);
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(1, 5, '2020-01-06', '2020-01-12');
-INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(1, 3, '2020-01-15', '2020-01-19');
+INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(2, 3, '2020-01-15', '2020-01-19');
 
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
     VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users');

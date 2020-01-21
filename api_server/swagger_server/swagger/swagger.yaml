@@ -1314,12 +1314,12 @@ definitions:
   ConflictDetail:
     type: "object"
     required:
-    - "conflict_with"
+    - "conflict_with_leave_days"
     - "rule"
     properties:
       rule:
         type: "string"
-      conflict_with:
+      conflict_with_leave_days:
         type: "array"
         items:
           $ref: "#/definitions/LeaveDaysEx"

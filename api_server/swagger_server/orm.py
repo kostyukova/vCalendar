@@ -1,3 +1,5 @@
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from swagger_server import db
 
 
@@ -21,6 +23,7 @@ class Team(db.Model):
 
 
 class Employee(db.Model):
+    __tablename__ = 'employee'
     employee_id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(255), index=True)
     position = db.Column(db.String(20))
@@ -46,7 +49,8 @@ class Employee_total_days(db.Model):
 
 class Employee_leave_days(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer)
+    employee_id = db.Column(db.Integer, ForeignKey('employee.employee_id'))
+    employee = relationship("Employee")
     leave_days = db.Column(db.Integer)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
