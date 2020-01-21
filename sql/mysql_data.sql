@@ -34,10 +34,12 @@ CREATE OR REPLACE TABLE `employee_leave_days` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `employee_id` INT(11) NOT NULL,
   `leave_days` TINYINT(4) NOT NULL CHECK(leave_days>0),
-  `start_date` DATE NOT NULL,
-  `end_date` DATE NOT NULL CHECK (`start_date`<=`end_date`),
+  `start_date` DATE NOT NULL CHECK(year(`start_date`) > 2019),
+  `end_date` DATE NOT NULL CHECK(year(`end_date`) > 2019),
   PRIMARY KEY (`id`),
-  CONSTRAINT `FK_employee_leave_days` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
+  CONSTRAINT `FK_employee_leave_days` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE,
+  CONSTRAINT `CK_end_date_greater_start_date` CHECK (`start_date`<=`end_date`) 
+
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 

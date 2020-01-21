@@ -1,11 +1,12 @@
+import logging
 from datetime import datetime, timedelta
+from enum import Enum, auto, unique
+
+import bcrypt
 import jwt
 from swagger_server import db
 from swagger_server.config import Config
 from swagger_server.orm import User as User_orm
-from enum import Enum, auto, unique
-import bcrypt
-import logging
 
 (AUTH_HEADER, PAYLOAD_USER_ID, PAYLOAD_EXP) = (
     'Authorization', 'user_id', 'exp')

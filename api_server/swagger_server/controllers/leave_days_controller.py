@@ -1,11 +1,19 @@
-import connexion
 import six
 
+import connexion
+import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+import swagger_server.controllers.leave_days_controller_impl as impl
+from swagger_server import auth, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.api_response_conflict import ApiResponseConflict  # noqa: E501
 from swagger_server.models.leave_days import LeaveDays  # noqa: E501
-from swagger_server import util
 
+AUTH_ERRORS = {
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='leave days'),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='leave days'),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='leave days'),
+    auth.TokenStatus.ROLE_GRANTED: None
+}
 
 def add_leave_days(body):  # noqa: E501
     """Add a employee LeaveDays to the system. Role write:leave_days must be granted
@@ -17,9 +25,11 @@ def add_leave_days(body):  # noqa: E501
 
     :rtype: LeaveDays
     """
-    if connexion.request.is_json:
-        body = LeaveDays.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    role = auth.WRITE_LEAVE_DAYS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return impl.add_leave_days(body)
+    return AUTH_ERRORS[hasRole](role)
 
 
 def delete_leave_days(id):  # noqa: E501
@@ -32,7 +42,11 @@ def delete_leave_days(id):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    return 'do some magic!'
+    role = auth.WRITE_LEAVE_DAYS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return impl.delete_leave_days(body)
+    return AUTH_ERRORS[hasRole](role)
 
 
 def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=None):  # noqa: E501
@@ -51,9 +65,7 @@ def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=No
 
     :rtype: List[LeaveDays]
     """
-    start_date = util.deserialize_date(start_date)
-    end_date = util.deserialize_date(end_date)
-    return 'do some magic!'
+    return impl.find_leave_days_by(employee_id, start_date, end_date, year)
 
 
 def find_leave_days_by_date(employeeId, leave_date):  # noqa: E501
@@ -68,8 +80,7 @@ def find_leave_days_by_date(employeeId, leave_date):  # noqa: E501
 
     :rtype: LeaveDays
     """
-    leave_date = util.deserialize_date(leave_date)
-    return 'do some magic!'
+    return impl.find_leave_days_by_date(employeeId, leave_date)
 
 
 def get_leave_days_by_id(id):  # noqa: E501
@@ -82,7 +93,7 @@ def get_leave_days_by_id(id):  # noqa: E501
 
     :rtype: LeaveDays
     """
-    return 'do some magic!'
+    return impl.get_leave_days_by_id(id)
 
 
 def update_leave_days_by_id(id, body):  # noqa: E501
@@ -97,6 +108,8 @@ def update_leave_days_by_id(id, body):  # noqa: E501
 
     :rtype: LeaveDays
     """
-    if connexion.request.is_json:
-        body = LeaveDays.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    role = auth.WRITE_LEAVE_DAYS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return impl.update_leave_days_by_id(id, body)
+    return AUTH_ERRORS[hasRole](role)
