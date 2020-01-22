@@ -51,7 +51,7 @@ def find_by_date(employeeId, leave_date):
         .params(param=leave_date).one_or_none()
 
 
-def find_by_rule(start_date: date, end_date: date, rule: str, id: int = None):
+def find_by_rule(start_date: date, end_date: date, rule, id: int = None):
     """Finds LeaveDays by given rule
 
     :param start_date: Start date to filter by
@@ -70,7 +70,7 @@ def find_by_rule(start_date: date, end_date: date, rule: str, id: int = None):
         .params(start_date=start_date)
     query = query.filter(text("start_date <= :end_date"))\
         .params(end_date=end_date)
-    query = query.filter(text(rule))
+    query = rule(query)
     return query.all()
 
 

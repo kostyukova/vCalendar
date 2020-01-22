@@ -53,13 +53,16 @@ CREATE OR REPLACE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 INSERT INTO `team`(`name`) VALUES ('Psi');
+INSERT INTO `team`(`name`) VALUES ('Alpha');
 
 INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
-    VALUES ('Иванов', 'junior engineer', 'Core,BA', 1, 0, 'ivanov@mail.ru');
+    VALUES ('Иванов', 'team leader', 'Core,BA', 1, 1, 'ivanov@mail.ru');
 INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
     VALUES ('Петров', 'junior engineer', 'Core,OACI', 1, 0, 'petrov@mail.ru');
 INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
-    VALUES ('Сидоров', 'junior engineer', 'BA,O365', 1, 0, 'sidorov@mail.ru');
+    VALUES ('Сидоров', 'junior engineer', 'BA,O365', 2, 0, 'sidorov@mail.ru');
+INSERT INTO `employee`(`full_name`, `position`, `specialization`, `team_id`, `expert`, `email`)
+    VALUES ('Ильин', 'team leader', 'OACI,O365', 2, 1, 'ilyin@mail.ru');
 
 INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
     VALUES (1, 28, 2020);
