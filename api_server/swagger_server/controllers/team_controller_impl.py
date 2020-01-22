@@ -2,6 +2,7 @@ import six
 
 import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+import swagger_server.dao.team_dao as dao
 from swagger_server import db, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.team import Team  # noqa: E501
@@ -21,12 +22,11 @@ def add_team(body):  # noqa: E501
     if connexion.request.is_json:
         body = Team.from_dict(connexion.request.get_json())  # noqa: E501
     # check team already exists by name
-    found = Team_orm.query.filter_by(name=body.name).one_or_none()
+    found = dao.find_by_name(body.name)
     if found is not None:
         return ErrorApiResponse.TeamExistError(body.name), 409
     try:
-        db.session.add(Team_orm(name=body.name))
-        db.session.commit()
+        dao.persist(Team_orm(name=body.name))
         return find_team_by_name(body.name)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='team'), 500
@@ -42,27 +42,14 @@ def delete_team(teamId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    found = Team_orm.query.get(teamId)
+    found = dao.get(teamId)
     if found is None:
         return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
     try:
-        db.session.delete(found)
-        db.session.commit()
+        dao.delete(found)
         return 'Successful operation', 204
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='team'), 500
-
-
-def find_all_team():  # noqa: E501
-    """Returns all Teams registered in the system.
-
-     # noqa: E501
-
-
-    :rtype: List[Team]
-    """
-    found = Team_orm.query.all()
-    return [to_team_dto(elem) for elem in found]
 
 
 def find_team_by(name=None):  # noqa: E501
@@ -75,12 +62,8 @@ def find_team_by(name=None):  # noqa: E501
 
     :rtype: List[Team]
     """
-    query = Team_orm.query
-    if name and name.strip():
-        query = query.filter(Team_orm.name.ilike(
-            '%' + name.strip() + '%'))
     try:
-        return [to_team_dto(elem) for elem in query.all()]
+        return [to_team_dto(elem) for elem in dao.find_by(name)]
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='team'), 500
 
@@ -95,7 +78,7 @@ def find_team_by_name(name):  # noqa: E501
 
     :rtype: Team
     """
-    found = Team_orm.query.filter_by(name=name).one_or_none()
+    found = dao.find_by_name(name)
     if found is None:
         return ErrorApiResponse.TeamNotFoundError(name=name), 404
     return to_team_dto(found)
@@ -111,7 +94,7 @@ def get_team_by_id(teamId):  # noqa: E501
 
     :rtype: Team
     """
-    found = Team_orm.query.get(teamId)
+    found = dao.get(teamId)
     if found is None:
         return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
     return to_team_dto(found)
@@ -129,19 +112,18 @@ def update_team_by_id(teamId, body):  # noqa: E501
 
     :rtype: Team
     """
-    found = Team_orm.query.get(teamId)
+    found = dao.get(teamId)
     if found is None:
         return ErrorApiResponse.TeamNotFoundError(id=teamId), 404
     if connexion.request.is_json:
         body = Team.from_dict(connexion.request.get_json())  # noqa: E501
     # check team already exists by name
-    duplicate = Team_orm.query.filter_by(name=body.name).one_or_none()
+    duplicate = dao.find_by_name(name=body.name)
     if duplicate is not None and duplicate.team_id != teamId:
         return ErrorApiResponse.TeamExistError(body.name), 409
     found.name = body.name
     try:
-        db.session.add(found)
-        db.session.commit()
+        dao.persist(found)
         return get_team_by_id(teamId)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='team'), 500

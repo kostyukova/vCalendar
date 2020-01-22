@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 pymysql = "*"
 pyjwt = "~=1.7"
 bcrypt = "~=3.1"
+flask-testing = "*"
 
 [requires]
 python_version = "3.7"

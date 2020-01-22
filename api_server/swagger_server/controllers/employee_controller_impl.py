@@ -2,6 +2,8 @@ import six
 
 import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+import swagger_server.dao.employee_dao as dao
+import swagger_server.dao.team_dao as team_dao
 from swagger_server import db, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.employee import Employee  # noqa: E501
@@ -21,16 +23,19 @@ def add_employee(body):  # noqa: E501
     if connexion.request.is_json:
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
     # check email already exists
-    found = Employee_orm.query.filter_by(email=body.email).one_or_none()
+    found = dao.find_by_email(body.email)
     if found is not None:
         return ErrorApiResponse.EmployeeEmailExistError(body.email), 409
+    # check for team number
+    team = team_dao.get(body.team_id)
+    if team is None:
+        return ErrorApiResponse.TeamNotFoundError(id=body.team_id), 404
     # persist new employee
     orm = Employee_orm(full_name=body.full_name, position=body.position,
                        specialization=body.specialization if body.specialization else '',
                        team_id=body.team_id, expert=body.expert, email=body.email)
     try:
-        db.session.add(orm)
-        db.session.commit()
+        dao.persist(orm)
         return find_employee_by_email(body.email)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
@@ -46,27 +51,14 @@ def delete_employee(employeeId):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    found = Employee_orm.query.get(employeeId)
+    found = dao.get(employeeId)
     if found is None:
         return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
     try:
-        db.session.delete(found)
-        db.session.commit()
+        dao.delete(found)
         return 'Successful operation', 204
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
-
-
-def find_all_employee():  # noqa: E501
-    """Returns all Employees registered in the system.
-
-     # noqa: E501
-
-
-    :rtype: List[Employee]
-    """
-    found = Employee_orm.query.all()
-    return [to_employee_dto(elem) for elem in found]
 
 
 def find_employees_by(full_name=None, position=None, specialization=None, expert=None, team_id=None, email=None):  # noqa: E501
@@ -89,25 +81,8 @@ def find_employees_by(full_name=None, position=None, specialization=None, expert
 
     :rtype: List[Employee]
     """
-    query = Employee_orm.query
-    if full_name and full_name.strip():
-        query = query.filter(Employee_orm.full_name.ilike(
-            '%' + full_name.strip() + '%'))
-    if position and position.strip():
-        query = query.filter(Employee_orm.position.ilike(
-            '%' + position.strip() + '%'))
-    if specialization and specialization.strip():
-        query = query.filter(Employee_orm.specialization.ilike(
-            '%' + specialization.strip() + '%'))
-    if expert is not None:
-        query = query.filter_by(expert=expert)
-    if team_id:
-        query = query.filter_by(team_id=team_id)
-    if email and email.strip():
-        query = query.filter(Employee_orm.email.ilike(
-            '%' + email.strip() + '%'))
     try:
-        return [to_employee_dto(elem) for elem in query.all()]
+        return [to_employee_dto(elem) for elem in dao.find_by(full_name, position, specialization, expert, team_id, email)]
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='employee'), 500
 
@@ -122,7 +97,7 @@ def find_employee_by_email(email):  # noqa: E501
 
     :rtype: Employee
     """
-    found = Employee_orm.query.filter_by(email=email).one_or_none()
+    found = dao.find_by_email(email)
     if found is None:
         return ErrorApiResponse.EmployeeNotFoundError(email=email), 404
     return to_employee_dto(found)
@@ -138,7 +113,7 @@ def get_employee_by_id(employeeId):  # noqa: E501
 
     :rtype: Employee
     """
-    found = Employee_orm.query.get(employeeId)
+    found = dao.get(employeeId)
     if found is None:
         return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
     return to_employee_dto(found)
@@ -156,12 +131,19 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
 
     :rtype: Employee
     """
-    found = Employee_orm.query.get(employeeId)
+    found = dao.get(employeeId)
     if found is None:
         return ErrorApiResponse.EmployeeNotFoundError(id=employeeId), 404
     if connexion.request.is_json:
         body = Employee.from_dict(connexion.request.get_json())  # noqa: E501
-
+    # check email already exists
+    duplicate = dao.find_by_email(body.email)
+    if duplicate is not None and duplicate.employee_id != body._employee_id:
+        return ErrorApiResponse.EmployeeEmailExistError(body.email), 409
+    # check for team number
+    team = team_dao.get(body.team_id)
+    if team is None:
+        return ErrorApiResponse.TeamNotFoundError(id=body.team_id), 404
     found.full_name = body.full_name
     found.position = body.position
     found.specialization = body.specialization if body.specialization else ''
@@ -169,8 +151,7 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
     found.expert = body.expert
     found.email = body.email
     try:
-        db.session.add(found)
-        db.session.commit()
+        dao.persist(found)
         return get_employee_by_id(employeeId)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex, type='employee'), 500

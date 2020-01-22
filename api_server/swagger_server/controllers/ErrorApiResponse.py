@@ -42,8 +42,8 @@ def NoUsernameError(type='user'):
     return ApiResponse(code=1007, type=type, message='No username supplied')
 
 
-def UserNotFoundError(type='user'):
-    return ApiResponse(code=1008, type=type, message='User not found')
+def UserNotFoundError(id: int = None, username: str = None, type='user'):
+    return ApiResponse(code=1008, type=type, message='User not found, id \'{}\' username \'{}\''.format(id, username))
 
 
 def EmployeeEmailExistError(email: str, type='employee'):
@@ -83,7 +83,7 @@ def LeaveDaysNotFoundError(id: int = None, employee_id: str = None, leave_date: 
 
 def LeaveDaysExistError(employee_id: str = None, start_date: date = None, end_date: date = None, type='leave days'):
     return ApiResponse(code=1016, type=type,
-                       message='Leave days for employee id\'{}\', start date \'{}\', end date \'{}\' already exists'
+                       message='Leave days for employee id\'{}\', for period (\'{}\', \'{}\') already exists'
                        .format(employee_id, start_date, end_date))
 
 

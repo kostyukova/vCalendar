@@ -38,17 +38,6 @@ class TestEmployeeController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_find_all_employee(self):
-        """Test case for find_all_employee
-
-        Returns all Employees registered in the system.
-        """
-        response = self.client.open(
-            '/vcalendar/employee/findAll',
-            method='GET')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
-
     def test_find_employee_by_email(self):
         """Test case for find_employee_by_email
 

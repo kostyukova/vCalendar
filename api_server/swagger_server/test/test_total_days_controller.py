@@ -38,6 +38,17 @@ class TestTotalDaysController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+    def test_find_employee_total_days(self):
+        """Test case for find_employee_total_days
+
+        Finds TotalDays by employee
+        """
+        response = self.client.open(
+            '/vcalendar/employee/{employeeId}/total_days/'.format(employeeId=56),
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_find_total_days_by(self):
         """Test case for find_total_days_by
 

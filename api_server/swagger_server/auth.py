@@ -6,7 +6,7 @@ import bcrypt
 import jwt
 from swagger_server import db
 from swagger_server.config import Config
-from swagger_server.orm import User as User_orm
+import swagger_server.dao.user_dao as dao
 
 (AUTH_HEADER, PAYLOAD_USER_ID, PAYLOAD_EXP) = (
     'Authorization', 'user_id', 'exp')
@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def generate_token(username, password):
-    found = User_orm.query.filter_by(username=username).one_or_none()
+    found = dao.get_by_name(username)
     if found == None:
         return None
     if not check_password_hash(password, found.password):
@@ -48,7 +48,8 @@ def validate_token(token: str):
             try:
                 payload = jwt.decode(
                     jwt_token, Config.JWT_SECRET,  algorithms=[Config.JWT_ALGORITHM])
-                return User_orm.query.filter_by(id=payload[PAYLOAD_USER_ID]).one_or_none()
+                user = dao.get(payload[PAYLOAD_USER_ID])
+                return user if user else TokenStatus.INVALID
             except jwt.DecodeError:
                 return TokenStatus.INVALID
             except jwt.ExpiredSignatureError:

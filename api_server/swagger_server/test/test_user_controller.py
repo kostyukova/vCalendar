@@ -47,18 +47,32 @@ class TestUserController(BaseTestCase):
         Delete user
         """
         response = self.client.open(
-            '/vcalendar/user/{username}'.format(username='username_example'),
+            '/vcalendar/user/{id}'.format(id=789),
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_find_all_user(self):
-        """Test case for find_all_user
+    def test_find_by(self):
+        """Test case for find_by
 
-        Finds all users. Role read:users role must be granted
+        Finds users by given parameters. Role read:users role must be granted
+        """
+        query_string = [('username', 'username_example'),
+                        ('email', 'email_example')]
+        response = self.client.open(
+            '/vcalendar/user/findBy',
+            method='GET',
+            query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_get_user_by_id(self):
+        """Test case for get_user_by_id
+
+        Gets user by id. Role read:users role must be granted
         """
         response = self.client.open(
-            '/vcalendar/user/findAll',
+            '/vcalendar/user/{id}'.format(id=789),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -68,9 +82,11 @@ class TestUserController(BaseTestCase):
 
         Gets user by user name. Role read:users role must be granted
         """
+        query_string = [('username', 'username_example')]
         response = self.client.open(
-            '/vcalendar/user/{username}'.format(username='username_example'),
-            method='GET')
+            '/vcalendar/user/',
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -81,7 +97,7 @@ class TestUserController(BaseTestCase):
         """
         body = User()
         response = self.client.open(
-            '/vcalendar/user/{username}'.format(username='username_example'),
+            '/vcalendar/user/{id}'.format(id=789),
             method='PUT',
             data=json.dumps(body),
             content_type='application/json')

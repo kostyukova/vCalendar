@@ -49,17 +49,6 @@ def delete_team(teamId):  # noqa: E501
     return AUTH_ERRORS[hasRole](role)
 
 
-def find_all_team():  # noqa: E501
-    """Returns all Teams registered in the system.
-
-     # noqa: E501
-
-
-    :rtype: List[Team]
-    """
-    return impl.find_all_team()
-
-
 def find_team_by(name):  # noqa: E501
     """Finds Teams by given parameters
 

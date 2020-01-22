@@ -31,7 +31,7 @@ def find_by(employee_id=None, start_date=None, end_date=None, year=None):
         query = query.filter(text("start_date <= :end_date"))\
             .params(end_date=end_date)
     if year:
-        query = query.filter(text("year(start_date) = :year or year(end_date) = :year"))\
+        query = query.filter(text("(year(start_date) = :year or year(end_date) = :year)"))\
             .params(year=year)
     return query.all()
 

@@ -49,16 +49,6 @@ def delete_employee(employeeId):  # noqa: E501
     return AUTH_ERRORS[hasRole](role)
 
 
-def find_all_employee():  # noqa: E501
-    """Returns all Employees registered in the system.
-
-     # noqa: E501
-
-
-    :rtype: List[Employee]
-    """
-    return impl.find_all_employee()
-
 def find_employee_by_email(email):  # noqa: E501
     """Finds Employee by given email
 

@@ -38,17 +38,6 @@ class TestTeamController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_find_all_team(self):
-        """Test case for find_all_team
-
-        Returns all Teams registered in the system.
-        """
-        response = self.client.open(
-            '/vcalendar/team/findAll',
-            method='GET')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
-
     def test_find_team_by(self):
         """Test case for find_team_by
 
@@ -59,6 +48,17 @@ class TestTeamController(BaseTestCase):
             '/vcalendar/team/findBy',
             method='GET',
             query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_find_team_by_name(self):
+        """Test case for find_team_by_name
+
+        Finds Team by name
+        """
+        response = self.client.open(
+            '/vcalendar/team/findByName/{name}'.format(name='name_example'),
+            method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

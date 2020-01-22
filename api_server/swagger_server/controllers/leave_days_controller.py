@@ -5,7 +5,8 @@ import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
 import swagger_server.controllers.leave_days_controller_impl as impl
 from swagger_server import auth, util
 from swagger_server.models.api_response import ApiResponse  # noqa: E501
-from swagger_server.models.api_response_conflict import ApiResponseConflict  # noqa: E501
+from swagger_server.models.api_response_conflict import \
+    ApiResponseConflict  # noqa: E501
 from swagger_server.models.leave_days import LeaveDays  # noqa: E501
 
 AUTH_ERRORS = {
@@ -14,6 +15,7 @@ AUTH_ERRORS = {
     auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='leave days'),
     auth.TokenStatus.ROLE_GRANTED: None
 }
+
 
 def add_leave_days(body):  # noqa: E501
     """Add a employee LeaveDays to the system. Role write:leave_days must be granted
@@ -47,6 +49,19 @@ def delete_leave_days(id):  # noqa: E501
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_leave_days(id)
     return AUTH_ERRORS[hasRole](role)
+
+
+def find_employee_leave_days(employeeId):  # noqa: E501
+    """Finds LeaveDays by employee
+
+     # noqa: E501
+
+    :param employeeId: Employee id to filter by
+    :type employeeId: int
+
+    :rtype: List[LeaveDays]
+    """
+    return impl.find_employee_leave_days(employeeId)
 
 
 def find_leave_days_by(employee_id=None, start_date=None, end_date=None, year=None):  # noqa: E501

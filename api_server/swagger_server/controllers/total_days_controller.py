@@ -49,6 +49,19 @@ def delete_total_days(id):  # noqa: E501
     return AUTH_ERRORS[hasRole](role)
 
 
+def find_employee_total_days(employeeId):  # noqa: E501
+    """Finds TotalDays by employee
+
+     # noqa: E501
+
+    :param employeeId: Employee id to filter by
+    :type employeeId: int
+
+    :rtype: List[TotalDays]
+    """
+    return impl.find_employee_total_days(employeeId)
+
+
 def find_total_days_by(employee_id=None, year=None):  # noqa: E501
     """Finds TotalDays by given parameters
 

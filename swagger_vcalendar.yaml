@@ -59,22 +59,6 @@ paths:
             $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
-  /team/findAll:
-    get:
-      tags:
-      - "team"
-      summary: "Returns all Teams registered in the system."
-      description: ""
-      operationId: "findAllTeam"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Team"
   /team/findBy:
     get:
       tags:
@@ -279,22 +263,6 @@ paths:
             $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
-  /employee/findAll:
-    get:
-      tags:
-      - "employee"
-      summary: "Returns all Employees registered in the system."
-      description: ""
-      operationId: "findAllEmployee"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Employee"
   /employee/findBy:
     get:
       tags:
@@ -573,6 +541,32 @@ paths:
           description: "TotalDays not found"
           schema:
             $ref: "#/definitions/ApiResponse"
+  /employee/{employeeId}/total_days/:
+    get:
+      tags:
+      - "total_days"
+      summary: "Finds TotalDays by employee"
+      description: ""
+      operationId: "findEmployeeTotalDays"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee id to filter by"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TotalDays"
+        404:
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /employee/total_days/{id}:
     get:
       tags:
@@ -792,6 +786,32 @@ paths:
           description: "LeaveDays not found"
           schema:
             $ref: "#/definitions/ApiResponse"
+  /employee/{employeeId}/leave_days/:
+    get:
+      tags:
+      - "leave_days"
+      summary: "Finds LeaveDays by employee"
+      description: ""
+      operationId: "findEmployeeLeaveDays"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee id to filter by"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LeaveDays"
+        404:
+          description: "Employee not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /employee/leave_days/{id}:
     get:
       tags:
@@ -965,7 +985,7 @@ paths:
           description: "Invalid username/password supplied"
           schema:
             $ref: "#/definitions/ApiResponse"
-  /user/{username}:
+  /user/:
     get:
       tags:
       - "user"
@@ -976,10 +996,45 @@ paths:
       - "application/json"
       parameters:
       - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. "
+        in: "query"
+        description: "The name of user that needs to be fetched. "
         required: true
         type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+  /user/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Gets user by id. Role read:users role must be granted"
+      description: ""
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of user that needs to be fetched"
+        required: true
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "successful operation"
@@ -1008,11 +1063,12 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "username"
+      - name: "id"
         in: "path"
-        description: "name that need to be updated"
+        description: "The id of user that needs to be updated"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       - in: "body"
         name: "body"
         description: "Updated user object"
@@ -1047,11 +1103,12 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "username"
+      - name: "id"
         in: "path"
-        description: "The name that needs to be deleted"
+        description: "The id of user that needs to be deleted"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       responses:
         204:
           description: "Successful deletion"
@@ -1071,15 +1128,24 @@ paths:
             $ref: "#/definitions/ApiResponse"
       security:
       - Bearer: []
-  /user/findAll:
+  /user/findBy:
     get:
       tags:
       - "user"
-      summary: "Finds all users. Role read:users role must be granted"
+      summary: "Finds users by given parameters. Role read:users role must be granted"
       description: ""
-      operationId: "findAllUser"
+      operationId: "findBy"
       produces:
       - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The username to filter by. "
+        type: "string"
+      - name: "email"
+        in: "query"
+        description: "The email to filter by. "
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -1202,9 +1268,11 @@ definitions:
       total_days:
         type: "integer"
         format: "int32"
+        example: "20"
       year:
         type: "integer"
         format: "int32"
+        example: "2020"
   LeaveDays:
     type: "object"
     required:
@@ -1222,12 +1290,15 @@ definitions:
       leave_days:
         type: "integer"
         format: "int32"
+        example: "5"
       start_date:
         type: "string"
         format: "date"
+        example: "2020-01-20"
       end_date:
         type: "string"
         format: "date"
+        example: "2020-01-26"
   LeaveDaysEx:
     type: "object"
     allOf:

@@ -2,6 +2,7 @@ import six
 
 import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
+import swagger_server.dao.user_dao as dao
 from swagger_server import auth, db, util
 from swagger_server.models.api_response import ApiResponse
 from swagger_server.models.user import User  # noqa: E501
@@ -42,54 +43,70 @@ def create_user(body):  # noqa: E501
     orm = User_orm(username=body.username, password=auth.generate_password_hash(body.password),
                    email=body.email, roles=body.roles if body.roles else '')
     # check username already exists
-    found = User_orm.query.filter_by(username=body.username).one_or_none()
+    found = dao.get_by_name(body.username)
     if found is not None:
         return ErrorApiResponse.UsernameExistError(body.username), 409
     # check email already exists
-    found = User_orm.query.filter_by(email=body.email).one_or_none()
+    found = dao.get_by_email(body.email)
     if found is not None:
         return ErrorApiResponse.UseremailExistError(body.email), 409
     try:
-        db.session.add(orm)
-        db.session.commit()
+        dao.persist(orm)
         return get_user_by_name(body.username)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex), 500
 
 
-def delete_user(username):  # noqa: E501
+def delete_user(id):  # noqa: E501
     """Delete user
 
     This can only be done with write:users role. # noqa: E501
 
-    :param username: The name that needs to be deleted
-    :type username: str
+    :param id: The id of user that needs to be deleted
+    :type id: int
 
-    :rtype: None
+    :rtype: ApiResponse
     """
-    if not username:
-        return ErrorApiResponse.NoUsernameError(), 400
-    found = User_orm.query.filter_by(username=username).one_or_none()
+    found = dao.get(id)
     if found is None:
-        return ErrorApiResponse.UserNotFoundError(), 404
+        return ErrorApiResponse.UserNotFoundError(id=id), 404
     try:
-        db.session.delete(found)
-        db.session.commit()
+        dao.delete(found)
         return 'Successful operation', 204
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex), 500
 
 
-def find_all_user():  # noqa: E501
-    """Finds all users. Role read:users role must be granted
+def find_by(username=None, email=None):  # noqa: E501
+    """Finds users by given parameters. Role read:users role must be granted
 
      # noqa: E501
 
+    :param username: The username to filter by. 
+    :type username: str
+    :param email: The email to filter by. 
+    :type email: str
 
     :rtype: List[User]
     """
-    found = User_orm.query.all()
+    found = dao.find_by(username=username, email=email)
     return [to_user_dto(elem) for elem in found]
+
+
+def get_user_by_id(id):  # noqa: E501
+    """Gets user by id. Role read:users role must be granted
+
+     # noqa: E501
+
+    :param id: The id of user that needs to be fetched
+    :type id: int
+
+    :rtype: User
+    """
+    found = dao.get(id)
+    if found is None:
+        return ErrorApiResponse.UserNotFoundError(id=id), 404
+    return to_user_dto(found)
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -97,46 +114,53 @@ def get_user_by_name(username):  # noqa: E501
 
      # noqa: E501
 
-    :param username: The name that needs to be fetched. 
+    :param username: The name of user that needs to be fetched. 
+    :type username: str
+
     :type username: str
 
     :rtype: User
     """
     if not username:
         return ErrorApiResponse.NoUsernameError(), 400
-    found = User_orm.query.filter_by(username=username).one_or_none()
+    found = dao.get_by_name(username)
     if found is None:
-        return ErrorApiResponse.UserNotFoundError(), 404
-    return to_user_dto(found).to_dict()
+        return ErrorApiResponse.UserNotFoundError(username=username), 404
+    return to_user_dto(found)
 
 
-def update_user(username, body):  # noqa: E501
+def update_user(id, body):  # noqa: E501
     """Updated user
 
     This can only be done by with write:users role. # noqa: E501
 
-    :param username: name that need to be updated
-    :type username: str
+    :param id: The id of user that needs to be updated
+    :type id: int
     :param body: Updated user object
     :type body: dict | bytes
 
-    :rtype: None
+    :rtype: User
     """
-    if not username:
-        return ErrorApiResponse.NoUsernameError(), 400
-    found = User_orm.query.filter_by(username=username).one_or_none()
+    found = dao.get(id)
     if found is None:
-        return ErrorApiResponse.UserNotFoundError(), 404
+        return ErrorApiResponse.UserNotFoundError(id=id), 404
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
+    # check username already exists
+    duplicate = dao.get_by_name(body.username)
+    if duplicate is not None and duplicate.id != found.id:
+        return ErrorApiResponse.UsernameExistError(body.username), 409
+    # check email already exists
+    duplicate = dao.get_by_email(body.email)
+    if duplicate is not None and duplicate.id != found.id:
+        return ErrorApiResponse.UseremailExistError(body.email), 409
 
     found.username = body.username
     found.password = auth.generate_password_hash(body.password)
     found.email = body.email
     found.roles = body.roles if body.roles else ''
     try:
-        db.session.add(found)
-        db.session.commit()
+        dao.persist(found)
         return get_user_by_name(body.username)
     except Exception as ex:
         return ErrorApiResponse.InternalServerError(ex), 500

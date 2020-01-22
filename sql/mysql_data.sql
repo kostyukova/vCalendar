@@ -70,7 +70,7 @@ INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `en
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(2, 3, '2020-01-15', '2020-01-19');
 
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
-    VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users');
+    VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users,read:users');
 INSERT INTO `user`(`username`, `password`, `email`, `roles`)
     VALUES('user', '$2b$12$nZKuiZrbSedpTwQrhDn6hey6S38fr5oVEYuM5QAodBrsNpCq3v9WO', 'user@mail.com', 'write:teams,write:employees,write:total_days,write:leave_days');
 
