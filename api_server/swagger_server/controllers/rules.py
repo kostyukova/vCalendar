@@ -13,7 +13,9 @@ from swagger_server.models.leave_days import LeaveDays
 from swagger_server.models.leave_days_ex import LeaveDaysEx
 from swagger_server.orm import Employee as Employee_orm
 from swagger_server.orm import Employee_leave_days as LeaveDays_orm
+import logging
 
+#logging.basicConfig(level=logging.INFO)
 
 '''
  - Only one BA engineer
@@ -72,6 +74,7 @@ def check_rules_2(employee_id: int, start_date: date, end_date: date, id: int = 
 def check_rules_3(employee_id: int, start_date: date, end_date: date, id: int = None):
     def rule(x): return x
     found = dao.find_by_rule(start_date, end_date, rule, id)
+    found = max_intersepts(found)
     if len(found) > 2:
         dto = [to_dto(elem) for elem in found]
         return ConflictDetail(rule="Only three employee on vacation at the same time", conflict_with_leave_days=dto)
@@ -113,6 +116,7 @@ def check_rules_6(employee_id: int, start_date: date, end_date: date, id: int = 
 
     def rule(x): return x.filter(Employee_orm.specialization.like('%Core%'))
     found = dao.find_by_rule(start_date, end_date, rule, id)
+    found = max_intersepts(found)
     if len(found) > 1:
         dto = [to_dto(elem) for elem in found]
         return ConflictDetail(rule="Only two Core", conflict_with_leave_days=dto)
@@ -144,3 +148,40 @@ def to_dto(found: LeaveDays_orm):
                        employee=Employee(employee_id=employee.employee_id, full_name=employee.full_name,
                                          position=employee.position, specialization=employee.specialization,
                                          team_id=employee.team_id, expert=employee.expert, email=employee.email))
+
+
+def max_intersepts(leave_days_list: [LeaveDays_orm]):
+    if len(leave_days_list) <= 1:
+        return leave_days_list
+    dates = []
+    for elem in leave_days_list:
+        dates.append(elem.start_date)
+        dates.append(elem.end_date)
+    # remove duplicated
+    dates = list(set(dates))
+    dates.sort()
+    # append last date
+    last = dates[len(dates)-1]
+    dates.append(last)
+
+    # split to right open periods
+    # [dates[0], dates[1), [) ... [last, last)]]
+    # find a period where max interseptions
+    (intersect_max, index_max) = (0, None)
+    for i in range(len(dates) - 1):
+        intersects = [x for x in leave_days_list if
+                      intersect(x, dates[i], dates[i+1])]
+        #logging.info('Next period [%s, %s), interseptions: %d', dates[i], dates[i+1], len(intersects))
+        if len(intersects) > intersect_max:
+            (intersect_max, index_max) = (len(intersects), i)
+
+    logging.info('Max intersection period [%s, %s)',
+                 dates[index_max], dates[index_max + 1])
+    return [x for x in leave_days_list if
+            intersect(x, dates[index_max], dates[index_max+1])]
+
+
+def intersect(leave_days: LeaveDays_orm, start_date: date, end_date: date):
+    if start_date == end_date:
+        return leave_days.start_date <= end_date and end_date <= leave_days.end_date
+    return leave_days.start_date < end_date and leave_days.end_date >= start_date
