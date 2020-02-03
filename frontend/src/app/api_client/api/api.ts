@@ -1,0 +1,11 @@
+export * from './employee.service';
+import { EmployeeService } from './employee.service';
+export * from './leaveDays.service';
+import { LeaveDaysService } from './leaveDays.service';
+export * from './team.service';
+import { TeamService } from './team.service';
+export * from './totalDays.service';
+import { TotalDaysService } from './totalDays.service';
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [EmployeeService, LeaveDaysService, TeamService, TotalDaysService, UserService];

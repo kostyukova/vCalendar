@@ -5,6 +5,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AddressFormComponent } from './address-form/address-form.component';
 import { TableComponent } from './table/table.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'address-form', component: AddressFormComponent },
   { path: 'table', component: TableComponent },
+  { path: 'employee-list', component: EmployeeListComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: '**', component: PageNotFoundComponent }
 ];

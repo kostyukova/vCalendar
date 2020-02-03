@@ -13,6 +13,7 @@ pymysql = "*"
 pyjwt = "~=1.7"
 bcrypt = "~=3.1"
 flask-testing = "*"
+flask-cors = "~=3.0"
 
 [requires]
 python_version = "3.7"

@@ -12,8 +12,9 @@ export class NavigationComponent {
   routes = [
     { url: 'home', linkName: 'Home' },
     { url: 'address-form', linkName: 'Sample address form' },
-    { url: 'table', linkName: 'Sample table form' },
-    { url: 'dashboard', linkName: 'Sample dashboard form' }
+    { url: 'table', linkName: 'Sample table' },
+    { url: 'employee-list', linkName: 'Employees' },
+    { url: 'dashboard', linkName: 'Sample dashboard' }
   ];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

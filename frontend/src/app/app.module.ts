@@ -26,6 +26,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { environment } from '../environments/environment';
+import { BASE_PATH } from './api_client';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { EmployeeService } from './api_client/api/employee.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,10 +40,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     TableComponent,
     DashboardComponent,
     HomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    EmployeeListComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatInputModule,
@@ -58,7 +65,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatGridListModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [
+    { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+    EmployeeService
+  ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
