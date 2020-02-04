@@ -6,11 +6,13 @@ import { AddressFormComponent } from './address-form/address-form.component';
 import { TableComponent } from './table/table.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'calendar', component: CalendarComponent },
   { path: 'address-form', component: AddressFormComponent },
   { path: 'table', component: TableComponent },
   { path: 'employee-list', component: EmployeeListComponent },

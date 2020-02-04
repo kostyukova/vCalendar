@@ -31,6 +31,9 @@ import { BASE_PATH } from './api_client';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { EmployeeService } from './api_client/api/employee.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import { HttpClientModule } from '@angular/common/http';
     DashboardComponent,
     HomeComponent,
     PageNotFoundComponent,
-    EmployeeListComponent
+    EmployeeListComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +67,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatPaginatorModule,
     MatSortModule,
     MatGridListModule,
-    MatMenuModule
+    MatMenuModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
