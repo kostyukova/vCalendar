@@ -11,10 +11,10 @@
  */
 
 
-export interface LeaveDays { 
+export interface LeaveDays {
     id?: number;
-    employeeId: number;
-    leaveDays: number;
-    startDate: string;
-    endDate: string;
+    employee_id: number;
+    leave_days: number;
+    start_date: string;
+    end_date: string;
 }
