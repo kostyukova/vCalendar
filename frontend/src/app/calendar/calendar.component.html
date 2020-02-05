@@ -1,16 +1,18 @@
-<div class="row text-center">
-  <div class="col-md-4">
-    <div class="btn-group">
-      <button class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+<div class="container" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+  <div fxFlex="40%" fxLayoutAlign="center">
+    <div fxLayout="row">
+      <button mat-raised-button color="primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
         Previous
       </button>
-      <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">Today</button>
-      <button class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+      <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
+        Today
+      </button>
+      <button mat-raised-button color="primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
         Next
       </button>
     </div>
   </div>
-  <div class="col-md-4">
+  <div fxFlex>
     <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
   </div>
 </div>

@@ -33,6 +33,7 @@ import { EmployeeService } from './api_client/api/employee.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
@@ -68,6 +69,7 @@ import { CalendarComponent } from './calendar/calendar.component';
     MatSortModule,
     MatGridListModule,
     MatMenuModule,
+    FlexLayoutModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
