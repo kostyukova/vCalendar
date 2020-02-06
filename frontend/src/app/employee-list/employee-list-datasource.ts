@@ -43,9 +43,9 @@ export class EmployeeListDataSource extends DataSource<Employee> {
     this.loadingSubject.complete();
   }
 
-  loadData() {
+  loadData(fullName?: string, position?: string, specialization?: string, expert?: boolean, teamId?: number, email?: string) {
     this.loadingSubject.next(true);
-    this.apiClient.findEmployeesBy().pipe(
+    this.apiClient.findEmployeesBy(fullName, position, specialization, expert, teamId, email).pipe(
       catchError(() => of([])),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(data => {
