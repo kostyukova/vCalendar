@@ -1,0 +1,13 @@
+<div fxLayout="column">
+  <mat-form-field>
+    <input matInput placeholder="Action" [value]="data.action">
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Event" [value]="data.event" rows="10"></textarea>
+  </mat-form-field>
+  <div mat-dialog-actions fxLayoutAlign="end end">
+    <button mat-button (click)="onNoClick()">Close</button>
+    <button mat-button [mat-dialog-close]="data.event" cdkFocusInitial>Ok</button>
+  </div>
+</div>

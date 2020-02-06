@@ -1,12 +1,17 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Inject } from '@angular/core';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { addMonths, endOfDay, endOfMonth, startOfDay, startOfMonth, subMonths } from 'date-fns';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { LeaveDaysService } from '../api_client/api/leaveDays.service';
 import { LeaveDays } from '../api_client/model/leaveDays';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+export interface DialogData {
+  action: string;
+  event: CalendarEvent;
+}
 
 @Component({
   selector: 'app-calendar',
@@ -48,7 +53,8 @@ export class CalendarComponent implements OnInit {
     }
   ];
 
-  constructor(private dataPipe: DatePipe, private apiClient: LeaveDaysService) { }
+
+  constructor(private dataPipe: DatePipe, private apiClient: LeaveDaysService, private modal: MatDialog) { }
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -98,4 +104,32 @@ export class CalendarComponent implements OnInit {
     this.viewDate = date;
     this.fetchEvents();
   }
+
+  handleEvent(action_: string, event_: CalendarEvent): void {
+    const dialogRef = this.modal.open(CalendarEventDialog, {
+      width: '800px',
+      height: '400px',
+      data: { action: action_, event: JSON.stringify(event_) }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // result data from dialog
+      console.log('The dialog was closed');
+    });
+  }
+}
+@Component({
+  selector: 'app-calendar-event-dialog',
+  templateUrl: 'calendar-event-dialog.html',
+})
+export class CalendarEventDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<CalendarEventDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }

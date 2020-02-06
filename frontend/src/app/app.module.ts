@@ -17,7 +17,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -32,7 +33,7 @@ import { TotalDaysService } from './api_client/api/totalDays.service';
 import { UserService } from './api_client/api/user.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarComponent, CalendarEventDialog } from './calendar/calendar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HomeComponent } from './home/home.component';
@@ -53,7 +54,12 @@ import { DatePipe } from '@angular/common';
     HomeComponent,
     PageNotFoundComponent,
     EmployeeListComponent,
-    CalendarComponent
+    CalendarComponent,
+    CalendarEventDialog
+  ],
+  entryComponents: [
+    CalendarComponent,
+    CalendarEventDialog
   ],
   imports: [
     BrowserModule,
@@ -77,6 +83,7 @@ import { DatePipe } from '@angular/common';
     MatGridListModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     FlexLayoutModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
