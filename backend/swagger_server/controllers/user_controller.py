@@ -44,7 +44,7 @@ def create_user(body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.create_user(body)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def delete_user(id):  # noqa: E501
@@ -61,7 +61,7 @@ def delete_user(id):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_user(id)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def find_by(username=None, email=None):  # noqa: E501
@@ -80,7 +80,7 @@ def find_by(username=None, email=None):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.find_by(username, email)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def get_user_by_id(id):  # noqa: E501
@@ -97,7 +97,7 @@ def get_user_by_id(id):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.get_user_by_id(id)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def get_user_by_name(username):  # noqa: E501
@@ -114,7 +114,7 @@ def get_user_by_name(username):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.get_user_by_name(username)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def update_user(id, body):  # noqa: E501
@@ -133,4 +133,4 @@ def update_user(id, body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.update_user(id, body)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401

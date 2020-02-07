@@ -31,7 +31,7 @@ def add_leave_days(body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.add_leave_days(body)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def delete_leave_days(id):  # noqa: E501
@@ -48,7 +48,7 @@ def delete_leave_days(id):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_leave_days(id)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401
 
 
 def find_employee_leave_days(employeeId):  # noqa: E501
@@ -127,4 +127,4 @@ def update_leave_days_by_id(id, body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.update_leave_days_by_id(id, body)
-    return AUTH_ERRORS[hasRole](role)
+    return AUTH_ERRORS[hasRole](role), 401

@@ -2,7 +2,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -74,6 +74,7 @@ import { LoginComponent } from './login/login.component';
     MatRadioModule,
     MatCardModule,
     ReactiveFormsModule,
+    FormsModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
