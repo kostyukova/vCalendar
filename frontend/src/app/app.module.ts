@@ -1,5 +1,5 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -42,7 +42,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { TableComponent } from './table/table.component';
 import { DatePipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
-
+import { BasicAuthInspector } from './_helpers/basic-auth-inspector';
+import { AuthenticationService } from './_services/authentication.service';
 
 
 @NgModule({
@@ -97,6 +98,8 @@ import { LoginComponent } from './login/login.component';
     TeamService,
     TotalDaysService,
     UserService,
+    AuthenticationService,
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInspector, multi: true},
     DatePipe
   ],
   bootstrap: [AppComponent]

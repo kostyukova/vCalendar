@@ -1,23 +1,28 @@
-<div fxLayout="column" fxLayoutAlign="center center" >
-  <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form class="login-form">
+<div fxLayout="column" fxLayoutAlign="center center">
+  <form class="login-form" [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <div fxLayout="column">
           <mat-form-field class="login-full-width">
-            <input matInput placeholder="Username" [(ngModel)]="username" name="user-name" required>
+            <input matInput placeholder="Username" formControlName="username">
+            <mat-error *ngIf="loginForm.controls['username'].hasError('required')">
+              Username is <strong>required</strong>
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="login-full-width">
-            <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" required>
+            <input matInput placeholder="Password" formControlName="password" type="password">
+            <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
           </mat-form-field>
         </div>
-      </form>
-      <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
-    </mat-card-content>
-    <mat-card-actions fxLayoutAlign="end end">
-      <button mat-raised-button (click)="login()" color="primary">Login</button>
-    </mat-card-actions>
-  </mat-card>
+      </mat-card-content>
+      <mat-card-actions fxLayoutAlign="end end">
+        <button mat-raised-button type="submit" color="primary">Login</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
 </div>
