@@ -41,6 +41,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TableComponent } from './table/table.component';
 import { DatePipe } from '@angular/common';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -55,7 +56,8 @@ import { DatePipe } from '@angular/common';
     PageNotFoundComponent,
     EmployeeListComponent,
     CalendarComponent,
-    CalendarEventDialog
+    CalendarEventDialog,
+    LoginComponent
   ],
   entryComponents: [
     CalendarComponent,
