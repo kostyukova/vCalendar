@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { AlertService } from '../alert/alert.service';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +12,8 @@ import { first } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  error = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthenticationService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthenticationService, private alertService: AlertService) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     const username = this.loginForm.controls.username.value;
     const password = this.loginForm.controls.password.value;
 
-    // stop here if form is invalid
+    // break if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
@@ -38,8 +38,9 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['home']);
         },
         error => {
-          // FiXME error message to user
-          this.error = error;
+          if (error.error && error.error.message) {
+            this.alertService.error(error.error.message);
+          }
           console.error(error);
         });
   }

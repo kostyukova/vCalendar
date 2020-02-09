@@ -1,0 +1,13 @@
+.alert-error {
+  color: #f44336;
+}
+
+.alert-success {
+  color: #36f456;
+}
+
+.alert {
+  padding: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+}

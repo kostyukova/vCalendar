@@ -44,6 +44,8 @@ import { DatePipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { BasicAuthInspector } from './_helpers/basic-auth-inspector';
 import { AuthenticationService } from './_services/authentication.service';
+import { AlertComponent } from './alert/alert.component';
+import { AlertService } from './alert/alert.service';
 
 
 @NgModule({
@@ -58,7 +60,8 @@ import { AuthenticationService } from './_services/authentication.service';
     EmployeeListComponent,
     CalendarComponent,
     CalendarEventDialog,
-    LoginComponent
+    LoginComponent,
+    AlertComponent
   ],
   entryComponents: [
     CalendarComponent,
@@ -98,6 +101,7 @@ import { AuthenticationService } from './_services/authentication.service';
     TeamService,
     TotalDaysService,
     UserService,
+    AlertService,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInspector, multi: true},
     DatePipe
