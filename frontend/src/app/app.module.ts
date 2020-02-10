@@ -46,6 +46,7 @@ import { BasicAuthInspector } from './_helpers/basic-auth-inspector';
 import { AuthenticationService } from './_services/authentication.service';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
+import { ErrorInterceptor } from './_helpers/error-intersepror';
 
 
 @NgModule({
@@ -104,6 +105,7 @@ import { AlertService } from './alert/alert.service';
     AlertService,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInspector, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     DatePipe
   ],
   bootstrap: [AppComponent]

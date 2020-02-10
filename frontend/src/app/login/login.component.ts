@@ -13,7 +13,8 @@ import { AuthenticationService } from '../_services/authentication.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthenticationService, private alertService: AlertService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router,
+              private authService: AuthenticationService, private alertService: AlertService) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit($event: any): void {
+    console.log($event);
     const username = this.loginForm.controls.username.value;
     const password = this.loginForm.controls.password.value;
 
