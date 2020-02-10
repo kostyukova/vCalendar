@@ -47,6 +47,7 @@ import { AuthenticationService } from './_services/authentication.service';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
 import { ErrorInterceptor } from './_helpers/error-intersepror';
+import { UserListComponent } from './user-list/user-list.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { ErrorInterceptor } from './_helpers/error-intersepror';
     CalendarComponent,
     CalendarEventDialog,
     LoginComponent,
-    AlertComponent
+    AlertComponent,
+    UserListComponent
   ],
   entryComponents: [
     CalendarComponent,

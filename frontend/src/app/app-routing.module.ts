@@ -8,11 +8,14 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TableComponent } from './table/table.component';
+import { AuthGuard } from './_helpers/auth-guard';
+import { UserListComponent } from './user-list/user-list.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'address-form', component: AddressFormComponent },

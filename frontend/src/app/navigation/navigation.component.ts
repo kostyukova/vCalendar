@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -12,9 +12,10 @@ export class NavigationComponent {
   routes = [
     { url: 'home', linkName: 'Home' },
     { url: 'calendar', linkName: 'Calendars' },
+    { url: 'employee-list', linkName: 'Employees' },
+    { url: 'user-list', linkName: 'Users' },
     { url: 'address-form', linkName: 'Sample address form' },
     { url: 'table', linkName: 'Sample table' },
-    { url: 'employee-list', linkName: 'Employees' },
     { url: 'dashboard', linkName: 'Sample dashboard' }
   ];
 
@@ -24,6 +25,6 @@ export class NavigationComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
 }
