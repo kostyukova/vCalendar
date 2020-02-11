@@ -162,14 +162,11 @@ export class TeamService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findTeamBy(name: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
-    public findTeamBy(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
-    public findTeamBy(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
-    public findTeamBy(name: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findTeamBy(name?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
+    public findTeamBy(name?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
+    public findTeamBy(name?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
+    public findTeamBy(name?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling findTeamBy.');
-        }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (name !== undefined && name !== null) {

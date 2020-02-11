@@ -72,7 +72,6 @@ paths:
       - name: "name"
         in: "query"
         description: "Team name template to filter by"
-        required: true
         type: "string"
       responses:
         200:

@@ -11,7 +11,7 @@
  */
 
 
-export interface Team { 
-    teamId?: number;
+export interface Team {
+    team_id?: number;
     name: string;
 }

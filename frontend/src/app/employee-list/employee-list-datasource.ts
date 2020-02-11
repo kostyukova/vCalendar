@@ -1,10 +1,11 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map, catchError, finalize } from 'rxjs/operators';
-import { Observable, of as observableOf, merge, BehaviorSubject, of } from 'rxjs';
-import { Employee } from '../api_client/model/employee';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { EmployeeService } from '../api_client/api/employee.service';
+import { Employee } from '../api_client/model/employee';
+import { TeamPipe } from '../_services/team-pipe';
 
 /**
  * Data source for the EmployeeList view. This class should
@@ -21,7 +22,7 @@ export class EmployeeListDataSource extends DataSource<Employee> {
   public paginator: MatPaginator;
   public sort: MatSort;
 
-  constructor(private apiClient: EmployeeService) {
+  constructor(private apiClient: EmployeeService, private teamPipe: TeamPipe ) {
     super();
   }
 
@@ -49,6 +50,7 @@ export class EmployeeListDataSource extends DataSource<Employee> {
       catchError(() => of([])),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(data => {
+      data.forEach(item => item.team_name = this.teamPipe.transform(item.team_id));
       console.log(data);
       this.dataSubject.next(data);
       this.dataLength.next(data.length);

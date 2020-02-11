@@ -7,6 +7,7 @@ import { Employee } from '../api_client/model/employee';
 import { EmployeeListDataSource } from './employee-list-datasource';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { TeamPipe } from '../_services/team-pipe';
 
 @Component({
   selector: 'app-employee-list',
@@ -25,12 +26,12 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['employee_id', 'full_name', 'position', 'specialization', 'team_id', 'expert'];
 
-  constructor(private apiClient: EmployeeService) {
+  constructor(private apiClient: EmployeeService, private teamPipe: TeamPipe) {
 
   }
 
   ngOnInit() {
-    this.dataSource = new EmployeeListDataSource(this.apiClient);
+    this.dataSource = new EmployeeListDataSource(this.apiClient, this.teamPipe);
     this.dataSource.loadData('');
   }
 

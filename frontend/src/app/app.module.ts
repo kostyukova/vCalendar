@@ -48,6 +48,8 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
 import { ErrorInterceptor } from './_helpers/error-intersepror';
 import { UserListComponent } from './user-list/user-list.component';
+import { TeamCache } from './_services/team-cache';
+import { TeamPipe } from './_services/team-pipe';
 
 
 @NgModule({
@@ -64,6 +66,7 @@ import { UserListComponent } from './user-list/user-list.component';
     CalendarEventDialog,
     LoginComponent,
     AlertComponent,
+    TeamPipe,
     UserListComponent
   ],
   entryComponents: [
@@ -105,9 +108,11 @@ import { UserListComponent } from './user-list/user-list.component';
     TotalDaysService,
     UserService,
     AlertService,
+    TeamCache,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInspector, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    TeamPipe,
     DatePipe
   ],
   bootstrap: [AppComponent]

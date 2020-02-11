@@ -49,7 +49,7 @@ def delete_team(teamId):  # noqa: E501
     return AUTH_ERRORS[hasRole](role), 401
 
 
-def find_team_by(name):  # noqa: E501
+def find_team_by(name=None):  # noqa: E501
     """Finds Teams by given parameters
 
      # noqa: E501
