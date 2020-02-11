@@ -6,6 +6,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { EmployeeService } from '../api_client/api/employee.service';
 import { Employee } from '../api_client/model/employee';
 import { TeamPipe } from '../_services/team-pipe';
+import { YesnoPipe } from '../_services/Yesno-pipe';
 
 /**
  * Data source for the EmployeeList view. This class should
@@ -22,7 +23,7 @@ export class EmployeeListDataSource extends DataSource<Employee> {
   public paginator: MatPaginator;
   public sort: MatSort;
 
-  constructor(private apiClient: EmployeeService, private teamPipe: TeamPipe ) {
+  constructor(private apiClient: EmployeeService, private teamPipe: TeamPipe, private yesnoPipe: YesnoPipe) {
     super();
   }
 
@@ -50,7 +51,10 @@ export class EmployeeListDataSource extends DataSource<Employee> {
       catchError(() => of([])),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(data => {
-      data.forEach(item => item.team_name = this.teamPipe.transform(item.team_id));
+      data.forEach(item => {
+        item.team_name = this.teamPipe.transform(item.team_id);
+        item.expert_value = this.yesnoPipe.transform(item.expert);
+      });
       console.log(data);
       this.dataSubject.next(data);
       this.dataLength.next(data.length);

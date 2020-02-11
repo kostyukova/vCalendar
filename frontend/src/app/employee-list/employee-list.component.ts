@@ -5,9 +5,11 @@ import { MatTable } from '@angular/material/table';
 import { EmployeeService } from '../api_client/api/employee.service';
 import { Employee } from '../api_client/model/employee';
 import { EmployeeListDataSource } from './employee-list-datasource';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { TeamPipe } from '../_services/team-pipe';
+import { TeamCache } from '../_services/team-cache';
+import { YesnoPipe } from '../_services/Yesno-pipe';
 
 @Component({
   selector: 'app-employee-list',
@@ -21,17 +23,19 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
   @ViewChild('inputFullName', { static: false }) inputFullName: ElementRef;
   @ViewChild('inputPosition', { static: false }) inputPosition: ElementRef;
   @ViewChild('inputSpecialization', { static: false }) inputSpecialization: ElementRef;
+  @ViewChild('inputTeam', { static: false }) inputTeam: ElementRef;
+  @ViewChild('inputExpert', { static: false }) inputExpert: ElementRef;
   dataSource: EmployeeListDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['employee_id', 'full_name', 'position', 'specialization', 'team_id', 'expert'];
 
-  constructor(private apiClient: EmployeeService, private teamPipe: TeamPipe) {
+  constructor(private apiClient: EmployeeService, private teamCache: TeamCache, private teamPipe: TeamPipe, private yesnoPipe: YesnoPipe) {
 
   }
 
   ngOnInit() {
-    this.dataSource = new EmployeeListDataSource(this.apiClient, this.teamPipe);
+    this.dataSource = new EmployeeListDataSource(this.apiClient, this.teamPipe, this.yesnoPipe);
     this.dataSource.loadData('');
   }
 
@@ -45,9 +49,7 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
-          this.dataSource.loadData(this.inputFullName.nativeElement.value,
-            this.inputPosition.nativeElement.value,
-            this.inputSpecialization.nativeElement.value);
+          this.loadData();
         })
       )
       .subscribe();
@@ -56,9 +58,7 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
-          this.dataSource.loadData(this.inputFullName.nativeElement.value,
-            this.inputPosition.nativeElement.value,
-            this.inputSpecialization.nativeElement.value);
+          this.loadData();
         })
       )
       .subscribe();
@@ -67,15 +67,40 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
-          this.dataSource.loadData(this.inputFullName.nativeElement.value,
-            this.inputPosition.nativeElement.value,
-            this.inputSpecialization.nativeElement.value);
+          this.loadData();
+        })
+      )
+      .subscribe();
+    fromEvent(this.inputTeam.nativeElement, 'change')
+      .pipe(
+        distinctUntilChanged(),
+        tap(() => {
+          this.loadData();
+        })
+      )
+      .subscribe();
+    fromEvent(this.inputExpert.nativeElement, 'change')
+      .pipe(
+        distinctUntilChanged(),
+        tap(() => {
+          this.loadData();
         })
       )
       .subscribe();
   }
 
+  loadData() {
+    this.dataSource.loadData(this.inputFullName.nativeElement.value,
+      this.inputPosition.nativeElement.value,
+      this.inputSpecialization.nativeElement.value,
+      this.inputExpert.nativeElement.value ? this.inputExpert.nativeElement.value : null,
+      this.inputTeam.nativeElement.value ? this.inputTeam.nativeElement.value : null);
+  }
   onRowClicked(row) {
     console.log(row);
+  }
+
+  get teams(): Observable<Map<number, string>> {
+    return this.teamCache.getFoundList();
   }
 }

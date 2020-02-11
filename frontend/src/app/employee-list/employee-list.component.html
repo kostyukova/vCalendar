@@ -1,5 +1,5 @@
 <div class="mat-elevation-z8">
-  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -12,6 +12,22 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Specialization" #inputSpecialization>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Team</mat-label>
+      <select matNativeControl #inputTeam>
+        <option value=''>None</option>
+        <option *ngFor="let item of (teams| async | keyvalue)" [value]="item.key">
+          {{item.value}}</option>
+      </select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Expert</mat-label>
+      <select matNativeControl #inputExpert>
+        <option value=''>None</option>
+        <option value='true'>Yes</option>
+        <option value='false'>No</option>
+      </select>
     </mat-form-field>
   </div>
   <table mat-table class="full-width-table" matSort aria-label="Elements">
@@ -51,7 +67,7 @@
     <!-- expert column -->
     <ng-container matColumnDef="expert">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Expert</th>
-      <td mat-cell *matCellDef="let row">{{row.expert}}</td>
+      <td mat-cell *matCellDef="let row">{{row.expert_value}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
