@@ -25,7 +25,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { environment } from '../environments/environment';
-import { AddressFormComponent } from './address-form/address-form.component';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
 import { BASE_PATH } from './api_client';
@@ -37,13 +36,11 @@ import { UserService } from './api_client/api/user.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarComponent, CalendarEventDialog } from './calendar/calendar.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { TableComponent } from './table/table.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { BasicAuthInspector } from './_helpers/basic-auth-inspector';
 import { ErrorInterceptor } from './_helpers/error-intersepror';
@@ -56,10 +53,7 @@ import { YesnoPipe } from './_services/Yesno-pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    AddressFormComponent,
     NavigationComponent,
-    TableComponent,
-    DashboardComponent,
     HomeComponent,
     PageNotFoundComponent,
     EmployeeListComponent,

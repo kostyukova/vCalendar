@@ -14,9 +14,6 @@ export class NavigationComponent {
     { url: 'calendar', linkName: 'Calendars' },
     { url: 'employee-list', linkName: 'Employees' },
     { url: 'user-list', linkName: 'Users' },
-    { url: 'address-form', linkName: 'Sample address form' },
-    { url: 'table', linkName: 'Sample table' },
-    { url: 'dashboard', linkName: 'Sample dashboard' }
   ];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
