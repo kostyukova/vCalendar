@@ -9,10 +9,13 @@
       <h2>Employees</h2>
     </div>
   </div>
-  <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="center center">
+  <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
     <!-- search box -->
-    <mat-form-field>
+    <mat-form-field fxFlexOffset="20px">
       <input matInput placeholder="Full name" #inputFullName>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email" #inputEmail>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Position" #inputPosition>
@@ -74,16 +77,17 @@
 
     <!-- expert column -->
     <ng-container matColumnDef="expert">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Expert</th>
+      <th mat-header-cell *matHeaderCellDef>Expert</th>
       <td mat-cell *matCellDef="let row">{{row.expert_value}}</td>
     </ng-container>
 
     <!-- Action Column -->
     <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let row" class="action-link">
-        <a (click)="openDialog('Update',row)">Edit</a> |
-        <a (click)="openDialog('Delete',row)">Delete</a>
+        <button mat-button (click)="openDialog('Update', row)" mat-flat-button color="primary"
+          class="table-button">Edit</button>
+        <button mat-button (click)="openDialog('Delete', row)" mat-flat-button color="primary">Delete</button>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

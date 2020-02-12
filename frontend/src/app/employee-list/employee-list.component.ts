@@ -23,6 +23,7 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<Employee>;
   @ViewChild('inputFullName', { static: false }) inputFullName: ElementRef;
+  @ViewChild('inputEmail', { static: false }) inputEmail: ElementRef;
   @ViewChild('inputPosition', { static: false }) inputPosition: ElementRef;
   @ViewChild('inputSpecialization', { static: false }) inputSpecialization: ElementRef;
   @ViewChild('inputTeam', { static: false }) inputTeam: ElementRef;
@@ -46,6 +47,12 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
     // server-side search
     fromEvent(this.inputFullName.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => this.loadData())
+      ).subscribe();
+    fromEvent(this.inputEmail.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
         distinctUntilChanged(),
@@ -76,11 +83,13 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
   }
 
   loadData() {
-    this.dataSource.loadData(this.inputFullName.nativeElement.value,
+    this.dataSource.loadData(
+      this.inputFullName.nativeElement.value,
       this.inputPosition.nativeElement.value,
       this.inputSpecialization.nativeElement.value,
       this.inputExpert.nativeElement.value ? this.inputExpert.nativeElement.value : null,
-      this.inputTeam.nativeElement.value ? this.inputTeam.nativeElement.value : null);
+      this.inputTeam.nativeElement.value ? this.inputTeam.nativeElement.value : null,
+      this.inputEmail.nativeElement.value);
   }
 
   get teams(): Observable<Map<number, string>> {

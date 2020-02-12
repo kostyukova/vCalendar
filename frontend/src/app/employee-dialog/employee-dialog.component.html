@@ -16,6 +16,15 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email">
+            <mat-error *ngIf="dataForm.controls['email'].hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['email'].hasError('email')">
+              Wrong email format
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
             <mat-label>Position</mat-label>
             <select matNativeControl formControlName="position">
               <option *ngFor="let item of positions | keyvalue" [value]="item.value">
@@ -23,6 +32,33 @@
             </select>
             <mat-error *ngIf="dataForm.controls['position'].hasError('required')">
               Position is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Specialization" formControlName="specialization">
+            <mat-hint>A comma separated set of 'Core', 'BA', 'OACI', 'O365'</mat-hint>
+            <mat-error *ngIf="dataForm.controls['specialization'].hasError('commaseparated')">
+              Value does not match <strong>comma separated</strong> format
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Team</mat-label>
+            <select matNativeControl formControlName="team_id">
+              <option *ngFor="let item of (teams| async | keyvalue)" [value]="item.key">
+                {{item.value}}</option>
+            </select>
+            <mat-error *ngIf="dataForm.controls['team_id'].hasError('required')">
+              Team is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Expert</mat-label>
+            <select matNativeControl formControlName="expert">
+              <option value='true'>Yes</option>
+              <option value='false'>No</option>
+            </select>
+            <mat-error *ngIf="dataForm.controls['expert'].hasError('required')">
+              Expert is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </ng-template>

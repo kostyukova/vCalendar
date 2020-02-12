@@ -1,7 +1,9 @@
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Employee } from '../api_client/model/employee';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { TeamCache } from '../_services/team-cache';
 
 @Component({
   selector: 'app-employee-dialog',
@@ -14,20 +16,40 @@ export class EmployeeDialogComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<EmployeeDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee | any) {
+    private dialogRef: MatDialogRef<EmployeeDialogComponent>,
+    private teamCache: TeamCache,
+    @Optional() @Inject(MAT_DIALOG_DATA) private data: Employee | any) {
 
     console.log(data);
     this.dataForm = this.formBuilder.group({
       full_name: [data.full_name, Validators.required],
       position: [data.position, Validators.required],
-      specialization: [data.specialization, null],
+      specialization: [data.specialization, this.validateSpecialization],
+      team_id: [data.team_id, Validators.required],
+      expert: [data.expert, Validators.required],
+      email: [data.email, [Validators.required, Validators.email]],
       action: [data.action, null]
     });
   }
 
   get positions() {
     return Employee.PositionEnum;
+  }
+
+  get teams(): Observable<Map<number, string>> {
+    return this.teamCache.getFoundList();
+  }
+
+  validateSpecialization(control: FormControl) {
+    if (!control.value) {
+      return null;
+    }
+    const accepted = ['Core', 'BA', 'OACI', 'O365'];
+    return control.value.split(',').every(elem => accepted.indexOf(elem) >= 0) ? null : {
+      commaseparated: {
+        valid: false
+      }
+    };
   }
 
   doAction() {
