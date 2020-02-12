@@ -13,8 +13,9 @@ import { AuthenticationService } from '../_services/authentication.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router,
-              private authService: AuthenticationService, private alertService: AlertService) { }
+  constructor(
+    private formBuilder: FormBuilder, private router: Router,
+    private authService: AuthenticationService, private alertService: AlertService) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -36,14 +37,8 @@ export class LoginComponent implements OnInit {
     this.authService.login(username, password)
       .pipe(first())
       .subscribe(
-        data => {
-          this.router.navigate(['home']);
-        },
-        error => {
-          if (error.error && error.error.message) {
-            this.alertService.error(error.error.message);
-          }
-          console.error(error);
-        });
+        data => this.router.navigate(['home']),
+        error => this.alertService.error(error)
+      );
   }
 }

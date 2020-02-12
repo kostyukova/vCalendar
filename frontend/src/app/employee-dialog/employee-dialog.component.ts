@@ -20,8 +20,8 @@ export class EmployeeDialogComponent {
     private teamCache: TeamCache,
     @Optional() @Inject(MAT_DIALOG_DATA) private data: Employee | any) {
 
-    console.log(data);
     this.dataForm = this.formBuilder.group({
+      employee_id: [data.employee_id, null],
       full_name: [data.full_name, Validators.required],
       position: [data.position, Validators.required],
       specialization: [data.specialization, this.validateSpecialization],
@@ -57,10 +57,15 @@ export class EmployeeDialogComponent {
     if (this.dataForm.invalid) {
       return;
     }
+    const specValue = this.dataForm.controls.specialization.value;
     const employee = {
-      full_name: this.dataForm.controls.full_name,
-      position: this.dataForm.controls.position,
-      specialization: this.dataForm.controls.specialization
+      employee_id: this.dataForm.controls.employee_id.value,
+      full_name: this.dataForm.controls.full_name.value,
+      position: this.dataForm.controls.position.value,
+      specialization: specValue ? specValue : '',
+      team_id: parseInt(this.dataForm.controls.team_id.value, 10),
+      expert: !!this.dataForm.controls.expert.value,
+      email: this.dataForm.controls.email.value
     };
     this.dialogRef.close({ event: this.dataForm.controls.action.value, data: employee });
   }

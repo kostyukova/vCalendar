@@ -20,7 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       // }
 
       const msg = error.error.message || error.statusText;
-      return throwError(error);
+      return throwError(msg);
     }));
   }
 }

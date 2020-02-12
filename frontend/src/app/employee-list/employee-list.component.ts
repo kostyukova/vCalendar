@@ -1,17 +1,18 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { EmployeeService } from '../api_client/api/employee.service';
-import { Employee } from '../api_client/model/employee';
-import { EmployeeListDataSource } from './employee-list-datasource';
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { TeamPipe } from '../_services/team-pipe';
-import { TeamCache } from '../_services/team-cache';
-import { YesnoPipe } from '../_services/Yesno-pipe';
-import { MatDialog } from '@angular/material/dialog';
+import { AlertService } from '../alert/alert.service';
+import { EmployeeService } from '../api_client/api/employee.service';
+import { Employee } from '../api_client/model/employee';
 import { EmployeeDialogComponent } from '../employee-dialog/employee-dialog.component';
+import { TeamCache } from '../_services/team-cache';
+import { TeamPipe } from '../_services/team-pipe';
+import { YesnoPipe } from '../_services/Yesno-pipe';
+import { EmployeeListDataSource } from './employee-list-datasource';
 
 @Component({
   selector: 'app-employee-list',
@@ -34,7 +35,8 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
 
   constructor(
     private apiClient: EmployeeService, private teamCache: TeamCache, private teamPipe: TeamPipe,
-    private yesnoPipe: YesnoPipe, private dialog: MatDialog) { }
+    private yesnoPipe: YesnoPipe, private dialog: MatDialog,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.dataSource = new EmployeeListDataSource(this.apiClient, this.teamPipe, this.yesnoPipe);
@@ -117,18 +119,31 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
     });
   }
 
-  addRowData(row) {
-    // FIXME implementation
-    this.table.renderRows();
+  addRowData(row: Employee) {
+    console.log(row);
+    row.employee_id = 0;
+    this.apiClient.addEmployee(row).subscribe(result => {
+      this.loadData();
+      this.table.renderRows();
+      this.alertService.success('Employee has been added');
+    }, error => this.alertService.error(error));
   }
 
-  updateRowData(row) {
-    // FIXME implementation
-    this.table.renderRows();
+  updateRowData(row: Employee) {
+    console.log(row);
+    this.apiClient.updateEmployeeById(row.employee_id, row).subscribe(result => {
+      this.loadData();
+      this.table.renderRows();
+      this.alertService.success('Employee has been updated');
+    }, error => this.alertService.error(error));
   }
 
-  deleteRowData(row) {
-    // FIXME implementation
-    this.table.renderRows();
+  deleteRowData(row: Employee) {
+    console.log(row);
+    this.apiClient.deleteEmployee(row.employee_id).subscribe(result => {
+      this.loadData();
+      this.table.renderRows();
+      this.alertService.success('Employee has been deleted');
+    }, error => this.alertService.error(error));
   }
 }

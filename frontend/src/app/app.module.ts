@@ -49,7 +49,15 @@ import { TeamCache } from './_services/team-cache';
 import { TeamPipe } from './_services/team-pipe';
 import { YesnoPipe } from './_services/Yesno-pipe';
 import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
+import { Configuration, ConfigurationParameters } from './api_client/configuration';
+import { ApiModule } from './api_client/api.module';
 
+export function apiConfigFactory(): Configuration {
+  const params: ConfigurationParameters = {
+    apiKeys: {}
+  };
+  return new Configuration(params);
+}
 
 @NgModule({
   declarations: [
@@ -73,12 +81,14 @@ import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.compo
     EmployeeDialogComponent
   ],
   imports: [
+    ApiModule.forRoot(apiConfigFactory),
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
@@ -87,7 +97,6 @@ import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.compo
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatIconModule,
     MatListModule,
     MatTableModule,
     MatPaginatorModule,

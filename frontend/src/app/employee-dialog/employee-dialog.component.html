@@ -10,7 +10,7 @@
         </p>
         <ng-template #elseTemplate>
           <mat-form-field>
-            <input matInput placeholder="Full Name" formControlName="full_name">
+            <input matInput placeholder="Full Name" formControlName="full_name" autofocus>
             <mat-error *ngIf="dataForm.controls['full_name'].hasError('required')">
               Full name is <strong>required</strong>
             </mat-error>
@@ -65,7 +65,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
-      <button mat-button (click)="doAction()" cdkFocusInitial>{{dataForm.controls['action'].value}}</button>
+      <button mat-button (click)="doAction()" type="submit">{{dataForm.controls['action'].value}}</button>
       <button mat-button (click)="closeDialog()">Close</button>
     </mat-card-actions>
   </mat-card>
