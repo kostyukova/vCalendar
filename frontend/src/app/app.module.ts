@@ -48,6 +48,7 @@ import { AuthenticationService } from './_services/authentication.service';
 import { TeamCache } from './_services/team-cache';
 import { TeamPipe } from './_services/team-pipe';
 import { YesnoPipe } from './_services/Yesno-pipe';
+import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
 
 
 @NgModule({
@@ -63,11 +64,13 @@ import { YesnoPipe } from './_services/Yesno-pipe';
     AlertComponent,
     TeamPipe,
     YesnoPipe,
-    UserListComponent
+    UserListComponent,
+    EmployeeDialogComponent
   ],
   entryComponents: [
     CalendarComponent,
-    CalendarEventDialog
+    CalendarEventDialog,
+    EmployeeDialogComponent
   ],
   imports: [
     BrowserModule,

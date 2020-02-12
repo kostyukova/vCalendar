@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Employee</h1>
+<div mat-dialog-content fxLayout="column">
+  <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
+    <input placeholder="FullName" matInput [(ngModel)]="localData.full_name">
+  </mat-form-field>
+  <ng-template #elseTemplate>
+    <p>
+    Do you really want to delete <b>{{localData.full_name}}</b> employee? </p>
+  </ng-template>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end end">
+  <button mat-button (click)="doAction()" cdkFocusInitial>{{action}}</button>
+  <button mat-button (click)="closeDialog()">Close</button>
+</div>
