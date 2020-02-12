@@ -1,14 +1,36 @@
-<h1 mat-dialog-title>Employee</h1>
-<div mat-dialog-content fxLayout="column">
-  <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
-    <input placeholder="FullName" matInput [(ngModel)]="localData.full_name">
-  </mat-form-field>
-  <ng-template #elseTemplate>
-    <p>
-    Do you really want to delete <b>{{localData.full_name}}</b> employee? </p>
-  </ng-template>
-</div>
-<div mat-dialog-actions fxLayoutAlign="end end">
-  <button mat-button (click)="doAction()" cdkFocusInitial>{{action}}</button>
-  <button mat-button (click)="closeDialog()">Close</button>
-</div>
+<form [formGroup]="dataForm" novalidate>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Employee</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <p *ngIf="dataForm.controls['action'].value == 'Delete'; else elseTemplate">
+          Do you really want to delete <b>{{dataForm.controls['full_name'].value}}</b> employee?
+        </p>
+        <ng-template #elseTemplate>
+          <mat-form-field>
+            <input matInput placeholder="Full Name" formControlName="full_name">
+            <mat-error *ngIf="dataForm.controls['full_name'].hasError('required')">
+              Full name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Position</mat-label>
+            <select matNativeControl formControlName="position">
+              <option *ngFor="let item of positions | keyvalue" [value]="item.value">
+                {{item.value}}</option>
+            </select>
+            <mat-error *ngIf="dataForm.controls['position'].hasError('required')">
+              Position is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </ng-template>
+      </div>
+    </mat-card-content>
+    <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
+      <button mat-button (click)="doAction()" cdkFocusInitial>{{dataForm.controls['action'].value}}</button>
+      <button mat-button (click)="closeDialog()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

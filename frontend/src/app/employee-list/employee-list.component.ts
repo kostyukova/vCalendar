@@ -95,6 +95,9 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
       if (result.event === 'Add') {
         this.addRowData(result.data);
       } else if (result.event === 'Update') {
