@@ -25,6 +25,6 @@
 
 <div *ngIf="events$ | async; else loading; let events">
   <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)">
+    (eventClicked)="handleEvent('Update', $event.event)">
   </mwl-calendar-month-view>
 </div>

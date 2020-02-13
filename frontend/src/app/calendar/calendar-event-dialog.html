@@ -1,13 +1,35 @@
-<div fxLayout="column">
-  <mat-form-field>
-    <input matInput placeholder="Action" [value]="data.action">
-  </mat-form-field>
-
-  <mat-form-field>
-    <textarea matInput placeholder="Event" [value]="data.event" rows="10"></textarea>
-  </mat-form-field>
-  <div mat-dialog-actions fxLayoutAlign="end end">
-    <button mat-button [mat-dialog-close]="data.event" cdkFocusInitial>Ok</button>
-    <button mat-button (click)="onNoClick()">Close</button>
-  </div>
-</div>
+<form [formGroup]="dataForm" novalidate>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Employee leave days</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <mat-form-field>
+          <input matInput placeholder="Employee" formControlName="employee_id" readonly>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Leave days" formControlName="leave_days" autofocus>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Start date" formControlName="start_date" type="date">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="End date" formControlName="end_date" type="date">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
+      <button mat-button (click)="doAction()" type="submit">{{dataForm.controls['action'].value}}</button>
+      <button mat-button (click)="closeDialog()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      View calendar event
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <textarea matInput [value]="data.event | json" rows="10" disabled></textarea>
+</mat-expansion-panel>

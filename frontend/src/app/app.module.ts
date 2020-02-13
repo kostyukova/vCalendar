@@ -20,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -35,7 +36,8 @@ import { TotalDaysService } from './api_client/api/totalDays.service';
 import { UserService } from './api_client/api/user.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarComponent, CalendarEventDialog } from './calendar/calendar.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarEventDialogComponent } from './calendar/calendar-event.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { LoginComponent } from './login/login.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -65,7 +67,7 @@ export function apiConfigFactory(): Configuration {
     PageNotFoundComponent,
     EmployeeListComponent,
     CalendarComponent,
-    CalendarEventDialog,
+    CalendarEventDialogComponent,
     LoginComponent,
     AlertComponent,
     TeamPipe,
@@ -75,7 +77,7 @@ export function apiConfigFactory(): Configuration {
   ],
   entryComponents: [
     CalendarComponent,
-    CalendarEventDialog,
+    CalendarEventDialogComponent,
     EmployeeDialogComponent
   ],
   imports: [
@@ -103,6 +105,7 @@ export function apiConfigFactory(): Configuration {
     MatMenuModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatExpansionModule,
     FlexLayoutModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],

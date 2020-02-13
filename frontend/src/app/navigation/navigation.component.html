@@ -13,18 +13,19 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>VCalendar</span>
-      <span class="toolbar-fill-remaining-space"></span>
+      <span class="toolbar-fill-remaining-space">
+        <app-alert></app-alert>
+      </span>
       <span>
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item [routerLink]="['login']" >Login</button>
+          <button mat-menu-item [routerLink]="['login']">Login</button>
         </mat-menu>
       </span>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <app-alert></app-alert>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

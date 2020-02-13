@@ -195,7 +195,7 @@ def update_leave_days_by_id(id, body):  # noqa: E501
     found.employee_id = body.employee_id
     found.start_date = body.start_date
     found.end_date = body.end_date
-    found.leave_date = body.leave_days
+    found.leave_days = body.leave_days
     try:
         dao.persist(found)
         return get_leave_days_by_id(id)

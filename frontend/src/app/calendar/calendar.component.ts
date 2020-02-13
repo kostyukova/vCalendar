@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { addMonths, endOfDay, endOfMonth, startOfDay, startOfMonth, subMonths } from 'date-fns';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { LeaveDaysService } from '../api_client/api/leaveDays.service';
 import { LeaveDays } from '../api_client/model/leaveDays';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CalendarEventDialogComponent } from './calendar-event.component';
+import { AlertService } from '../alert/alert.service';
 
 export interface DialogData {
   action: string;
@@ -53,8 +55,9 @@ export class CalendarComponent implements OnInit {
     }
   ];
 
-
-  constructor(private dataPipe: DatePipe, private apiClient: LeaveDaysService, private modal: MatDialog) { }
+  constructor(
+    private dataPipe: DatePipe, private apiClient: LeaveDaysService,
+    private modal: MatDialog, private alertService: AlertService) { }
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -105,31 +108,54 @@ export class CalendarComponent implements OnInit {
     this.fetchEvents();
   }
 
-  handleEvent(action_: string, event_: CalendarEvent): void {
-    const dialogRef = this.modal.open(CalendarEventDialog, {
+  handleEvent(actionStr: string, eventObj: CalendarEvent): void {
+    const dialogRef = this.modal.open(CalendarEventDialogComponent, {
       width: '800px',
-      height: '400px',
-      data: { action: action_, event: JSON.stringify(event_) }
+      height: '460px',
+      data: { action: actionStr, event: eventObj }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       // result data from dialog
-      console.log('The dialog was closed');
+      console.log(result, 'The calendar event dialog was closed');
+      if (!result) {
+        return;
+      }
+      if (result.event === 'Add') {
+        this.addRowData(result.data);
+      } else if (result.event === 'Update') {
+        this.updateRowData(result.data);
+      } else if (result.event === 'Delete') {
+        this.deleteRowData(result.data);
+      }
     });
   }
-}
-@Component({
-  selector: 'app-calendar-event-dialog',
-  templateUrl: 'calendar-event-dialog.html',
-})
-export class CalendarEventDialog {
 
-  constructor(
-    public dialogRef: MatDialogRef<CalendarEventDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
+  addRowData(row: LeaveDays) {
+    console.log(row);
+    row.id = 0;
+    this.apiClient.addLeaveDays(row).subscribe(result => {
+      this.fetchEvents();
+      // FIXME refresh calendar
+      this.alertService.success('Employee leave days has been added');
+    }, error => this.alertService.error(error));
   }
 
+  updateRowData(row: LeaveDays) {
+    console.log(row);
+    this.apiClient.updateLeaveDaysById(row.id, row).subscribe(result => {
+      this.fetchEvents();
+      // FIXME refresh calendar
+      this.alertService.success('Employee leave days has been updated');
+    }, error => this.alertService.error(error));
+  }
+
+  deleteRowData(row: LeaveDays) {
+    console.log(row);
+    this.apiClient.deleteLeaveDays(row.id).subscribe(result => {
+      this.fetchEvents();
+      // FIXME refresh calendar
+      this.alertService.success('Employee leave days has been deleted');
+    }, error => this.alertService.error(error));
+  }
 }
