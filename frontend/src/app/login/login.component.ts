@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(username, password)
       .pipe(first())
       .subscribe(
-        data => this.router.navigate(['home']),
+        data => this.router.navigate(['calendar']),
         error => this.alertService.error(error)
       );
   }

@@ -37,7 +37,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarComponent, CalendarEventDialog } from './calendar/calendar.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -63,7 +62,6 @@ export function apiConfigFactory(): Configuration {
   declarations: [
     AppComponent,
     NavigationComponent,
-    HomeComponent,
     PageNotFoundComponent,
     EmployeeListComponent,
     CalendarComponent,

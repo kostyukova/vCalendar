@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CalendarComponent } from './calendar/calendar.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { UserListComponent } from './user-list/user-list.component';
@@ -10,12 +9,11 @@ import { AuthGuard } from './_helpers/auth-guard';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/calendar', pathMatch: 'full' },
   { path: 'calendar', component: CalendarComponent },
   { path: 'employee-list', component: EmployeeListComponent },
+  { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
