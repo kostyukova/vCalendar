@@ -72,7 +72,7 @@ export class CalendarComponent implements OnInit {
         console.log(data);
         return data.map((leavedays: LeaveDays) => {
           return {
-            title: 'Leave days for employee' + leavedays.employee_id,
+            title: 'Leave days for employee ' + leavedays.employee_id,
             start: startOfDay(new Date(leavedays.start_date)),
             end: endOfDay(new Date(leavedays.end_date)),
             color: this.getNextColor(),
@@ -81,7 +81,10 @@ export class CalendarComponent implements OnInit {
           };
         });
       }),
-      catchError(() => of([]))
+      catchError((error) => {
+        this.alertService.error(error);
+        return of([]);
+      })
     );
   }
 
@@ -108,11 +111,11 @@ export class CalendarComponent implements OnInit {
     this.fetchEvents();
   }
 
-  handleEvent(actionStr: string, eventObj: CalendarEvent): void {
+  handleEvent(calendarAction: string, calendarEvent: CalendarEvent): void {
     const dialogRef = this.modal.open(CalendarEventDialogComponent, {
       width: '800px',
       height: '460px',
-      data: { action: actionStr, event: eventObj }
+      data: { action: calendarAction, event: calendarEvent }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -131,9 +134,11 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  addRowData(row: LeaveDays) {
+  addRowData(row: LeaveDays | any) {
     console.log(row);
     row.id = 0;
+    row.employee_id = row.employee.employee_id;
+    delete row.employee;
     this.apiClient.addLeaveDays(row).subscribe(result => {
       this.fetchEvents();
       // FIXME refresh calendar
@@ -141,8 +146,10 @@ export class CalendarComponent implements OnInit {
     }, error => this.alertService.error(error));
   }
 
-  updateRowData(row: LeaveDays) {
+  updateRowData(row: LeaveDays | any) {
     console.log(row);
+    row.employee_id = row.employee.employee_id;
+    delete row.employee;
     this.apiClient.updateLeaveDaysById(row.id, row).subscribe(result => {
       this.fetchEvents();
       // FIXME refresh calendar

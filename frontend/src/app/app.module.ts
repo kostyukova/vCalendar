@@ -4,9 +4,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -20,7 +22,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -29,15 +30,18 @@ import { environment } from '../environments/environment';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
 import { BASE_PATH } from './api_client';
+import { ApiModule } from './api_client/api.module';
 import { EmployeeService } from './api_client/api/employee.service';
 import { LeaveDaysService } from './api_client/api/leaveDays.service';
 import { TeamService } from './api_client/api/team.service';
 import { TotalDaysService } from './api_client/api/totalDays.service';
 import { UserService } from './api_client/api/user.service';
+import { Configuration, ConfigurationParameters } from './api_client/configuration';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarEventDialogComponent } from './calendar/calendar-event.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { LoginComponent } from './login/login.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -49,9 +53,6 @@ import { AuthenticationService } from './_services/authentication.service';
 import { TeamCache } from './_services/team-cache';
 import { TeamPipe } from './_services/team-pipe';
 import { YesnoPipe } from './_services/Yesno-pipe';
-import { EmployeeDialogComponent } from './employee-dialog/employee-dialog.component';
-import { Configuration, ConfigurationParameters } from './api_client/configuration';
-import { ApiModule } from './api_client/api.module';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -106,6 +107,7 @@ export function apiConfigFactory(): Configuration {
     MatProgressSpinnerModule,
     MatDialogModule,
     MatExpansionModule,
+    MatAutocompleteModule,
     FlexLayoutModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],

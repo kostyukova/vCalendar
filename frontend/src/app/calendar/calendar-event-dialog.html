@@ -6,16 +6,41 @@
     <mat-card-content>
       <div fxLayout="column">
         <mat-form-field>
-          <input matInput placeholder="Employee" formControlName="employee_id" readonly>
+          <input (keyup)="0" matInput placeholder="Employee" aria-label="Employee" [matAutocomplete]="autoEmployee"
+            formControlName="employee">
+          <mat-autocomplete #autoEmployee="matAutocomplete" [displayWith]="displayWith">
+            <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee">
+              <span>{{ employee.full_name }}</span>
+              <span>&nbsp;({{ employee.email }})</span>
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="dataForm.controls['employee'].hasError('required')">
+            Employee is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="dataForm.controls['employee'].hasError('notselected')">
+            Employee has to be <strong>selected</strong> from options
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Leave days" formControlName="leave_days" autofocus>
+          <mat-error *ngIf="dataForm.controls['leave_days'].hasError('required')">
+            Leave days is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="dataForm.controls['leave_days'].hasError('pattern')">
+            Leave days has to be one or two digit number<strong>number</strong>
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Start date" formControlName="start_date" type="date">
+          <mat-error *ngIf="dataForm.controls['start_date'].hasError('required')">
+            Start date is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="End date" formControlName="end_date" type="date">
+          <mat-error *ngIf="dataForm.controls['end_date'].hasError('required')">
+            End date is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </div>
     </mat-card-content>
