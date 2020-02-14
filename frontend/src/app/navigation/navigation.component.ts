@@ -11,6 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
 export class NavigationComponent {
   routes = [
     { url: 'calendar', linkName: 'Calendar' },
+    { url: 'team-list', linkName: 'Teams' },
     { url: 'employee-list', linkName: 'Employees' },
     { url: 'user-list', linkName: 'Users' },
   ];

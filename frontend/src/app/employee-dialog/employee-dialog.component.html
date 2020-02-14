@@ -14,6 +14,9 @@
             <mat-error *ngIf="dataForm.controls['full_name'].hasError('required')">
               Full name is <strong>required</strong>
             </mat-error>
+            <mat-error *ngIf="dataForm.controls['full_name'].hasError('maxlength')">
+              Full name has to be not longer than <strong>255</strong> symbols
+            </mat-error>
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Email" formControlName="email">
@@ -22,6 +25,9 @@
             </mat-error>
             <mat-error *ngIf="dataForm.controls['email'].hasError('email')">
               Wrong email format
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['email'].hasError('maxlength')">
+              Email has to be not longer than <strong>255</strong> symbols
             </mat-error>
           </mat-form-field>
           <mat-form-field>

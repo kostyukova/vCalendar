@@ -1,0 +1,29 @@
+<form [formGroup]="dataForm" novalidate>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Team</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <p *ngIf="dataForm.controls['action'].value == 'Delete'; else elseTemplate">
+          Do you really want to delete <b>{{dataForm.controls['name'].value}}</b> team?
+        </p>
+        <ng-template #elseTemplate>
+          <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name" autofocus>
+            <mat-error *ngIf="dataForm.controls['name'].hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['name'].hasError('maxlength')">
+              Name has to be not longer than <strong>255</strong> symbols
+            </mat-error>
+          </mat-form-field>
+        </ng-template>
+      </div>
+    </mat-card-content>
+    <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
+      <button mat-button (click)="doAction()" type="submit">{{dataForm.controls['action'].value}}</button>
+      <button mat-button (click)="closeDialog()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

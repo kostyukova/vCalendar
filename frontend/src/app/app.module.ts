@@ -54,6 +54,8 @@ import { AuthenticationService } from './_services/authentication.service';
 import { TeamCache } from './_services/team-cache';
 import { TeamPipe } from './_services/team-pipe';
 import { YesnoPipe } from './_services/Yesno-pipe';
+import { TeamListComponent } from './team-list/team-list.component';
+import { TeamDialogComponent } from './team-dialog/team-dialog.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -76,13 +78,16 @@ export function apiConfigFactory(): Configuration {
     YesnoPipe,
     UserListComponent,
     AlertDialogComponent,
-    EmployeeDialogComponent
+    EmployeeDialogComponent,
+    TeamListComponent,
+    TeamDialogComponent
   ],
   entryComponents: [
     CalendarComponent,
     CalendarEventDialogComponent,
     AlertDialogComponent,
-    EmployeeDialogComponent
+    TeamDialogComponent,
+    EmployeeDialogComponent,
   ],
   imports: [
     ApiModule.forRoot(apiConfigFactory),

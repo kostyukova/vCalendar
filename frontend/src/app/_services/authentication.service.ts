@@ -22,7 +22,6 @@ export class AuthenticationService {
     return this.apiClient.authenticateUser(username, password)
     .pipe(map(token => {
         const user = new CurrentUser(username, null, token);
-        console.log(user);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;

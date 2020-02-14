@@ -74,7 +74,6 @@ export class CalendarComponent implements OnInit {
       this.formatDate(endOfMonth(this.viewDate))
     ).pipe(
       map((data: LeaveDays[]) => {
-        console.log(data);
         return data.map((leavedays: LeaveDays) => {
           return {
             title: 'Leave days for employee ' + leavedays.employee_id,
@@ -130,7 +129,8 @@ export class CalendarComponent implements OnInit {
     this.handleEvent('Add', {
       start: date,
       title: 'Add leave days for an employee',
-      allDay: true, meta: {
+      allDay: true,
+      meta: {
         start_date: formated,
         end_date: formated
       }

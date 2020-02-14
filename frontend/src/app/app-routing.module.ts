@@ -6,11 +6,13 @@ import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { AuthGuard } from './_helpers/auth-guard';
+import { TeamListComponent } from './team-list/team-list.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/calendar', pathMatch: 'full' },
   { path: 'calendar', component: CalendarComponent },
+  { path: 'team-list', component: TeamListComponent },
   { path: 'employee-list', component: EmployeeListComponent },
   { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },

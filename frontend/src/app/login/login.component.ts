@@ -25,19 +25,17 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit($event: any): void {
-    console.log($event);
-    const username = this.loginForm.controls.username.value;
-    const password = this.loginForm.controls.password.value;
-
     // break if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
 
+    const username = this.loginForm.controls.username.value;
+    const password = this.loginForm.controls.password.value;
     this.authService.login(username, password)
       .pipe(first())
       .subscribe(
-        data => this.router.navigate(['calendar']),
+        () => this.router.navigate(['calendar']),
         error => this.alertService.error(error.message)
       );
   }

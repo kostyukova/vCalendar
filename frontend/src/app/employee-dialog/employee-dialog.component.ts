@@ -22,12 +22,12 @@ export class EmployeeDialogComponent {
 
     this.dataForm = this.formBuilder.group({
       employee_id: [data.employee_id, null],
-      full_name: [data.full_name, Validators.required],
+      full_name: [data.full_name, [Validators.required, Validators.maxLength(255)]],
       position: [data.position, Validators.required],
       specialization: [data.specialization, this.validateSpecialization],
       team_id: [data.team_id, Validators.required],
       expert: [data.expert, Validators.required],
-      email: [data.email, [Validators.required, Validators.email]],
+      email: [data.email, [Validators.required, Validators.email, Validators.maxLength(255)]],
       action: [data.action, null]
     });
   }
@@ -60,12 +60,12 @@ export class EmployeeDialogComponent {
     const specValue = this.dataForm.controls.specialization.value;
     const employee = {
       employee_id: this.dataForm.controls.employee_id.value,
-      full_name: this.dataForm.controls.full_name.value,
+      full_name: this.dataForm.controls.full_name.value.trim(),
       position: this.dataForm.controls.position.value,
       specialization: specValue ? specValue : '',
       team_id: parseInt(this.dataForm.controls.team_id.value, 10),
       expert: !!this.dataForm.controls.expert.value,
-      email: this.dataForm.controls.email.value
+      email: this.dataForm.controls.email.value.trim()
     };
     this.dialogRef.close({ event: this.dataForm.controls.action.value, data: employee });
   }

@@ -34,12 +34,12 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
   displayedColumns = ['employee_id', 'full_name', 'position', 'specialization', 'team_id', 'expert', 'action'];
 
   constructor(
-    private apiClient: EmployeeService, private teamCache: TeamCache, private teamPipe: TeamPipe,
-    private yesnoPipe: YesnoPipe, private dialog: MatDialog,
-    private alertService: AlertService) { }
+    private apiClient: EmployeeService, private alertService: AlertService,
+    private teamCache: TeamCache, private teamPipe: TeamPipe,
+    private yesnoPipe: YesnoPipe, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.dataSource = new EmployeeListDataSource(this.apiClient, this.teamPipe, this.yesnoPipe);
+    this.dataSource = new EmployeeListDataSource(this.apiClient, this.alertService, this.teamPipe, this.yesnoPipe);
     this.dataSource.loadData('');
   }
 
