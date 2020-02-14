@@ -1,14 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { addMonths, endOfDay, endOfMonth, startOfDay, startOfMonth, subMonths } from 'date-fns';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { LeaveDaysService } from '../api_client/api/leaveDays.service';
 import { LeaveDays } from '../api_client/model/leaveDays';
 import { CalendarEventDialogComponent } from './calendar-event.component';
 import { AlertService } from '../alert/alert.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export interface DialogData {
   action: string;
@@ -23,10 +24,14 @@ export interface DialogData {
 })
 export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
-
   viewDate: Date = new Date();
 
   events$: Observable<Array<CalendarEvent<LeaveDays>>>;
+  refresh: Subject<any> = new Subject();
+
+  @ViewChild(MatMenuTrigger, { static: false })
+  contextMenu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
 
   colors: any = [
     {
@@ -65,8 +70,8 @@ export class CalendarComponent implements OnInit {
 
   fetchEvents(): void {
     this.events$ = this.apiClient.findLeaveDaysBy(null,
-      this.dataPipe.transform(startOfMonth(this.viewDate), 'yyyy-MM-dd'),
-      this.dataPipe.transform(endOfMonth(this.viewDate), 'yyyy-MM-dd')
+      this.formatDate(startOfMonth(this.viewDate)),
+      this.formatDate(endOfMonth(this.viewDate))
     ).pipe(
       map((data: LeaveDays[]) => {
         console.log(data);
@@ -111,6 +116,27 @@ export class CalendarComponent implements OnInit {
     this.fetchEvents();
   }
 
+  onContextMenu(event: MouseEvent, date: Date) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { item: date };
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
+  }
+
+  onContextMenuAdd(date: Date) {
+    const formated = this.formatDate(date);
+    this.handleEvent('Add', {
+      start: date,
+      title: 'Add leave days for an employee',
+      allDay: true, meta: {
+        start_date: formated,
+        end_date: formated
+      }
+    });
+  }
+
   handleEvent(calendarAction: string, calendarEvent: CalendarEvent): void {
     const dialogRef = this.modal.open(CalendarEventDialogComponent, {
       width: '800px',
@@ -120,7 +146,6 @@ export class CalendarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // result data from dialog
-      console.log(result, 'The calendar event dialog was closed');
       if (!result) {
         return;
       }
@@ -134,35 +159,44 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  addRowData(row: LeaveDays | any) {
+  private refreshCalendarView(): void {
+    // emit refresh event
+    this.refresh.next();
+  }
+
+  private addRowData(row: LeaveDays | any) {
     console.log(row);
     row.id = 0;
     row.employee_id = row.employee.employee_id;
     delete row.employee;
     this.apiClient.addLeaveDays(row).subscribe(result => {
       this.fetchEvents();
-      // FIXME refresh calendar
+      this.refreshCalendarView();
       this.alertService.success('Employee leave days has been added');
     }, error => this.alertService.error(error));
   }
 
-  updateRowData(row: LeaveDays | any) {
+  private updateRowData(row: LeaveDays | any) {
     console.log(row);
     row.employee_id = row.employee.employee_id;
     delete row.employee;
     this.apiClient.updateLeaveDaysById(row.id, row).subscribe(result => {
       this.fetchEvents();
-      // FIXME refresh calendar
+      this.refreshCalendarView();
       this.alertService.success('Employee leave days has been updated');
     }, error => this.alertService.error(error));
   }
 
-  deleteRowData(row: LeaveDays) {
+  private deleteRowData(row: LeaveDays) {
     console.log(row);
     this.apiClient.deleteLeaveDays(row.id).subscribe(result => {
       this.fetchEvents();
-      // FIXME refresh calendar
+      this.refreshCalendarView();
       this.alertService.success('Employee leave days has been deleted');
     }, error => this.alertService.error(error));
+  }
+
+  private formatDate(date: Date) {
+    return this.dataPipe.transform(date, 'yyyy-MM-dd');
   }
 }
