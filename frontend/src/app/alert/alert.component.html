@@ -1,7 +1,10 @@
-<div *ngIf="message" (click)="onClick($event)"
+<div *ngIf="message"
   [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-error': message.type === 'error' }">
-  {{message.text}}
-  <button mat-icon-button aria-label="Close" (click)="onClick($event)">
+  {{message.message}}
+  <button mat-icon-button aria-label="View" *ngIf="message.details" (click)="onView($event)">
+    <mat-icon>open_in_new</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Close" (click)="onClose($event)">
     <mat-icon>close</mat-icon>
   </button>
 </div>

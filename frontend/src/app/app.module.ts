@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { environment } from '../environments/environment';
+import { AlertDialogComponent } from './alert/alert-dialog.component';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './alert/alert.service';
 import { BASE_PATH } from './api_client';
@@ -74,11 +75,13 @@ export function apiConfigFactory(): Configuration {
     TeamPipe,
     YesnoPipe,
     UserListComponent,
+    AlertDialogComponent,
     EmployeeDialogComponent
   ],
   entryComponents: [
     CalendarComponent,
     CalendarEventDialogComponent,
+    AlertDialogComponent,
     EmployeeDialogComponent
   ],
   imports: [

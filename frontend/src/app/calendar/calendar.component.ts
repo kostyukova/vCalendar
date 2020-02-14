@@ -173,7 +173,7 @@ export class CalendarComponent implements OnInit {
       this.fetchEvents();
       this.refreshCalendarView();
       this.alertService.success('Employee leave days has been added');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message, error.details));
   }
 
   private updateRowData(row: LeaveDays | any) {
@@ -184,7 +184,7 @@ export class CalendarComponent implements OnInit {
       this.fetchEvents();
       this.refreshCalendarView();
       this.alertService.success('Employee leave days has been updated');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message, error.details));
   }
 
   private deleteRowData(row: LeaveDays) {
@@ -193,7 +193,7 @@ export class CalendarComponent implements OnInit {
       this.fetchEvents();
       this.refreshCalendarView();
       this.alertService.success('Employee leave days has been deleted');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message));
   }
 
   private formatDate(date: Date) {

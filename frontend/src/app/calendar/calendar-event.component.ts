@@ -41,7 +41,7 @@ export class CalendarEventDialogComponent {
     if (data.event.meta && data.event.meta.employee_id) {
       this.apiClient.getEmployeeById(data.event.meta.employee_id).subscribe(
         employee => this.dataForm.controls.employee.setValue(employee),
-        error => this.alertService.error(error)
+        error => this.alertService.error(error.mesage)
       );
     }
   }

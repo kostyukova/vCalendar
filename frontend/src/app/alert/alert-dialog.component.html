@@ -1,0 +1,13 @@
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <textarea matInput [value]="data | json" rows="15" disabled></textarea>
+      </div>
+    </mat-card-content>
+    <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
+      <button mat-button (click)="onClose()">Close</button>
+    </mat-card-actions>
+  </mat-card>

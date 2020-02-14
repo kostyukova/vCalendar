@@ -126,7 +126,7 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
       this.loadData();
       this.table.renderRows();
       this.alertService.success('Employee has been added');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message));
   }
 
   updateRowData(row: Employee) {
@@ -135,7 +135,7 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
       this.loadData();
       this.table.renderRows();
       this.alertService.success('Employee has been updated');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message));
   }
 
   deleteRowData(row: Employee) {
@@ -144,6 +144,6 @@ export class EmployeeListComponent implements AfterViewInit, OnInit {
       this.loadData();
       this.table.renderRows();
       this.alertService.success('Employee has been deleted');
-    }, error => this.alertService.error(error));
+    }, error => this.alertService.error(error.message));
   }
 }

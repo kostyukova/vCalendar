@@ -1,6 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { AlertService } from './alert.service';
+import { AlertDialogComponent } from './alert-dialog.component';
+import { Alert, AlertService } from './alert.service';
 
 @Component({
   selector: 'app-alert',
@@ -9,9 +11,9 @@ import { AlertService } from './alert.service';
 })
 export class AlertComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  message: any;
+  message: Alert;
 
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.subscription = this.alertService.getMessage().subscribe(message => {
@@ -23,7 +25,16 @@ export class AlertComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  onClick(event) {
+  onClose(event) {
     this.alertService.clear();
+  }
+
+  onView(event) {
+    if (this.message && this.message.details) {
+      this.dialog.open(AlertDialogComponent, {
+        width: '600px',
+        data: this.message.details
+      });
+    }
   }
 }
