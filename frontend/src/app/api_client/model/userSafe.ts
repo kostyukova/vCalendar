@@ -9,10 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserSafe } from './userSafe';
 
 
-export interface User { 
+export interface UserSafe { 
     id?: number;
     username: string;
     email: string;

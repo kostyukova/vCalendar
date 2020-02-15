@@ -81,7 +81,7 @@ def find_by(username=None, email=None, roles=None):  # noqa: E501
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
-        return impl.find_by(username, email)
+        return impl.find_by(username, email, roles)
     return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 

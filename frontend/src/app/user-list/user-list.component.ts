@@ -18,6 +18,7 @@ export class UserListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, { static: false }) table: MatTable<User>;
   @ViewChild('inputUsername', { static: false }) inputUsername: ElementRef;
   @ViewChild('inputEmail', { static: false }) inputEmail: ElementRef;
+  @ViewChild('inputRoles', { static: false }) inputRoles: ElementRef;
 
   dataSource: UserListDataSource;
   displayedColumns = ['id', 'username', 'email', 'roles', 'action'];
@@ -46,12 +47,19 @@ export class UserListComponent implements AfterViewInit, OnInit {
         distinctUntilChanged(),
         tap(() => this.loadData())
       ).subscribe();
+    fromEvent(this.inputRoles.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(() => this.loadData())
+      ).subscribe();
   }
 
   loadData() {
     this.dataSource.loadData(
       this.inputUsername.nativeElement.value,
-      this.inputEmail.nativeElement.value
+      this.inputEmail.nativeElement.value,
+      this.inputRoles.nativeElement.value
     );
   }
 

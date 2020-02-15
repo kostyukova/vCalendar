@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ApiResponse } from '../model/apiResponse';
 import { User } from '../model/user';
+import { UserSafe } from '../model/userSafe';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -119,9 +120,9 @@ export class UserService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createUser(body: User, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public createUser(body: User, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public createUser(body: User, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public createUser(body: User, observe?: 'body', reportProgress?: boolean): Observable<UserSafe>;
+    public createUser(body: User, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserSafe>>;
+    public createUser(body: User, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserSafe>>;
     public createUser(body: User, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -152,7 +153,7 @@ export class UserService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<User>(`${this.basePath}/user`,
+        return this.httpClient.post<UserSafe>(`${this.basePath}/user`,
             body,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -214,13 +215,15 @@ export class UserService {
      *
      * @param username The username to filter by.
      * @param email The email to filter by.
+     * @param roles Roles to filter by.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findBy(username?: string, email?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
-    public findBy(username?: string, email?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
-    public findBy(username?: string, email?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
-    public findBy(username?: string, email?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findBy(username?: string, email?: string, roles?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UserSafe>>;
+    public findBy(username?: string, email?: string, roles?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserSafe>>>;
+    public findBy(username?: string, email?: string, roles?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserSafe>>>;
+    public findBy(username?: string, email?: string, roles?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -230,6 +233,9 @@ export class UserService {
         }
         if (email !== undefined && email !== null) {
             queryParameters = queryParameters.set('email', <any>email);
+        }
+        if (roles !== undefined && roles !== null) {
+            queryParameters = queryParameters.set('roles', <any>roles);
         }
 
         let headers = this.defaultHeaders;
@@ -252,7 +258,7 @@ export class UserService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<User>>(`${this.basePath}/user/findBy`,
+        return this.httpClient.get<Array<UserSafe>>(`${this.basePath}/user/findBy`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -270,9 +276,9 @@ export class UserService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserById(id: number, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public getUserById(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public getUserById(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public getUserById(id: number, observe?: 'body', reportProgress?: boolean): Observable<UserSafe>;
+    public getUserById(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserSafe>>;
+    public getUserById(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserSafe>>;
     public getUserById(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
@@ -299,7 +305,7 @@ export class UserService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<User>(`${this.basePath}/user/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<UserSafe>(`${this.basePath}/user/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -316,9 +322,9 @@ export class UserService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserByName(username: string, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public getUserByName(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public getUserByName(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public getUserByName(username: string, observe?: 'body', reportProgress?: boolean): Observable<UserSafe>;
+    public getUserByName(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserSafe>>;
+    public getUserByName(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserSafe>>;
     public getUserByName(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
@@ -350,9 +356,65 @@ export class UserService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<User>(`${this.basePath}/user/`,
+        return this.httpClient.get<UserSafe>(`${this.basePath}/user/`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updated user password
+     * This can only be done by with write:users role.
+     * @param id The id of user that needs to be updated
+     * @param body Updated user object
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public patchUser(id: number, body: User, observe?: 'body', reportProgress?: boolean): Observable<UserSafe>;
+    public patchUser(id: number, body: User, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserSafe>>;
+    public patchUser(id: number, body: User, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserSafe>>;
+    public patchUser(id: number, body: User, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patchUser.');
+        }
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling patchUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.patch<UserSafe>(`${this.basePath}/user/${encodeURIComponent(String(id))}`,
+            body,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -369,10 +431,10 @@ export class UserService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateUser(id: number, body: User, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public updateUser(id: number, body: User, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public updateUser(id: number, body: User, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
-    public updateUser(id: number, body: User, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateUser(id: number, body: UserSafe, observe?: 'body', reportProgress?: boolean): Observable<UserSafe>;
+    public updateUser(id: number, body: UserSafe, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserSafe>>;
+    public updateUser(id: number, body: UserSafe, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserSafe>>;
+    public updateUser(id: number, body: UserSafe, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateUser.');
@@ -406,7 +468,7 @@ export class UserService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<User>(`${this.basePath}/user/${encodeURIComponent(String(id))}`,
+        return this.httpClient.put<UserSafe>(`${this.basePath}/user/${encodeURIComponent(String(id))}`,
             body,
             {
                 withCredentials: this.configuration.withCredentials,

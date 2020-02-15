@@ -39,9 +39,9 @@ export class UserListDataSource extends DataSource<User> {
     this.loadingSubject.complete();
   }
 
-  loadData(username?: string, email?) {
+  loadData(username?: string, email?: string, roles?: string) {
     this.loadingSubject.next(true);
-    this.apiClient.findBy(username, email).pipe(
+    this.apiClient.findBy(username, email, roles).pipe(
       catchError(error => {
         this.alertService.error(error.message);
         return of([]);
