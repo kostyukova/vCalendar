@@ -5,7 +5,7 @@ from swagger_server import db, util
 from swagger_server.orm import User as User_orm
 
 
-def find_by(username: str = None, email: str = None):
+def find_by(username: str = None, email: str = None, roles: str = None):
     """Finds all users. Role read:users role must be granted
 
     :rtype: List[User_orm]
@@ -17,6 +17,9 @@ def find_by(username: str = None, email: str = None):
     if email and email.strip():
         query = query.filter(User_orm.email.ilike(
             '%' + email.strip() + '%'))
+    if roles and roles.strip():
+        query = query.filter(User_orm.roles.ilike(
+            '%' + roles.strip() + '%'))
 
     return query.all()
 

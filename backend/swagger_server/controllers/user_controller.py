@@ -38,13 +38,14 @@ def create_user(body):  # noqa: E501
     :param body: Created user object
     :type body: dict | bytes
 
-    :rtype: User
+    :rtype: UserSafe
     """
     role = auth.WRITE_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.create_user(body)
     return AUTH_ERRORS[hasRole](role), hasRole.http_status
+
 
 def delete_user(id):  # noqa: E501
     """Delete user
@@ -63,7 +64,7 @@ def delete_user(id):  # noqa: E501
     return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
-def find_by(username=None, email=None):  # noqa: E501
+def find_by(username=None, email=None, roles=None):  # noqa: E501
     """Finds users by given parameters. Role read:users role must be granted
 
      # noqa: E501
@@ -72,8 +73,10 @@ def find_by(username=None, email=None):  # noqa: E501
     :type username: str
     :param email: The email to filter by. 
     :type email: str
+    :param roles: Roles to filter by. 
+    :type roles: str
 
-    :rtype: List[User]
+    :rtype: List[UserSafe]
     """
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
@@ -90,7 +93,7 @@ def get_user_by_id(id):  # noqa: E501
     :param id: The id of user that needs to be fetched
     :type id: int
 
-    :rtype: User
+    :rtype: UserSafe
     """
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
@@ -107,12 +110,31 @@ def get_user_by_name(username):  # noqa: E501
     :param username: The name of user that needs to be fetched.
     :type username: str
 
-    :rtype: User
+    :rtype: UserSafe
     """
     role = auth.READ_USERS
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.get_user_by_name(username)
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
+
+
+def patch_user(id, body):  # noqa: E501
+    """Updated user password
+
+    This can only be done by with write:users role. # noqa: E501
+
+    :param id: The id of user that needs to be updated
+    :type id: int
+    :param body: Updated user object
+    :type body: dict | bytes
+
+    :rtype: UserSafe
+    """
+    role = auth.WRITE_USERS
+    hasRole = auth.has_role(connexion.request.headers, role)
+    if hasRole == auth.TokenStatus.ROLE_GRANTED:
+        return impl.patch_user(id, body)
     return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
@@ -126,7 +148,7 @@ def update_user(id, body):  # noqa: E501
     :param body: Updated user object
     :type body: dict | bytes
 
-    :rtype: User
+    :rtype: UserSafe
     """
     role = auth.WRITE_USERS
     hasRole = auth.has_role(connexion.request.headers, role)

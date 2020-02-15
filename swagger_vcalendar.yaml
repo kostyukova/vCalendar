@@ -944,7 +944,7 @@ paths:
         200:
           description: "Successful operation"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/UserSafe"
         409:
           description: "User already exists conflict"
           schema:
@@ -1003,7 +1003,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/UserSafe"
         400:
           description: "Invalid username supplied"
           schema:
@@ -1038,7 +1038,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/UserSafe"
         400:
           description: "Invalid username supplied"
           schema:
@@ -1073,12 +1073,52 @@ paths:
         description: "Updated user object"
         required: true
         schema:
+          $ref: "#/definitions/UserSafe"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserSafe"
+        400:
+          description: "Invalid user supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        403: 
+          description: 'Forbidden'
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - "user"
+      summary: "Updated user password"
+      description: "This can only be done by with write:users role."
+      operationId: "patchUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of user that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
           $ref: "#/definitions/User"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/UserSafe"
         400:
           description: "Invalid user supplied"
           schema:
@@ -1145,13 +1185,17 @@ paths:
         in: "query"
         description: "The email to filter by. "
         type: "string"
+      - name: "roles"
+        in: "query"
+        description: "Roles to filter by. "
+        type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/User"
+              $ref: "#/definitions/UserSafe"
         403: 
           description: 'Forbidden'
           schema:
@@ -1164,8 +1208,11 @@ securityDefinitions:
     name: "Authorization"
     in: "header"
 definitions:
-  User:
+  UserSafe:
     type: "object"
+    required:
+    - "username"
+    - "email"
     properties:
       id:
         type: "integer"
@@ -1182,6 +1229,18 @@ definitions:
       roles:
         type: "string"
         example: "write:employees"
+    xml:
+      name: "UserSafe"
+  User:
+    type: "object"
+    required:
+    - "password"
+    allOf:
+    - $ref: '#/definitions/UserSafe'
+    properties:
+      password:
+        type: "string"
+        example: "123qwe"
     xml:
       name: "User"
   Team:
