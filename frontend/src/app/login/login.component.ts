@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AlertService } from '../alert/alert.service';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -12,9 +12,10 @@ import { AuthenticationService } from '../_services/authentication.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  returnRoute;
 
   constructor(
-    private formBuilder: FormBuilder, private router: Router,
+    private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router,
     private authService: AuthenticationService, private alertService: AlertService) { }
 
   ngOnInit() {
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
       username: [null, Validators.required],
       password: [null, Validators.required]
     });
+    this.returnRoute = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   onSubmit($event: any): void {
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(username, password)
       .pipe(first())
       .subscribe(
-        () => this.router.navigate(['calendar']),
+        () => this.router.navigate([this.returnRoute]),
         error => this.alertService.error(error.message)
       );
   }

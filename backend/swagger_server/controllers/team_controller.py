@@ -29,7 +29,7 @@ def add_team(body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.add_team(body)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def delete_team(teamId):  # noqa: E501
@@ -46,7 +46,7 @@ def delete_team(teamId):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_team(teamId)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def find_team_by(name=None):  # noqa: E501
@@ -104,4 +104,4 @@ def update_team_by_id(teamId, body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.update_team_by_id(teamId, body)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status

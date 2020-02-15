@@ -12,12 +12,11 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(catchError(error => {
       console.log(error);
-      // FIXME process 401 HTTP status
-      // if (err.status === 401) {
-      //   // auto logout if 401 response returned from api
-      //   this.authenticationService.logout();
-      //   location.reload(true);
-      // }
+      if (error.status === 401) {
+        // auto logout if 401 response returned from api
+        this.authenticationService.logout();
+        location.reload();
+      }
       const errorObj = error.error.message ? error.error : { message: error.statusText };
       return throwError(errorObj);
     }));

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of, Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserService } from '../api_client/api/user.service';
 import { CurrentUser } from '../_model/current-user';
 
@@ -10,7 +11,7 @@ import { CurrentUser } from '../_model/current-user';
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<CurrentUser>;
 
-  constructor(private apiClient: UserService) {
+  constructor(private apiClient: UserService, private router: Router) {
     this.currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
   }
 
@@ -20,7 +21,7 @@ export class AuthenticationService {
 
   login(username: string, password: string): Observable<CurrentUser> {
     return this.apiClient.authenticateUser(username, password)
-    .pipe(map(token => {
+      .pipe(map(token => {
         const user = new CurrentUser(username, null, token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
@@ -32,5 +33,6 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
   }
 }

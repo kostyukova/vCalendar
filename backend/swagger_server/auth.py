@@ -14,14 +14,16 @@ import swagger_server.dao.user_dao as dao
 (READ_USERS, WRITE_USERS, WRITE_TEAMS, WRITE_EMPLOYEES, WRITE_TOTAL_DAYS, WRITE_LEAVE_DAYS) = (
     'read:users', 'write:users', 'write:teams', 'write:employees', 'write:total_days', 'write:leave_days')
 
-
 @unique
 class TokenStatus(Enum):
-    INVALID = auto()
-    EXPIRED = auto()
-    ROLE_GRANTED = auto()
-    NO_ROLE_GRANTED = auto()
+    INVALID = ('INVALID', 401)
+    EXPIRED = ('EXPIRED', 401)
+    ROLE_GRANTED = ('ROLE_GRANTED', 200)
+    NO_ROLE_GRANTED = ('NO_ROLE_GRANTED', 403)
 
+    def __init__(self, title, http_status):
+        self.title = title
+        self.http_status = http_status
 
 logging.basicConfig(level=logging.INFO)
 

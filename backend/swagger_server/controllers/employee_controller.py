@@ -8,9 +8,9 @@ from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.employee import Employee  # noqa: E501
 
 AUTH_ERRORS = {
-    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='employee'),# 401 response status
-    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='employee'),# 401 response status
-    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='employee'),# FIXME 403 response status
+    auth.TokenStatus.EXPIRED: lambda role: ErrorApiResponse.TokenExpiredError(type='employee'),
+    auth.TokenStatus.INVALID: lambda role: ErrorApiResponse.TokenInvalidError(type='employee'),
+    auth.TokenStatus.NO_ROLE_GRANTED: lambda role: ErrorApiResponse.NoRoleGrantedError(role=role, type='employee'),
     auth.TokenStatus.ROLE_GRANTED: None
 }
 
@@ -29,7 +29,7 @@ def add_employee(body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.add_employee(body)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def delete_employee(employeeId):  # noqa: E501
@@ -46,7 +46,7 @@ def delete_employee(employeeId):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_employee(employeeId)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def find_employee_by_email(email):  # noqa: E501
@@ -115,4 +115,4 @@ def update_employee_by_id(employeeId, body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.update_employee_by_id(employeeId, body)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status

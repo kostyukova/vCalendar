@@ -29,7 +29,7 @@ def add_total_days(body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.add_total_days(id)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def delete_total_days(id):  # noqa: E501
@@ -46,7 +46,7 @@ def delete_total_days(id):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.delete_total_days(id)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
 
 
 def find_employee_total_days(employeeId):  # noqa: E501
@@ -121,4 +121,4 @@ def update_total_days_by_id(id, body):  # noqa: E501
     hasRole = auth.has_role(connexion.request.headers, role)
     if hasRole == auth.TokenStatus.ROLE_GRANTED:
         return impl.update_total_days_by_id(id, body)
-    return AUTH_ERRORS[hasRole](role), 401
+    return AUTH_ERRORS[hasRole](role), hasRole.http_status
