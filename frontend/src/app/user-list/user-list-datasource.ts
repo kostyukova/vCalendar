@@ -2,22 +2,22 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { AlertService } from '../alert/alert.service';
-import { TeamService } from '../api_client/api/team.service';
-import { Team } from '../api_client/model/team';
+import { User } from '../api_client/model/user';
+import { UserService } from '../api_client/api/user.service';
 
 /**
- * Data source for the TeamList view. This class should
+ * Data source for the UserList view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class TeamListDataSource extends DataSource<Team> {
+export class UserListDataSource extends DataSource<User> {
 
-  private dataSubject = new BehaviorSubject<Team[]>([]);
+  private dataSubject = new BehaviorSubject<User[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private apiClient: TeamService, private alertService: AlertService) {
+  constructor(private apiClient: UserService, private alertService: AlertService) {
     super();
   }
 
@@ -26,7 +26,7 @@ export class TeamListDataSource extends DataSource<Team> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Team[]> {
+  connect(): Observable<User[]> {
     return this.dataSubject.asObservable();
   }
 
@@ -39,9 +39,9 @@ export class TeamListDataSource extends DataSource<Team> {
     this.loadingSubject.complete();
   }
 
-  loadData(name?: string) {
+  loadData(username?: string, email?) {
     this.loadingSubject.next(true);
-    this.apiClient.findTeamBy(name).pipe(
+    this.apiClient.findBy(username, email).pipe(
       catchError(error => {
         this.alertService.error(error.message);
         return of([]);

@@ -56,6 +56,7 @@ import { TeamPipe } from './_services/team-pipe';
 import { YesnoPipe } from './_services/Yesno-pipe';
 import { TeamListComponent } from './team-list/team-list.component';
 import { TeamDialogComponent } from './team-dialog/team-dialog.component';
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -80,7 +81,8 @@ export function apiConfigFactory(): Configuration {
     AlertDialogComponent,
     EmployeeDialogComponent,
     TeamListComponent,
-    TeamDialogComponent
+    TeamDialogComponent,
+    UserDialogComponent
   ],
   entryComponents: [
     CalendarComponent,
@@ -88,6 +90,7 @@ export function apiConfigFactory(): Configuration {
     AlertDialogComponent,
     TeamDialogComponent,
     EmployeeDialogComponent,
+    UserDialogComponent
   ],
   imports: [
     ApiModule.forRoot(apiConfigFactory),

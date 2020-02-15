@@ -1,1 +1,67 @@
-<p>user-list works!</p>
+<div class="mat-elevation-z8">
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <div fxFlex>
+      <div class="spinner-container" *ngIf="dataSource.loading$ | async" class="spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    </div>
+    <div fxFlex="60%">
+      <h2>Users</h2>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+    <!-- search box -->
+    <mat-form-field fxFlexOffset="20px">
+      <input matInput placeholder="Username" #inputUsername>
+    </mat-form-field>
+    <mat-form-field fxFlexOffset="20px">
+      <input matInput placeholder="Email" #inputEmail>
+    </mat-form-field>
+    <button mat-button (click)="openDialog('Add',{})" mat-flat-button color="primary">Add</button>
+  </div>
+  <table mat-table class="full-width-table" matSort aria-label="Users">
+    <!-- id column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
+
+    <!-- username column -->
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+      <td mat-cell *matCellDef="let row">
+        <p>{{row.username}}</p>
+      </td>
+    </ng-container>
+
+    <!-- email column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let row">{{row.email}}</td>
+    </ng-container>
+
+    <!-- roles column -->
+    <ng-container matColumnDef="roles">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
+      <td mat-cell *matCellDef="let row">
+        <p>{{row.roles}}</p>
+      </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row" class="action-link">
+        <button mat-button (click)="openDialog('Update', row)" mat-flat-button color="primary"
+          class="table-button">Edit</button>
+          <button mat-button (click)="openDialog('Delete', row)" mat-flat-button color="primary"
+          class="table-button">Delete</button>
+          <button mat-button (click)="openDialog('Setpass', row)" mat-flat-button color="primary"
+          class="table-button">Set password</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
