@@ -1,1 +1,53 @@
-<p>user-dialog works!</p>
+<form [formGroup]="dataForm" novalidate>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <p *ngIf="dataForm.controls['action'].value == 'Delete'; else elseTemplate">
+          Do you really want to delete <b>{{dataForm.controls['username'].value}}</b> user?
+        </p>
+        <ng-template #elseTemplate>
+          <mat-form-field *ngIf="dataForm.controls['username']">
+            <input matInput placeholder="Username" formControlName="username" autofocus>
+            <mat-error *ngIf="dataForm.controls['username'].hasError('required')">
+              Username is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['username'].hasError('maxlength')">
+              Username has to be not longer than <strong>20</strong> symbols
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="dataForm.controls['password']">
+            <input matInput placeholder="Password" formControlName="password" type="password">
+            <mat-error *ngIf="dataForm.controls['password'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['password'].hasError('maxlength')">
+              Password has to be not longer than <strong>20</strong> symbols
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="dataForm.controls['email']">
+            <input matInput placeholder="Email" formControlName="email" >
+            <mat-error *ngIf="dataForm.controls['email'].hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['email'].hasError('maxlength')">
+              Email has to be not longer than <strong>255</strong> symbols
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="dataForm.controls['roles']">
+            <input matInput placeholder="Roles" formControlName="roles" >
+            <mat-error *ngIf="dataForm.controls['roles'].hasError('commaseparated')">
+              Value does not match <strong>comma separated</strong> format
+            </mat-error>
+          </mat-form-field>
+        </ng-template>
+      </div>
+    </mat-card-content>
+    <mat-card-actions mat-dialog-actions fxLayoutAlign="end end">
+      <button mat-button (click)="doAction()" type="submit">{{dataForm.controls['action'].value}}</button>
+      <button mat-button (click)="closeDialog()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

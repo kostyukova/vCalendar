@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { AlertService } from '../alert/alert.service';
 import { UserService } from '../api_client/api/user.service';
 import { User } from '../api_client/model/user';
+import { UserSafe } from '../api_client/model/userSafe';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 import { UserListDataSource } from './user-list-datasource';
 
@@ -101,7 +102,7 @@ export class UserListComponent implements AfterViewInit, OnInit {
     }, error => this.alertService.error(error.message));
   }
 
-  updateRowData(row: User) {
+  updateRowData(row: UserSafe) {
     console.log(row);
     this.apiClient.updateUser(row.id, row).subscribe(() => {
       this.loadData();
@@ -118,6 +119,7 @@ export class UserListComponent implements AfterViewInit, OnInit {
       this.alertService.success('User has been deleted');
     }, error => this.alertService.error(error.message));
   }
+
   setPassword(row: User) {
     console.log(row, 'Set password');
   }
