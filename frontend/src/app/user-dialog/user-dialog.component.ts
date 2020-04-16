@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '../api_client/model/user';
 
@@ -46,6 +46,22 @@ export class UserDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  get acceptedRoles() {
+    return ['read:users', 'write:users', 'write:teams', 'write:employees', 'write:total_days', 'write:leave_days'];
+  }
+
+  validateRoles(control: FormControl) {
+    if (!control.value) {
+      return null;
+    }
+    return control.value.split(',').every(
+      elem => this.acceptedRoles.indexOf(elem) >= 0) ? null : {
+        commaseparated: {
+          valid: false
+        }
+      };
+  }
+
   doAction() {
     // break if form is invalid
     if (this.dataForm.invalid) {
@@ -72,7 +88,7 @@ export class UserDialogComponent implements OnInit {
       case 'Delete':
         break;
       case 'Setpass':
-        user.password = this.dataForm.controls.username.value.trim();
+        user.password = this.dataForm.controls.password.value.trim();
         break;
     }
 

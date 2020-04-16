@@ -1,0 +1,8 @@
+# ignore folders
+.git
+dist
+e2e
+node_modules
+.editorconfig
+.gitignore
+README.md

@@ -27,8 +27,17 @@
               Password has to be not longer than <strong>20</strong> symbols
             </mat-error>
           </mat-form-field>
+          <mat-form-field *ngIf="dataForm.controls['passconfirm']">
+            <input matInput placeholder="Password confirm" formControlName="passconfirm" type="password">
+            <mat-error *ngIf="dataForm.controls['passconfirm'].hasError('required')">
+              Password confirmation is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['password'].hasError('maxlength')">
+              Password confirmation has to be not longer than <strong>20</strong> symbols
+            </mat-error>
+          </mat-form-field>
           <mat-form-field *ngIf="dataForm.controls['email']">
-            <input matInput placeholder="Email" formControlName="email" >
+            <input matInput placeholder="Email" formControlName="email">
             <mat-error *ngIf="dataForm.controls['email'].hasError('required')">
               Email is <strong>required</strong>
             </mat-error>
@@ -37,7 +46,8 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field *ngIf="dataForm.controls['roles']">
-            <input matInput placeholder="Roles" formControlName="roles" >
+            <input matInput placeholder="Roles" formControlName="roles">
+            <mat-hint>A comma separated set of {{acceptedRoles}}</mat-hint>
             <mat-error *ngIf="dataForm.controls['roles'].hasError('commaseparated')">
               Value does not match <strong>comma separated</strong> format
             </mat-error>
