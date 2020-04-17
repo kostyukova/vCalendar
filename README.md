@@ -33,9 +33,12 @@ ng build --prod | npm run build:production
 
 ## To launch backend like docker container
 cd ./backend
+docker build -t vcalendar-backend:v1.0 .
+docker run -p 8080:8080 -d vcalendar-backend:v1.0
 
 ## To launch fronend like docker container
 cd ./frontend
 docker build -t vcalendar-frontend:v1.0 .
 docker run -p 8081:80 -d vcalendar-frontend:v1.0
 
+ 

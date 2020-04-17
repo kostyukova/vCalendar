@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta
 from enum import Enum, auto, unique
 
-import bcrypt
+# import bcrypt
 import jwt
 from swagger_server import db
 from swagger_server.config import Config
@@ -77,8 +77,11 @@ def has_role(headers, role: str):
 
 
 def generate_password_hash(password: str):
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    # FIXME different implementation!!! 
+    # return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    return "fixme"
 
 
 def check_password_hash(password: str, password_hash: str):
-    return bcrypt.checkpw(password.encode(), password_hash.encode())
+    # return bcrypt.checkpw(password.encode(), password_hash.encode())
+    return True
