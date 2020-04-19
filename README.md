@@ -33,12 +33,22 @@ ng build --prod | npm run build:production
 
 ## To launch backend like docker container
 cd ./backend
-docker build -t vcalendar-backend:v1.0 .
-docker run -p 8080:8080 -d vcalendar-backend:v1.0
+docker build -t vcalendar-backend:V1.0 .
+docker run -p 8080:8080 -d vcalendar-backend:V1.0
 
 ## To launch fronend like docker container
 cd ./frontend
-docker build -t vcalendar-frontend:v1.0 .
-docker run -p 8081:80 -d vcalendar-frontend:v1.0
+docker build -t vcalendar-frontend:V1.0 .
+docker run -p 8081:80 -d vcalendar-frontend:V1.0
 
- 
+## Push docker images to github repository
+docker login -u kostyukova -p TOKEN docker.pkg.github.com
+docker images | docker image ls
+docker tag c5db16ad6fcb docker.pkg.github.com/kostyukova/vcalendar/vcalendar-backend:V1.0
+docker tag 62553c804d29 docker.pkg.github.com/kostyukova/vcalendar/vcalendar-frontend:V1.0
+docker push docker.pkg.github.com/kostyukova/vcalendar/vcalendar-frontend:V1.0
+docker push docker.pkg.github.com/kostyukova/vcalendar/vcalendar-backend:V1.0
+
+## Launch application with Docker Compose
+docker-compose up
+docker-compose down 

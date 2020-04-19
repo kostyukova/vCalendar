@@ -1,0 +1,47 @@
+version: '3'
+services:
+  backend:
+    container_name: backend
+    image: docker.pkg.github.com/kostyukova/vcalendar/vcalendar-backend:V1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=mysql+pymysql://vcalendar_user:IjkorobFic@mysql/vcalendar
+    volumes:
+      - backend-volume:/var/lib/vcalendar
+    networks:
+      - backend-network
+    depends_on:
+      - mysql
+
+  mysql:
+    container_name: mysql
+    image: mariadb:10.4
+    environment:
+      - MYSQL_ROOT_PASSWORD=root687!Pass
+      - MYSQL_DATABASE=vcalendar
+      - MYSQL_USER=vcalendar_user
+      - MYSQL_PASSWORD=IjkorobFic
+    volumes:
+      - mysql-volume:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d  
+    networks:
+      - backend-network
+
+  frontend:
+    container_name: frontend
+    image: docker.pkg.github.com/kostyukova/vcalendar/vcalendar-frontend:V1.0
+    ports:
+      - "8081:8080"
+    volumes:
+      - frontend-volume:/var/lib/vcalendar
+    networks:
+      - frontend-network
+volumes:
+  frontend-volume:
+  backend-volume:
+  mysql-volume:
+
+networks:
+  frontend-network:
+  backend-network:
