@@ -35,9 +35,9 @@ paths:
       description: ""
       operationId: "add_team"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - in: "body"
         name: "body"
@@ -69,7 +69,7 @@ paths:
       description: ""
       operationId: "find_team_by"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "name"
         in: "query"
@@ -96,7 +96,7 @@ paths:
       description: ""
       operationId: "find_team_by_name"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "name"
         in: "path"
@@ -125,7 +125,7 @@ paths:
       description: "Returns a single team."
       operationId: "get_team_by_id"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "teamId"
         in: "path"
@@ -155,9 +155,9 @@ paths:
       description: ""
       operationId: "update_team_by_id"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "teamId"
         in: "path"
@@ -206,7 +206,7 @@ paths:
       description: ""
       operationId: "delete_team"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "teamId"
         in: "path"
@@ -242,9 +242,9 @@ paths:
       description: ""
       operationId: "add_employee"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - in: "body"
         name: "body"
@@ -280,7 +280,7 @@ paths:
       description: ""
       operationId: "find_employees_by"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "full_name"
         in: "query"
@@ -333,7 +333,7 @@ paths:
       description: ""
       operationId: "find_employee_by_email"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "email"
         in: "path"
@@ -358,7 +358,7 @@ paths:
       description: "Returns a single employee."
       operationId: "get_employee_by_id"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -388,9 +388,9 @@ paths:
       description: ""
       operationId: "update_employee_by_id"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -439,7 +439,7 @@ paths:
       description: ""
       operationId: "delete_employee"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -476,9 +476,9 @@ paths:
       description: ""
       operationId: "add_total_days"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - in: "body"
         name: "body"
@@ -510,7 +510,7 @@ paths:
       description: ""
       operationId: "find_total_days_by"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employee_id"
         in: "query"
@@ -542,7 +542,7 @@ paths:
       description: ""
       operationId: "find_total_days_by_year"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -576,7 +576,7 @@ paths:
       description: ""
       operationId: "find_employee_total_days"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -603,7 +603,7 @@ paths:
       description: "Returns a single TotalDays."
       operationId: "get_total_days_by_id"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -633,9 +633,9 @@ paths:
       description: ""
       operationId: "update_total_days_by_id"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -684,7 +684,7 @@ paths:
       description: ""
       operationId: "delete_total_days"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -721,9 +721,9 @@ paths:
       description: ""
       operationId: "add_leave_days"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - in: "body"
         name: "body"
@@ -755,7 +755,7 @@ paths:
       description: ""
       operationId: "find_leave_days_by"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employee_id"
         in: "query"
@@ -799,7 +799,7 @@ paths:
       description: ""
       operationId: "find_leave_days_by_date"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -834,7 +834,7 @@ paths:
       description: ""
       operationId: "find_employee_leave_days"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "employeeId"
         in: "path"
@@ -861,7 +861,7 @@ paths:
       description: "Returns a single LeaveDays."
       operationId: "get_leave_days_by_id"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -891,9 +891,9 @@ paths:
       description: ""
       operationId: "update_leave_days_by_id"
       consumes:
-      - "application/json"
+      - "application/json; charset=utf-8"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -942,7 +942,7 @@ paths:
       description: ""
       operationId: "delete_leave_days"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -978,7 +978,7 @@ paths:
       description: "Role write:users role must be granted"
       operationId: "create_user"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - in: "body"
         name: "body"
@@ -1010,7 +1010,7 @@ paths:
       description: ""
       operationId: "authenticate_user"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "username"
         in: "query"
@@ -1040,7 +1040,7 @@ paths:
       description: ""
       operationId: "get_user_by_name"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "username"
         in: "query"
@@ -1075,7 +1075,7 @@ paths:
       description: ""
       operationId: "get_user_by_id"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -1110,7 +1110,7 @@ paths:
       description: "This can only be done by with write:users role."
       operationId: "update_user"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -1151,7 +1151,7 @@ paths:
       description: "This can only be done with write:users role."
       operationId: "delete_user"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -1186,7 +1186,7 @@ paths:
       description: "This can only be done by with write:users role."
       operationId: "patch_user"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "id"
         in: "path"
@@ -1228,7 +1228,7 @@ paths:
       description: ""
       operationId: "find_by"
       produces:
-      - "application/json"
+      - "application/json; charset=utf-8"
       parameters:
       - name: "username"
         in: "query"
