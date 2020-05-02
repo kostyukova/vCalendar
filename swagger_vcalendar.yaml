@@ -963,7 +963,7 @@ paths:
       description: ""
       operationId: "authenticateUser"
       produces:
-      - "application/json; charset=utf-8"
+      - "application/json"
       parameters:
       - name: "username"
         in: "query"

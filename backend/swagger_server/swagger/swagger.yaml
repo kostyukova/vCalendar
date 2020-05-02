@@ -1010,7 +1010,7 @@ paths:
       description: ""
       operationId: "authenticate_user"
       produces:
-      - "application/json; charset=utf-8"
+      - "application/json"
       parameters:
       - name: "username"
         in: "query"

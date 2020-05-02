@@ -35,11 +35,13 @@ ng build --prod | npm run build:production
 cd ./backend
 docker build -t vcalendar-backend:V1.0 .
 docker run -p 8080:8080 -d vcalendar-backend:V1.0
+docker exec -it CONTAINER_ID sh
 
 ## To launch fronend like docker container
 cd ./frontend
 docker build -t vcalendar-frontend:V1.0 .
 docker run -p 8081:80 -d vcalendar-frontend:V1.0
+docker exec -it CONTAINER_ID sh
 
 ## Push docker images to github repository
 docker login -u kostyukova -p TOKEN docker.pkg.github.com
@@ -48,6 +50,11 @@ docker tag c5db16ad6fcb docker.pkg.github.com/kostyukova/vcalendar/vcalendar-bac
 docker tag 62553c804d29 docker.pkg.github.com/kostyukova/vcalendar/vcalendar-frontend:V1.0
 docker push docker.pkg.github.com/kostyukova/vcalendar/vcalendar-frontend:V1.0
 docker push docker.pkg.github.com/kostyukova/vcalendar/vcalendar-backend:V1.0
+
+## Install application on VM
+scp ./docker-compose.yml localadmin@192.168.144.56:/vCalendar
+scp -rp ./sql localadmin@192.168.144.56:~/vCalendar
+scp -rp ./mariadb/ localadmin@192.168.144.56:~/vCalendar
 
 ## Launch application with Docker Compose
 docker-compose up
