@@ -19,6 +19,14 @@ java -jar swagger-codegen-cli-2.4.10.jar generate  -i swagger_vcalendar.yaml -l 
 java -jar swagger-codegen-cli-2.4.10.jar generate  -i swagger_vcalendar.yaml -l typescript-angular -o frontend/src/app/api_client
 ```
 
+## To generate password hash
+```
+cd ./backend
+pipenv shell
+python -i swagger_server/generate_pass.py 
+exit()
+```
+
 ## To launch backend localy
 cd ./vCalendar
 pipenv shell
@@ -59,3 +67,8 @@ scp -rp ./mariadb/ localadmin@192.168.144.56:~/vCalendar
 ## Launch application with Docker Compose
 docker-compose up
 docker-compose down 
+
+## Clear volumes, force to create DB data from mysql_data.sql
+docker volume ls
+docker volume prune 
+

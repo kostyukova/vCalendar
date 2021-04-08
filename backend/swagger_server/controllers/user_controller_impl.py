@@ -1,5 +1,5 @@
 import six
-
+import os
 import connexion
 import swagger_server.controllers.ErrorApiResponse as ErrorApiResponse
 import swagger_server.dao.user_dao as dao
@@ -41,8 +41,9 @@ def create_user(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    orm = User_orm(username=body.username, password=auth.generate_password_hash(body.password),
-                   email=body.email, roles=body.roles if body.roles else '')
+    salt = os.urandom(64)
+    orm = User_orm(username=body.username, password_hash=auth.generate_password_hash(body.password, salt),
+                   salt = salt.hex(), email=body.email, roles=body.roles if body.roles else '')
     # check username already exists
     found = dao.get_by_name(body.username)
     if found is not None:
@@ -151,7 +152,9 @@ def patch_user(id, body):  # noqa: E501
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
 
     # update only password
-    found.password = auth.generate_password_hash(body.password)
+    salt = os.urandom(64)
+    found.salt = salt.hex()
+    found.password_hash = auth.generate_password_hash(body.password, salt)
     try:
         dao.persist(found)
         return get_user_by_id(id)

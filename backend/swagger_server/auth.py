@@ -34,7 +34,7 @@ def generate_token(username, password):
     found = dao.get_by_name(username)
     if found == None:
         return None
-    check_password = check_password_hash(password, found.password)
+    check_password = check_password_hash(password, found.password_hash, bytes.fromhex(found.salt))
     logging.info('Check password hash: %s', check_password)
     if not check_password:
         return None
@@ -81,14 +81,11 @@ def has_role(headers, role: str):
         return TokenStatus.ROLE_GRANTED if role in roles else TokenStatus.NO_ROLE_GRANTED
     return result
 
-# FIXME must be unique for every password
-salt = os.urandom(64)
-salt = b'some password salt fujtyWayk'
-def generate_password_hash(password: str):
+def generate_password_hash(password: str, salt: bytes):
     return hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, 64).hex()
 
 
-def check_password_hash(password: str, password_hash: str):
-    check_hash = generate_password_hash(password)
+def check_password_hash(password: str, password_hash: str, salt: bytes):
+    check_hash = generate_password_hash(password, salt)
     print('Stored hash: {}, check hash:: {}'.format(password_hash, check_hash))
     return check_hash == password_hash 

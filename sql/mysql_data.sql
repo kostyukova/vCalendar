@@ -46,7 +46,8 @@ CREATE OR REPLACE TABLE `employee_leave_days` (
 CREATE OR REPLACE TABLE `user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(20) NOT NULL UNIQUE,
-  `password` VARCHAR(128) NOT NULL,
+  `password_hash` VARCHAR(128) NOT NULL,
+  `salt` VARCHAR(128) NOT NULL,
   `email` VARCHAR(255) NOT NULL UNIQUE,
   `roles` SET('read:users','write:users','write:teams', 'write:employees', 'write:total_days', 'write:leave_days') NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
@@ -69,8 +70,14 @@ INSERT INTO `employee_total_days`(`employee_id`, `total_days`, `year`)
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(1, 5, '2020-01-06', '2020-01-12');
 INSERT INTO `employee_leave_days`(`employee_id`, `leave_days`, `start_date`, `end_date`) VALUES(2, 3, '2020-01-15', '2020-01-19');
 
-INSERT INTO `user`(`username`, `password`, `email`, `roles`)
-    VALUES('admin', '$2b$12$HSz0inPMP6loSguyp5KPl.MZh/RaV/0klbUMCU9h6peIIyn/P4fQq', 'admin@mail.com', 'write:teams,write:users,read:users');
-INSERT INTO `user`(`username`, `password`, `email`, `roles`)
-    VALUES('user', '$2b$12$nZKuiZrbSedpTwQrhDn6hey6S38fr5oVEYuM5QAodBrsNpCq3v9WO', 'user@mail.com', 'write:teams,write:employees,write:total_days,write:leave_days');
+INSERT INTO `user`(`username`, `password_hash`, `salt`, `email`, `roles`)
+    VALUES('admin', 
+    '280e129a6d490256b01fde6e96f6aeb332f347288d7155a2138c8d17101f7f522b626ef27f1bc238758e608d00d9a2531086c965f7b009894d965f58225d946c', 
+    '78211afa6da0ec75432f9d07947dceb1ec2c9ace8f0fcbff76437449c7584f68d4ad7907351f35cb1117cf248bc6df9615bda2381139106bcbbe6e3030fdaf4f',
+    'admin@mail.com', 'write:users,read:users');
+INSERT INTO `user`(`username`, `password_hash`, `salt`, `email`, `roles`)
+    VALUES('user',
+    '2b9f27da4c9a8ea4a8f17bb5ad7337f88e599a2aa5348bc30b778a2a946b75700e8e09b406fd06478d5c663ad55caa61ced4ca4e78cde4e36215cca130307747',
+    'c2474a46474216152e8c9894c9625cf00e79701e943d0e9118e6b3e33f32d95b5ff374955cc8794368e85174ba3a7c3db6c7ad51eb00ce16599ed07abe00fb96',
+    'user@mail.com', 'write:teams,write:employees,write:total_days,write:leave_days');
 
