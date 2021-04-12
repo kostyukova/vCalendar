@@ -78,8 +78,10 @@ scp -rp ./mariadb/ localadmin@192.168.144.56:~/vCalendar
 
 ## Launch application with Docker Compose
 ```
-docker-compose up
+docker-compose up -d -- run containers in detached mode
+docker-compose logs -f -- show logs in follow mode
 docker-compose down 
+
 ```
 
 ## Clear volumes, force to create DB data from mysql_data.sql

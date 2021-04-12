@@ -35,7 +35,8 @@ services:
     ports:
       - "8081:80"
     volumes:
-      - frontend-volume:/var/lib/vcalendar
+      - frontend-volume:/var/lib/vcdefault.confalendar
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - frontend-network
 volumes:
